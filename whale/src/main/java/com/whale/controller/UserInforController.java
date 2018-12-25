@@ -2,14 +2,12 @@ package com.whale.controller;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -17,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.whale.model.UserInfor;
 import com.whale.param.UserParam;
@@ -46,10 +43,12 @@ public class UserInforController {
 		model.addAttribute("list", findList);
 		return "user/list";
 	}
-/**
- * 转到添加页面
- * @return
- */
+
+	/**
+	 * 转到添加页面
+	 * 
+	 * @return
+	 */
 	@RequestMapping("/toAdd")
 	public String toAdd() {
 		return "user/userInforAdd";
@@ -83,5 +82,12 @@ public class UserInforController {
 	public String delete(String id) {
 		userInforRepostitory.deleteById(id);
 		return "redirect:/list";
+	}
+
+	@RequestMapping("/toUpdate")
+	public String toUpdate(String id, Model model) {
+		UserInfor userInfor = userInforRepostitory.findById(id).get();
+		model.addAttribute("users", userInfor);
+		return "user/userInforUpdate";
 	}
 }
