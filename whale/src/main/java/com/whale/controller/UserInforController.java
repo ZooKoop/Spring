@@ -2,8 +2,9 @@ package com.whale.controller;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 import com.whale.model.UserInfor;
 import com.whale.param.UserParam;
 import com.whale.repostitory.UserInforRepostitory;
@@ -24,8 +25,8 @@ import com.whale.repostitory.UserInforRepostitory;
 public class UserInforController {
 	@Autowired
 	private UserInforRepostitory userInforRepostitory;
-//	@Autowired
-//	private EntityManager entityManager; 自动启用一级缓存
+	@Autowired
+	private EntityManager entityManager; //自动启用一级缓存
 
 	@RequestMapping("/")
 	public String index() {
@@ -84,10 +85,31 @@ public class UserInforController {
 		return "redirect:/list";
 	}
 
-	@RequestMapping("/toUpdate")
-	public String toUpdate(String id, Model model) {
+	@RequestMapping("/toUserUpdate")
+	@ResponseBody
+	public UserInfor toUpdate(String id, Model model) {
 		UserInfor userInfor = userInforRepostitory.findById(id).get();
-		model.addAttribute("users", userInfor);
-		return "user/userInforUpdate";
+		model.addAttribute("user", userInfor);
+		return userInfor;
+	}
+	
+	@Transactional
+	@RequestMapping("/userUpdate")
+	public String update(@Valid UserParam userParam,BindingResult result,Model model ) {
+		String errorMsg = "";
+		boolean hasErrors = result.hasErrors();
+		if (hasErrors) {
+			List<ObjectError> list = result.getAllErrors();
+			for (ObjectError e : list) {
+				errorMsg = errorMsg + e.getCode() + ":" + e.getDefaultMessage();
+			}
+			model.addAttribute("errorMsg", errorMsg);
+			return "user/userInforAdd";
+		}
+		
+		UserInfor userInfor = new UserInfor();
+		BeanUtils.copyProperties(userParam, userInfor);
+		entityManager.merge(userInfor);
+		return "redirect:/list";
 	}
 }

@@ -32,8 +32,9 @@
 						<td th:text="${list.userPassword}">1pp</td>
 						<td th:text="${list.email}">1pp</td>
 						<td th:text="${list.regTime}">1pp</td>
-						<td><a th:href="@{/toUpdate(id=${list.id})}"
-							>Edit</a></td>
+						<td><a th:data-id="${list.id}"
+							onclick="cz(this.getAttribute('data-id'))" data-toggle="modal"
+							data-target="#myModal">Edit</a></td>
 						<td><a th:href="@{/delete(id=${list.id})}"
 							onclick="return confirm('确认删除该用户吗？')">Delete</a></td>
 					</tr>
@@ -45,6 +46,25 @@
 				<a href="/toAdd" class="btn btn-info">添加</a>
 			</div>
 		</div>
+		<script type="text/javascript">
+			function cz(id) {
+				/* alert(id); */
+				/* console.log(id); */
+				$.ajax({
+					url : "/toUserUpdate",
+					data : "id=" + id,
+					type : "post",
+					dataType : "json",
+					success : function(data) {
+						console.log(data.id);
+						$("#id").val(data.id);
+						$("#userName").val(data.userName);
+						$("#userPassword").val(data.userPassword);
+						$("#email").val(data.email);
+					}
+				});
+			}
+		</script>
 		<!-- 模态框（Modal） -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 			aria-labelledby="myModalLabel" aria-hidden="true">
@@ -53,34 +73,50 @@
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
-						<h4 class="modal-title" id="myModalLabel">修改用户</h4>
+						<h4 class="modal-title" id="myModalLabel">编辑用户</h4>
 					</div>
-					<div class="modal-body">
-						<table class="table table-hover">
-							<tr>
-								<th><input name="userName">
-									</th>
-							</tr>
-							<!-- 	<tr>
-								<th><input th:value="${user.userPassword}"></th>
-							</tr>
-							<tr>
-								<th><input th:value="${user.email}"></th>
-							</tr>
-							<tr>
-								<th><input th:value="${user.regTime}"></th>
-							</tr> -->
-						</table>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">关闭
-						</button>
-						<button type="button" class="btn btn-primary">提交更改</button>
-					</div>
+					<form class="form-horizontal" th:action="@{/userUpdate}">
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-2 control-label">用户名：</label>
+								<div class="col-sm-10">
+									<input type="hidden" class="form-control" id="id"
+										name="id" value="">
+									<input type="text" class="form-control" id="userName"
+										name="userName" value="">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="inputPassword3" class="col-sm-2 control-label">密码：</label>
+								<div class="col-sm-10">
+									<input type="password" readonly="readonly" class="form-control"
+										id="userPassword" name="userPassword" value="">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="inputPassword3" class="col-sm-2 control-label">邮箱：</label>
+								<div class="col-sm-10">
+									<input type="email" class="form-control" id="email"
+										name="email" value="">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label"></label>
+							<div class="col-sm-10">
+								<div th:if="${errorMsg!=null}" class="alert alert-danger"
+									role="alert" th:text="${errorMsg}"></div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-dismiss="modal">关闭</button>
+							<button type="submit" class="btn btn-primary">提交更改</button>
+						</div>
+					</form>
 				</div>
-				<!-- /.modal-content -->
 			</div>
-			<!-- /.modal -->
 		</div>
 	</div>
 </body>
