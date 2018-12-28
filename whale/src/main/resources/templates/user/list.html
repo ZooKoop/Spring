@@ -12,6 +12,11 @@
 	<div class="container">
 		<h1>用户列表</h1>
 		<br />
+		<div class="form-group">
+			<div class="col-sm-2 control-lable">
+				<a href="/toAdd" class="btn btn-info">添加</a>
+			</div>
+		</div>
 		<div class="width:80%">
 			<table class="table table-hover">
 				<thead>
@@ -41,11 +46,19 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="form-group">
-			<div class="col-sm-2 control-lable">
-				<a href="/toAdd" class="btn btn-info">添加</a>
-			</div>
-		</div>
+		<ul class="pagination">
+		    <li>
+		    	<a th:if="${list.number} gt 0" th:href="@{/list(page=${list.number-1})}" >&laquo;</a>
+		    </li>
+		    
+		    <li><a th:if="${list.number-1} ge 0" th:href="@{/list(page=${list.number-1})}" th:text="${list.number}">2</a></li>
+		    <li class="active" ><a th:href="@{/list(page=${list.number})}" th:text="${list.number+1}">2222</a></li>
+		    <li><a th:if="${list.number+1} <= ${list.totalPages-1}" th:href="@{/list(page=${list.number+1})}" th:text="${list.number+2}">2</a></li>
+		    
+		    <li><a th:text="'当前页数：'+${list.number+1}"></a></li>
+		    <li><a th:text="'总页数'+${list.totalPages}"></a></li>
+		    <li><a th:if="${list.number} lt ${list.totalPages-1}" th:href="@{/list(page=${list.number+1})}">&raquo;</a></li>
+		</ul>
 		<script type="text/javascript">
 			function cz(id) {
 				/* alert(id); */

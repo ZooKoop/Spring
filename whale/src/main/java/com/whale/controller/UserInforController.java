@@ -34,14 +34,25 @@ public class UserInforController {
 	}
 
 	@RequestMapping("/list")
-	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") Integer page,
+	public String list(ModelMap model, @RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "size", defaultValue = "5") Integer size) {
 //		Sort sort = new Sort(Sort.Direction.DESC, "id");
 //		PageRequest pageable = new PageRequest(page, size, sort);
 //		Page<UserInfor> findList = userInforRepostitory.findList(pageable);
+		if (page<0) {
+			return "redirect:/list";
+		}
 		PageRequest pageable = PageRequest.of(page, size);
 		Page<UserInfor> findList = userInforRepostitory.findAll(pageable);
+		int totalPages = findList.getTotalPages()-1;
 		model.addAttribute("list", findList);
+		if (page>=totalPages) {
+			page=totalPages;
+			PageRequest pageEnd = PageRequest.of(page, size);
+			Page<UserInfor> findEnd = userInforRepostitory.findAll(pageEnd);
+			model.addAttribute("list", findEnd);
+//			return "user/list";
+		}
 		return "user/list";
 	}
 
