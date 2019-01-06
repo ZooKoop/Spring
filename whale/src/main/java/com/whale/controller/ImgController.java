@@ -3,6 +3,7 @@ package com.whale.controller;
 import java.io.File;
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,11 +12,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class ImgController {
+	@Value("${img.src}")
+	private String fileSrc;
+
 	@RequestMapping(value = "/upLoad", method = RequestMethod.POST)
 	@ResponseBody
 	public String upLoad(MultipartFile uploadFile) {
 		String filename = uploadFile.getOriginalFilename();
-		File file = new File("D:/img/");
+		File file = new File(fileSrc);
 		if (!file.exists()) {
 			file.mkdirs();
 		}
@@ -24,6 +28,7 @@ public class ImgController {
 		} catch (IllegalStateException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return "图片上传失败！";
 		}
 		return "图片上传成功！";
 	};
