@@ -132,12 +132,9 @@
 					<form id="file" class="form-horizontal" enctype="multipart/form-data" method="post">
 						<div class="modal-body">
 							<div class="form-group">
-								<label for="file" class="col-sm-3 control-label">选择图片：</label>
-								
-								<div class="col-sm-9">
-									<input id="excelFile" type="file" name="uploadFile" />
-									<!-- <input class="form-control" type="file" name="file" value="file" id="file"> -->
-								</div>
+								<label for="excelFile" class=" btn btn-info col-sm-3">选择图片</label>
+								<input style="display:none" id="excelFile" type="file" name="uploadFile" class="form-control"/>
+								<div class=" btn btn-info col-sm-9"></div>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -153,7 +150,6 @@
 </body>
 <script>
 function uploadFiles(){  
-// 	var uploadFile = $('#excelFile').get(0).files[0];
 	var uploadFile = new FormData($("#file")[0]);
 	console.log(uploadFile);
 	if("undefined" != typeof(uploadFile) && uploadFile != null && uploadFile != ""){
