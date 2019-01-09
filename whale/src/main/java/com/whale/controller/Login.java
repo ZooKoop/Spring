@@ -5,11 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class Login {
-	@RequestMapping(value="/loging")
-	public String login(String name,String pass) {
-		if (name!=""&&name!=null) {
-			return "redirect:/list";
-		}
-		return "loging";
+	@RequestMapping(value="/login")
+	public String login() {
+		return "user/list";
 	}
 }
