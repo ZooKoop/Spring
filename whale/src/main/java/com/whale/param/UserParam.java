@@ -2,13 +2,17 @@ package com.whale.param;
 
 import java.io.Serializable;
 
+import javax.persistence.GeneratedValue;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.GenericGenerator;
+
 public class UserParam implements Serializable{
 	private static final long serialVersionUID = 4658966840107394356L;
-
+	@GenericGenerator(name = "system-uuid", strategy = "uuid2")
+	@GeneratedValue(generator = "system-uuid")
 	private String id;
 
 	@NotEmpty(message = "用户名不能为空！")

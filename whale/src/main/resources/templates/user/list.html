@@ -15,7 +15,12 @@
 		<br />
 		<div class="form-group">
 			<div class="col-sm-2 control-lable">
-				<a href="/toAdd" class="btn btn-info">添加</a>
+				<form th:action="@{/logout}" method="post">
+				    <input type="submit" value="注销"/>
+				</form>
+			</div>
+			<div class="col-sm-2 control-lable">
+				<a th:href="@{/user/toAdd}" class="btn btn-info">添加</a>
 			</div>
 			<div class="col-sm-2 control-lable">
 				<a href="#	" class="btn btn-info" 
@@ -45,24 +50,25 @@
 						<td><a th:data-id="${list.id}"
 							onclick="cz(this.getAttribute('data-id'))" data-toggle="modal"
 							data-target="#myModal">Edit</a></td>
-						<td><a th:href="@{/delete(id=${list.id})}"
+						<td><a th:href="@{/user/delete(id=${list.id})}"
 							onclick="return confirm('确认删除该用户吗？')">Delete</a></td>
 					</tr>
+					
 				</tbody>
 			</table>
 		</div>
 		<ul class="pagination">
 		    <li>
-		    	<a th:if="${list.number} gt 0" th:href="@{/list(page=${list.number-1})}" >&laquo;</a>
+		    	<a th:if="${list.number} gt 0" th:href="@{/user/list(page=${list.number-1})}" >&laquo;</a>
 		    </li>
 		    
-		    <li><a th:if="${list.number-1} ge 0" th:href="@{/list(page=${list.number-1})}" th:text="${list.number}">2</a></li>
+		    <li><a th:if="${list.number-1} ge 0" th:href="@{/user/list(page=${list.number-1})}" th:text="${list.number}">2</a></li>
 		    <li class="active" ><a th:href="@{/list(page=${list.number})}" th:text="${list.number+1}">2222</a></li>
-		    <li><a th:if="${list.number+1} <= ${list.totalPages-1}" th:href="@{/list(page=${list.number+1})}" th:text="${list.number+2}">2</a></li>
+		    <li><a th:if="${list.number+1} <= ${list.totalPages-1}" th:href="@{/user/list(page=${list.number+1})}" th:text="${list.number+2}">2</a></li>
 		    
 		    <li><a th:text="'当前页数：'+${list.number+1}"></a></li>
 		    <li><a th:text="'总页数'+${list.totalPages}"></a></li>
-		    <li><a th:if="${list.number} lt ${list.totalPages-1}" th:href="@{/list(page=${list.number+1})}">&raquo;</a></li>
+		    <li><a th:if="${list.number} lt ${list.totalPages-1}" th:href="@{/user/list(page=${list.number+1})}">&raquo;</a></li>
 		</ul>
 		<!-- 模态框（Modal） -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
@@ -74,7 +80,7 @@
 							aria-hidden="true">&times;</button>
 						<h4 class="modal-title" id="myModalLabel">编辑用户</h4>
 					</div>
-					<form class="form-horizontal" th:action="@{/userUpdate}">
+					<form class="form-horizontal" th:action="@{/user/userUpdate}">
 						<div class="modal-body">
 							<div class="form-group">
 								<label for="userName" class="col-sm-2 control-label">用户名：</label>
@@ -173,5 +179,24 @@ function uploadFiles(){  
 		alert("选择的文件无效！请重新选择");
 	}
 }   
+function cz(ko){  
+		$.ajax({
+			url:'/user/toUserUpdate',
+			type:'POST',
+			data:"id="+ko,
+			dataType:"json",
+			success:function(data){
+				console.log(data);
+				alert(data);
+				$("#id").val(data.id);
+				$("#userName").val(data.userName);
+				$("#userPassword").val(data.userPassword);
+				$("#email").val(data.email);
+			},
+			error:function(){
+				alert("获取失败");
+			}
+		})
+}
 </script>
 </html>

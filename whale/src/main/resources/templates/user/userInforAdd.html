@@ -9,7 +9,7 @@
 	<div class="container">
 		<h1>用户添加</h1>
 		<br/>
-		<form th:action="@{/add}" method="post" class="form-horizontal">
+		<form th:action="@{/user/add}" method="post" class="form-horizontal">
 
 			<div class="form-group">
 				<label for="userName" class="col-sm-2 control-label">用户名</label>
@@ -40,7 +40,7 @@
 				<div class="col-sm-offset-2 col-sm-10">
 					<input type="submit" class="btn btn-infor" value="添加">
 					<input type="reset" class="btn btn-danger" value="重置">
-					<a th:href="@{/list}" class="btn btn-danger">后退</a>
+					<a th:href="@{user/list}" class="btn btn-danger">后退</a>
 				</div>
 			</div>
 		</form>
