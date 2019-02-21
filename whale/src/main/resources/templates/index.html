@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Whale</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script
+	src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- <script th:src="@{/js/upload.js}"></script> -->
+</head>
+<body>
+	<div th:replace="navbar :: html"></div>
+	<div class="container">
+		<a th:href="@{/user/list}">用户管理</a>
+	</div>
+</body>
+</html>
