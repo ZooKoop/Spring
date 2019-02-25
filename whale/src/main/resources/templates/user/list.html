@@ -10,28 +10,19 @@
 <!-- <script th:src="@{/js/upload.js}"></script> -->
 </head>
 <body>
-	<div class="container">
-		<h1>用户列表</h1>
-		<br />
-		<div class="form-group">
-			<div class="col-sm-2 control-lable">
-				<form th:action="@{/logout}" method="post">
-				    <input type="submit" value="注销"/>
-				</form>
-			</div>
-			<div class="col-sm-2 control-lable">
-				<a th:href="@{/user/toAdd}" class="btn btn-info">添加</a>
-			</div>
-			<div class="col-sm-2 control-lable">
-				<a href="#	" class="btn btn-info" 
-				data-toggle="modal" data-target="#imgModel">上传图片</a>
-			</div>
+	<div th:replace="navbar :: html"></div>
+	<div class="container-fluid">
+		<h4 class="text-primary">用户列表</h4>
+		<div>
+			<a th:href="@{/user/toAdd}" class="btn btn-info">添加</a>
+			<a href="#" class="btn btn-info" 
+			data-toggle="modal" data-target="#imgModel">上传图片</a>
 		</div>
-		<div class="width:80%">
-			<table class="table table-hover">
+		<div>
+			<table class="table table-bordered table-hover">
 				<thead>
 					<tr>
-						<th>ID</th>
+						<!-- <th>ID</th> -->
 						<th>UserName</th>
 						<th>UserPassword</th>
 						<th>Email</th>
@@ -42,7 +33,7 @@
 				</thead>
 				<tbody>
 					<tr th:each="list:${list}">
-						<td th:text="${list.id}">1pp</td>
+						<!-- <td th:text="${list.id}">1pp</td> -->
 						<td th:text="${list.userName}">1pp</td>
 						<td th:text="${list.userPassword}">1pp</td>
 						<td th:text="${list.email}">1pp</td>
