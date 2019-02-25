@@ -11,9 +11,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import org.hibernate.annotations.GenericGenerator;
 
-
 @Entity
-@Table(name="SECURITY_USER")
+@Table(name = "SECURITY_USER")
 public class SecurityUser implements Serializable {
 	private static final long serialVersionUID = 893813341339889229L;
 
@@ -22,22 +21,25 @@ public class SecurityUser implements Serializable {
 	@GeneratedValue(generator = "system-uuid")
 	@Column(name = "ID")
 	private String id;
-	
-	@Basic(optional = false) //不为空
-	@Column(name="USER_NAME")
+
+	@Basic(optional = false) // 不为空
+	@Column(name = "USER_NAME")
 	private String userName;
-	
-	@Basic(optional = false) //不为空
-	@Column(name="USER_PASSWORD")
+
+	@Basic(optional = false) // 不为空
+	@Column(name = "USER_PASSWORD")
 	private String userPassword;
-	
-	@Basic(optional = false) //不为空
-	@Column(name="EMAIL")
+
+	@Basic(optional = false) // 不为空
+	@Column(name = "EMAIL")
 	@Email
 	private String email;
+
+	@Column(name = "REG_TIME")
+	private Date regTime = new Date();
 	
-	@Column(name="REG_TIME")
-	private Date regTime=new Date();
+	@Column(name = "SRC_IMG")
+	private String srcImg;
 
 	public String getId() {
 		return id;
@@ -77,6 +79,14 @@ public class SecurityUser implements Serializable {
 
 	public void setRegTime(Date regTime) {
 		this.regTime = regTime;
+	}
+
+	public String getSrcImg() {
+		return srcImg;
+	}
+
+	public void setSrcImg(String srcImg) {
+		this.srcImg = srcImg;
 	}
 
 	@Override

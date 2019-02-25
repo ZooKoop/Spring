@@ -1,13 +1,18 @@
 package com.whale.security.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+
+import org.hibernate.annotations.Loader;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,17 +21,23 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.whale.model.UserInfor;
 import com.whale.param.UserParam;
 import com.whale.security.model.SecurityUser;
 import com.whale.security.repository.SecurityUserRepository;
 
 @Controller
+
 @RequestMapping("/user")
 public class UserInforController {
+	@Value("${img.src}")
+	private String fileSrc;
 	@Autowired
 	private SecurityUserRepository userInforRepostitory;
 	@Autowired
@@ -49,19 +60,9 @@ public class UserInforController {
 		return "user/list";
 	}
 
-	/**
-	 * 转到添加页面
-	 * 
-	 * @return
-	 */
-	@RequestMapping("/toAdd")
-	public String toAdd() {
-		return "user/userInforAdd";
-	}
-
-	@RequestMapping("/add")
-	// @ResponseBody 返回json数据
-	public String add(@Valid UserParam userParam, BindingResult result, ModelMap model) {
+	@PostMapping("/add")
+	@ResponseBody //返回json数据
+	public String add(@Valid UserParam userParam, BindingResult result, ModelMap model,MultipartFile data) {
 		String errorMsg = "";
 		boolean hasErrors = result.hasErrors();
 		if (hasErrors) {
@@ -75,14 +76,30 @@ public class UserInforController {
 		SecurityUser u = userInforRepostitory.findByuserName(userParam.getUserName());
 		if (u != null) {
 			model.addAttribute("errorMsg", "用户名已存在！");
-			return "user/userInforAdd";
+			return "用户名已存在";
 		}
+		//图片处理
+		String filename = data.getOriginalFilename();
+		File file = new File(fileSrc+"/user_head _Img");
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		try {
+			data.transferTo(new File(file + "/" + filename));
+		} catch (IllegalStateException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "图片上传失败！";
+		}
+		//存库
 		userParam.setId(UUID.randomUUID().toString());
 		SecurityUser userInfor = new SecurityUser();
 		BeanUtils.copyProperties(userParam, userInfor);
 		userInfor.setUserPassword(passwordEncoder.encode(userInfor.getUserPassword()));
+		userInfor.setSrcImg(file + "/" + filename);
+		System.out.println("--------------------------密码："+passwordEncoder.encode(userInfor.getUserPassword()));
 		userInforRepostitory.save(userInfor);
-		return "redirect:/user/list";
+		return "注册成功！";
 	}
 
 	@RequestMapping("/delete")

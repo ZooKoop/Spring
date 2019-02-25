@@ -1,4 +1,4 @@
-package com.whale.controller;
+package com.whale.security.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,11 +15,11 @@ public class ImgController {
 	@Value("${img.src}")
 	private String fileSrc;
 
-	@RequestMapping(value = "/upLoad", method = RequestMethod.POST)
+	@RequestMapping(value = "/userUpLoad", method = RequestMethod.POST)
 	@ResponseBody
 	public String upLoad(MultipartFile uploadFile) {
 		String filename = uploadFile.getOriginalFilename();
-		File file = new File(fileSrc);
+		File file = new File(fileSrc+"/user_head _Img");
 		if (!file.exists()) {
 			file.mkdirs();
 		}
