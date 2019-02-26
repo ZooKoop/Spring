@@ -8,11 +8,6 @@
 	<nav class="navbar navbar-default" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target="#example-navbar-collapse">
-					<span class="sr-only">切换导航</span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span>
-				</button>
 				<a class="navbar-brand" th:href="@{/}">Whale</a>
 			</div>
 			<div class="collapse navbar-collapse" id="example-navbar-collapse">
@@ -27,7 +22,7 @@
 						th:text="${session?.SPRING_SECURITY_CONTEXT?.authentication?.principal?.username}!=null?'欢迎  '+${session?.SPRING_SECURITY_CONTEXT?.authentication?.principal?.username}:'登陆'"><b
 							class="caret"></b> </a>
 						<ul class="dropdown-menu">
-							<li><a href="#" th:href="@{/login}">个人信息</a></li>
+							<li> <a href="#" th:href="@{/login}">个人信息</a></li>
 							<li><a href="#">修改密码 </a></li>
 							<li class="divider"></li>
 							<li>

@@ -19,7 +19,7 @@ public class ImgController {
 	@ResponseBody
 	public String upLoad(MultipartFile uploadFile) {
 		String filename = uploadFile.getOriginalFilename();
-		File file = new File(fileSrc+"/user_head _Img");
+		File file = new File(fileSrc+"/user_head_Img");
 		if (!file.exists()) {
 			file.mkdirs();
 		}

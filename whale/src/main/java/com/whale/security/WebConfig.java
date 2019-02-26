@@ -5,6 +5,7 @@ package com.whale.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -17,10 +18,12 @@ public class WebConfig implements WebMvcConfigurer{
 	@Value("${img.src}")
 	private String fileSrc;
 	@Override
-	public void addViewControllers(ViewControllerRegistry registry) {
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		// TODO Auto-generated method stub
-//		WebMvcConfigurer.super.addViewControllers(registry);
-		registry.addViewController("/images").setViewName(fileSrc+"/user_head _Img");
+		registry.addResourceHandler("/images/**").addResourceLocations("file:D:/imgs/");
+//		WebMvcConfigurer.super.addResourceHandlers(registry);
+		
 	}
+	
 
 }

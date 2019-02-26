@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //				.successHandler(myAuthenticationSuccessHandler)// 加自己定义的登陆成功hadler
 				.and()
 				.authorizeRequests()// 表示以下都是授权的配置
-				.antMatchers("/login", "/").permitAll()
+				.antMatchers("/login", "/","/images/**").permitAll()
 				.anyRequest()// 任何请求
 				.authenticated()// 都需要身份认证
 				.and().csrf() // 关闭csrf 不然不支持post

@@ -14,53 +14,60 @@
 	<div class="container-fluid">
 		<h4 class="text-primary">用户列表</h4>
 		<div>
-			<a th:href="@{/user/toAdd}" class="btn btn-info">添加</a>
-			<a href="#" class="btn btn-info" 
-			data-toggle="modal" data-target="#saveUser">添加用户</a>
+			<a href="#" class="btn btn-info" data-toggle="modal"
+				data-target="#saveUser">添加用户</a>
 		</div>
 		<div>
 			<table class="table table-bordered table-hover">
 				<thead>
 					<tr>
-						<!-- <th>ID</th> -->
-						<th>UserImg</th>
-						<th>UserName</th>
-						<th>UserPassword</th>
-						<th>Email</th>
+						<th>头像</th>
+						<th>账号</th>
+						<th>密码</th>
+						<th>邮箱</th>
 						<th>注册时间</th>
-						<th>Edit</th>
-						<th>Delete</th>
+						<th>编辑</th>
+						<th>删除</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="list:${list}">
-						<td ><img th:src="${list.srcImg}"></td>
+						<td><img style="width: 50px;"
+							class="img-rounded center-block" th:src="${list.srcImg}"></td>
 						<td th:text="${list.userName}">1pp</td>
 						<td th:text="${list.userPassword}">1pp</td>
 						<td th:text="${list.email}">1pp</td>
-						<td th:text="${list.regTime}">1pp</td>
-						<td><a th:data-id="${list.id}"
-							onclick="cz(this.getAttribute('data-id'))" data-toggle="modal"
-							data-target="#myModal">Edit</a></td>
-						<td><a th:href="@{/user/delete(id=${list.id})}"
-							onclick="return confirm('确认删除该用户吗？')">Delete</a></td>
+						<td
+							th:text="${#dates.format(list.regTime, 'yyyy-MM-dd HH:mm:ss')}">1pp</td>
+						<td><button class="btn btn-primary center-block"
+								th:data-id="${list.id}"
+								onclick="cz(this.getAttribute('data-id'))" data-toggle="modal"
+								data-target="#myModal">Edit</button></td>
+						<td><button class="btn btn-danger center-block"
+								th:href="@{/user/delete(id=${list.id})}"
+								onclick="return confirm('确认删除该用户吗？')">Delete</button></td>
 					</tr>
-					
+
 				</tbody>
 			</table>
 		</div>
 		<ul class="pagination">
-		    <li>
-		    	<a th:if="${list.number} gt 0" th:href="@{/user/list(page=${list.number-1})}" >&laquo;</a>
-		    </li>
-		    
-		    <li><a th:if="${list.number-1} ge 0" th:href="@{/user/list(page=${list.number-1})}" th:text="${list.number}">2</a></li>
-		    <li class="active" ><a th:href="@{/list(page=${list.number})}" th:text="${list.number+1}">2222</a></li>
-		    <li><a th:if="${list.number+1} <= ${list.totalPages-1}" th:href="@{/user/list(page=${list.number+1})}" th:text="${list.number+2}">2</a></li>
-		    
-		    <li><a th:text="'当前页数：'+${list.number+1}"></a></li>
-		    <li><a th:text="'总页数'+${list.totalPages}"></a></li>
-		    <li><a th:if="${list.number} lt ${list.totalPages-1}" th:href="@{/user/list(page=${list.number+1})}">&raquo;</a></li>
+			<li><a th:if="${list.number} gt 0"
+				th:href="@{/user/list(page=${list.number-1})}">&laquo;</a></li>
+
+			<li><a th:if="${list.number-1} ge 0"
+				th:href="@{/user/list(page=${list.number-1})}"
+				th:text="${list.number}">2</a></li>
+			<li class="active"><a th:href="@{/list(page=${list.number})}"
+				th:text="${list.number+1}">2222</a></li>
+			<li><a th:if="${list.number+1} <= ${list.totalPages-1}"
+				th:href="@{/user/list(page=${list.number+1})}"
+				th:text="${list.number+2}">2</a></li>
+
+			<li><a th:text="'当前页数：'+${list.number+1}"></a></li>
+			<li><a th:text="'总页数'+${list.totalPages}"></a></li>
+			<li><a th:if="${list.number} lt ${list.totalPages-1}"
+				th:href="@{/user/list(page=${list.number+1})}">&raquo;</a></li>
 		</ul>
 		<!-- 模态框（Modal） -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
@@ -77,10 +84,9 @@
 							<div class="form-group">
 								<label for="userName" class="col-sm-2 control-label">用户名：</label>
 								<div class="col-sm-10">
-									<input type="hidden" class="form-control" id="id"
-										name="id" value="">
-									<input type="text" class="form-control" id="userName"
-										name="userName" value="">
+									<input type="hidden" class="form-control" id="id" name="id"
+										value=""> <input type="text" class="form-control"
+										id="userName" name="userName" value="">
 								</div>
 							</div>
 							<div class="form-group">
@@ -115,7 +121,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- 上传图片模态框 -->
 		<div class="modal fade" id="saveUser" tabindex="-1" role="dialog"
 			aria-labelledby="myModalLabel" aria-hidden="true">
@@ -124,52 +130,61 @@
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
-						<h4 class="modal-title" id="myModalLabel">用户注册</h4>
+						<h4 class="modal-title" id="myModalLabel">注册用户</h4>
 					</div>
 					<!-- th:action="@{/imgUpload}" -->
-					<form id="file" class="form-horizontal" enctype="multipart/form-data" method="post">
+					<form id="file" class="form-horizontal"
+						enctype="multipart/form-data" method="post">
 						<div class="modal-body">
-							<!-- <div class="form-group">
-								<label for="excelFile" class=" btn btn-info col-sm-3">选择图片</label>
-								<input style="display:none" id="excelFile" type="file" name="uploadFile" class="form-control"/>
-								<div class=" btn btn-info col-sm-9"></div>
-							</div> -->
 							<div class="form-group">
 								<label for="userName" class="col-sm-2 control-label">用户名</label>
 								<div class="col-sm-10">
-									<input type="text" class="form-control" name="userName" placeholder="用户名">
+									<input type="text" class="form-control" name="userName"
+										placeholder="用户名">
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="userPassword" class="col-sm-2 control-label">密码</label>
 								<div class="col-sm-10">
-									<input type="password" class="form-control" name="userPassword"  placeholder="密码">
+									<input type="password" class="form-control" name="userPassword"
+										placeholder="密码">
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="email" class="col-sm-2 control-label">邮箱</label>
 								<div class="col-sm-10">
-									<input type="text" class="form-control" name="email" placeholder="邮箱">
+									<input type="text" class="form-control" name="email"
+										placeholder="邮箱">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-2 control-label"></label>
 								<div class="col-sm-10">
-									<div th:if="${errorMsg!=null}" class="alert alert-danger" role="alert" th:text="${errorMsg}">
-									</div>
+									<div th:if="${errorMsg!=null}" class="alert alert-danger"
+										role="alert" th:text="${errorMsg}"></div>
 								</div>
 							</div>
 							<div class="form-group">
-							    <label for="exampleInputFile">选择图片</label>
-							    <input type="file" name="data">
-							    <p class="help-block">Example block-level help text here.</p>
+								<label for="exampleInputFile">选择图片</label> <input type="file"
+									name="data">
+								<p class="help-block">Example block-level help text here.</p>
 							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label"></label>
+							<div class="col-sm-10">
+								<div th:if="${errorMsg!=null}" class="alert alert-danger"
+									role="alert" th:text="${errorMsg}"></div>
+							</div>
+						</div>
+						<div class="alert alert-warning">
+							<a href="#" class="close" data-dismiss="alert"> &times; </a> <strong>警告！</strong>您的网络连接有问题。
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default"
 								data-dismiss="modal">关闭</button>
-							<button class="btn btn-primary" onclick="uploadFiles();">上传</button>
-						</div> 
+							<button class="btn btn-primary" onclick="uploadFiles();">注册</button>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -177,66 +192,56 @@
 	</div>
 </body>
 <script>
-function uploadFiles(){  
-/* 	var uploadFile = new FormData($("#file")[0]);
-	console.log(uploadFile);
-	if("undefined" != typeof(uploadFile) && uploadFile != null && uploadFile != ""){
-		$.ajax({
-			url:'/userUpLoad',
-			type:'POST',
-			data:uploadFile,
-			async: false,  
-			cache: false, 
-			contentType: false, //不设置内容类型
-			processData: false, //不处理数据
-			success:function(data){
-				console.log(data);
-				alert(data);
-			},
-			error:function(){
-				alert("图片上传失败！");
-			}
-		})
-	}else {
-		alert("选择的文件无效！请重新选择");
-	} */
- 	var data = new FormData(document.getElementById("file"));
-	if("data" != typeof(data) && data != null && data != ""){
-		$.ajax({
-			url:'/user/add',
-			type:'POST',
-			data:data,
-			contentType: false, //不设置内容类型
-			processData: false, //不处理数据
-			success:function(data){
-				console.log(data);
-				alert(data);
-			},
-			error:function(){
-				alert("图片上传失败！");
-			}
-		})
-	}else {
-		alert("选择的文件无效！请重新选择");
+	function uploadFiles() {
+		var data = new FormData(document.getElementById("file"));
+		var n = false;
+		if ("data" != typeof (data) && data != null && data != "") {
+			$.ajax({
+				url : '/user/add',
+				type : 'POST',
+				data : data,
+				async : false,
+				contentType : false, //不设置内容类型
+				processData : false, //不处理数据
+				success : function(data) {
+					n=true;
+					/* 	
+						console.log(data);
+						alert(data);
+						if(data.contains("成功")){
+							n=true;
+						} */
+				},
+				error : function() {
+					alert("图片上传失败！");
+				}
+			});
+		
+		} else {
+			alert("选择的文件无效！请重新选择");
+		}
+		if(n){
+			//alert(1);
+			return false;
+		}
 	}
-}   
-function cz(ko){  
+	function cz(ko) {
 		$.ajax({
-			url:'/user/toUserUpdate',
-			type:'POST',
-			data:"id="+ko,
-			dataType:"json",
-			success:function(data){
+			url : '/user/toUserUpdate',
+			type : 'POST',
+			data : "id=" + ko,
+			dataType : "json",
+			success : function(data) {
 				console.log(data);
 				$("#id").val(data.id);
 				$("#userName").val(data.userName);
 				$("#userPassword").val(data.userPassword);
 				$("#email").val(data.email);
 			},
-			error:function(){
+			error : function() {
 				alert("获取失败");
 			}
 		})
-}
+	}
 </script>
 </html>

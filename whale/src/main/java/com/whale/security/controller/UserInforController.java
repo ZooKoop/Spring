@@ -4,12 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
-
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-
-import org.hibernate.annotations.Loader;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,17 +67,18 @@ public class UserInforController {
 			for (ObjectError e : list) {
 				errorMsg = errorMsg + e.getCode() + ":" + e.getDefaultMessage();
 			}
-			model.addAttribute("errorMsg", errorMsg);
-			return "user/userInforAdd";
+//			model.addAttribute("errorMsg", errorMsg);
+			return errorMsg;
 		}
 		SecurityUser u = userInforRepostitory.findByuserName(userParam.getUserName());
 		if (u != null) {
-			model.addAttribute("errorMsg", "用户名已存在！");
+//			model.addAttribute("errorMsg", "用户名已存在！");
 			return "用户名已存在";
 		}
 		//图片处理
+		String subFloder="/user_head_img";
 		String filename = data.getOriginalFilename();
-		File file = new File(fileSrc+"/user_head _Img");
+		File file = new File(fileSrc+subFloder);
 		if (!file.exists()) {
 			file.mkdirs();
 		}
@@ -96,7 +94,7 @@ public class UserInforController {
 		SecurityUser userInfor = new SecurityUser();
 		BeanUtils.copyProperties(userParam, userInfor);
 		userInfor.setUserPassword(passwordEncoder.encode(userInfor.getUserPassword()));
-		userInfor.setSrcImg(file + "/" + filename);
+		userInfor.setSrcImg("http://localhost:8080/images"+subFloder+"/"+ filename);
 		System.out.println("--------------------------密码："+passwordEncoder.encode(userInfor.getUserPassword()));
 		userInforRepostitory.save(userInfor);
 		return "注册成功！";
