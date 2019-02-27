@@ -58,7 +58,7 @@ public class UserInforController {
 	}
 
 	@PostMapping("/add")
-	@ResponseBody //返回json数据
+	@ResponseBody //返回json数据 
 	public String add(@Valid UserParam userParam, BindingResult result, ModelMap model,MultipartFile data) {
 		String errorMsg = "";
 		boolean hasErrors = result.hasErrors();

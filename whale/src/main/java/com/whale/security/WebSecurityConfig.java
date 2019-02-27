@@ -1,6 +1,5 @@
 package com.whale.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -39,6 +38,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/login", "/","/images/**").permitAll()
 				.anyRequest()// 任何请求
 				.authenticated()// 都需要身份认证
+				.and()
+				.headers().frameOptions().disable()//iframe不禁止 你找啥呢
 				.and().csrf() // 关闭csrf 不然不支持post
 				.disable();
 
@@ -46,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		// 不加页面无样式，报错
-		web.ignoring().antMatchers("/js/**", "/css/**", "/images/**");
+		web.ignoring().antMatchers("/js/**", "/css/**", "/images/**","/layer/**");
 	}
 
 }

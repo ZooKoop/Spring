@@ -3,19 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <title>用户列表</title>
-<link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+<link rel="stylesheet" href="/css/bootstrap.css" />
+<link rel="stylesheet" href="/layer/css/layer.css" />
 <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+
 <script
 	src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <!-- <script th:src="@{/js/upload.js}"></script> -->
+<script src="/layer/js/layer.js"></script>
 </head>
 <body>
 	<div th:replace="navbar :: html"></div>
 	<div class="container-fluid">
 		<h4 class="text-primary">用户列表</h4>
 		<div>
-			<a href="#" class="btn btn-info" data-toggle="modal"
-				data-target="#saveUser">添加用户</a>
+			<!-- <a href="#" class="btn btn-info" data-toggle="modal"
+				data-target="#saveUser">添加用户</a> -->
+			<a href="#" class="btn btn-info" onclick="layermsg();">添加用户</a>
 		</div>
 		<div>
 			<table class="table table-bordered table-hover">
@@ -123,7 +127,7 @@
 		</div>
 
 		<!-- 上传图片模态框 -->
-		<div class="modal fade" id="saveUser" tabindex="-1" role="dialog"
+		<!-- <div class="modal fade" id="saveUser" tabindex="-1" role="dialog"
 			aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -132,7 +136,7 @@
 							aria-hidden="true">&times;</button>
 						<h4 class="modal-title" id="myModalLabel">注册用户</h4>
 					</div>
-					<!-- th:action="@{/imgUpload}" -->
+					th:action="@{/imgUpload}"
 					<form id="file" class="form-horizontal"
 						enctype="multipart/form-data" method="post">
 						<div class="modal-body">
@@ -184,16 +188,82 @@
 							<button type="button" class="btn btn-default"
 								data-dismiss="modal">关闭</button>
 							<button class="btn btn-primary" onclick="uploadFiles();">注册</button>
+							<input  class="btn btn-primary" type="button" onclick="uploadFiles();" value="注册" />
+							<input  class="btn btn-primary" type="button" onclick="layermsg();" value="123" />
 						</div>
 					</form>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
+	
 </body>
 <script>
-	function uploadFiles() {
-		var data = new FormData(document.getElementById("file"));
+	function layermsg() {
+		
+		 layer.open({
+	            type: 2,
+	            area: ['800px','450px'],
+	            shade: 0.3,
+	            maxmin: false,//最大化和最小化按钮
+	            resize:false,//拉伸
+	            scrollbar: false,//滚动条
+	            moveOut: false,//拖动到屏幕外面
+	            fixed: false, //不固定
+	            content: '/adduser',
+	            btn: ['上传','取消'], //按钮上传按钮怎么提交的是 模态框的？
+	            yes: function(index , layero){//这是得到了那个页面的form表单，这个data
+	                var datas = layer.getChildFrame('body', index);//通过该对象可以获取iframe中的dom元素
+	              	var form=datas.find("#file");//这个是啥，获取引用from 这个id不用加$？不用
+	              	var formdata=new FormData(form);
+	            	console.log(formdata);
+	              	/*  var flag=uploadFiles(formdata); 
+	              	var userName=formdata.find("#userName").val();
+	              	var userPassword=formdata.find("#userPassword").val();
+	              	var email=formdata.find("#email").val();
+	              	var userParam={}
+	              	userParam.userName=userName;
+	              	userParam.userPassword=userPassword;
+	              	userParam.email=email; */
+	              	if ("formdata" != typeof (formdata) && formdata != null && formdata != "") {//然后掉ajax是不，对
+	        			$.ajax({
+	        				url : '/user/add',
+	        				type : 'POST',
+	        				data : formdata,
+	        				async : false,
+	        				contentType : false, //不设置内容类型
+	        				processData : false, //不处理数据
+	        				success : function(data) {
+	        						
+	        						console.log(data);
+	        						
+	        						if(data.indexOf("成功")>0){
+	        							layer.close(index); //如果设定了yes回调，需进行手工关闭
+	        						} else{
+	        							alert(data);
+	        						} 
+	        				},
+	        				error : function() {
+	        					alert("图片上传失败！");
+	        					//return n;
+	        				}
+	        			});
+	        		
+	        		} else {
+	        			alert("选择的文件无效！请重新选择");
+	        			//return n;
+	        		}
+	              	/* if(flag){
+	              		layer.close(index); //如果设定了yes回调，需进行手工关闭
+	              	} */
+	                
+	            }
+
+	        });
+	}
+	/* function uploadFiles(formdata) {我知道，我只是用这个ajax和提示的消息 我想知道 lyer在哪传值啊
+		//var data = new FormData(document.getElementById("file"));
+		var data = new FormData(formdata);
 		var n = false;
 		if ("data" != typeof (data) && data != null && data != "") {
 			$.ajax({
@@ -204,27 +274,26 @@
 				contentType : false, //不设置内容类型
 				processData : false, //不处理数据
 				success : function(data) {
-					n=true;
-					/* 	
+						
 						console.log(data);
 						alert(data);
-						if(data.contains("成功")){
-							n=true;
-						} */
+						if(data.indexOf("成功")>0){
+							return true;
+						} else{
+							return n;
+						}
 				},
 				error : function() {
 					alert("图片上传失败！");
+					return n;
 				}
 			});
 		
 		} else {
 			alert("选择的文件无效！请重新选择");
+			return n;
 		}
-		if(n){
-			//alert(1);
-			return false;
-		}
-	}
+	} */
 	function cz(ko) {
 		$.ajax({
 			url : '/user/toUserUpdate',
