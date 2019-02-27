@@ -196,70 +196,39 @@
 			</div>
 		</div> -->
 	</div>
-	
+
 </body>
 <script>
 	function layermsg() {
-		
-		 layer.open({
-	            type: 2,
-	            area: ['800px','450px'],
-	            shade: 0.3,
-	            maxmin: false,//最大化和最小化按钮
-	            resize:false,//拉伸
-	            scrollbar: false,//滚动条
-	            moveOut: false,//拖动到屏幕外面
-	            fixed: false, //不固定
-	            content: '/adduser',
-	            btn: ['上传','取消'], //按钮上传按钮怎么提交的是 模态框的？
-	            yes: function(index , layero){//这是得到了那个页面的form表单，这个data
-	                var datas = layer.getChildFrame('body', index);//通过该对象可以获取iframe中的dom元素
-	              	var form=datas.find("#file");//这个是啥，获取引用from 这个id不用加$？不用
-	              	var formdata=new FormData(form);
-	            	console.log(formdata);
-	              	/*  var flag=uploadFiles(formdata); 
-	              	var userName=formdata.find("#userName").val();
-	              	var userPassword=formdata.find("#userPassword").val();
-	              	var email=formdata.find("#email").val();
-	              	var userParam={}
-	              	userParam.userName=userName;
-	              	userParam.userPassword=userPassword;
-	              	userParam.email=email; */
-	              	if ("formdata" != typeof (formdata) && formdata != null && formdata != "") {//然后掉ajax是不，对
-	        			$.ajax({
-	        				url : '/user/add',
-	        				type : 'POST',
-	        				data : formdata,
-	        				async : false,
-	        				contentType : false, //不设置内容类型
-	        				processData : false, //不处理数据
-	        				success : function(data) {
-	        						
-	        						console.log(data);
-	        						
-	        						if(data.indexOf("成功")>0){
-	        							layer.close(index); //如果设定了yes回调，需进行手工关闭
-	        						} else{
-	        							alert(data);
-	        						} 
-	        				},
-	        				error : function() {
-	        					alert("图片上传失败！");
-	        					//return n;
-	        				}
-	        			});
-	        		
-	        		} else {
-	        			alert("选择的文件无效！请重新选择");
-	        			//return n;
-	        		}
-	              	/* if(flag){
-	              		layer.close(index); //如果设定了yes回调，需进行手工关闭
-	              	} */
-	                
-	            }
 
-	        });
+		layer.open({
+			type : 2,
+			area : [ '800px', '450px' ],
+			shade : 0.3,
+			maxmin : false,//最大化和最小化按钮
+			resize : false,//拉伸
+			scrollbar : false,//滚动条
+			moveOut : false,//拖动到屏幕外面
+			fixed : false, //不固定
+			content : '/adduser',
+			end : function() {
+				location.reload();
+			},
+			btn : [ '上传', '取消' ], //按钮上传按钮怎么提交的是 模态框的？
+			yes : function(index, layero) {//这是得到了那个页面的form表单，这个data
+				var body = layer.getChildFrame('body', index);//找页面下所有套的子类
+
+				var iframeWin = layero.find('iframe')[0]; //得到iframe页的窗口对象
+				iframeWin.contentWindow.uploadFiles();//doSubmit 是你在弹出层的那个jsp里写的表单提交方法
+				//var da = body.find('#file');//这是你弹出层 表单对象
+				/* console.log(kg)
+				if(kg==200){
+					var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+					parent.layer.close(index); //再执行关闭
+				} */
+			}
+
+		});
 	}
 	/* function uploadFiles(formdata) {我知道，我只是用这个ajax和提示的消息 我想知道 lyer在哪传值啊
 		//var data = new FormData(document.getElementById("file"));

@@ -2,12 +2,9 @@ package com.whale.param;
 
 import java.io.Serializable;
 
-import javax.persistence.GeneratedValue;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.GenericGenerator;
 
 public class UserParam implements Serializable{
 	private static final long serialVersionUID = 4658966840107394356L;
@@ -23,7 +20,6 @@ public class UserParam implements Serializable{
 	@NotEmpty(message="邮箱不能为空！")
 	@Email(message="邮箱的格式不正确！") 
 	private String email;
-
 	public String getId() {
 		return id;
 	}

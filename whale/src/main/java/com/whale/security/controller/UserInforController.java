@@ -59,7 +59,7 @@ public class UserInforController {
 
 	@PostMapping("/add")
 	@ResponseBody //返回json数据 
-	public String add(@Valid UserParam userParam, BindingResult result, ModelMap model,MultipartFile data) {
+	public String add(@Valid UserParam userParam, BindingResult result, ModelMap model,MultipartFile srcImg) {
 		String errorMsg = "";
 		boolean hasErrors = result.hasErrors();
 		if (hasErrors) {
@@ -77,13 +77,13 @@ public class UserInforController {
 		}
 		//图片处理
 		String subFloder="/user_head_img";
-		String filename = data.getOriginalFilename();
+		String filename = srcImg.getOriginalFilename();
 		File file = new File(fileSrc+subFloder);
 		if (!file.exists()) {
 			file.mkdirs();
 		}
 		try {
-			data.transferTo(new File(file + "/" + filename));
+			srcImg.transferTo(new File(file + "/" + filename));
 		} catch (IllegalStateException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -97,7 +97,7 @@ public class UserInforController {
 		userInfor.setSrcImg("http://localhost:8080/images"+subFloder+"/"+ filename);
 		System.out.println("--------------------------密码："+passwordEncoder.encode(userInfor.getUserPassword()));
 		userInforRepostitory.save(userInfor);
-		return "注册成功！";
+		return "200";
 	}
 
 	@RequestMapping("/delete")
