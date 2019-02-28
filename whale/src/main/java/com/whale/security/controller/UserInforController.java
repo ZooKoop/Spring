@@ -38,28 +38,33 @@ public class UserInforController {
 	@Autowired
 	private SecurityUserRepository userInforRepostitory;
 	@Autowired
-	private EntityManager entityManager; //自动启用一级缓存
+	private EntityManager entityManager; // 自动启用一级缓存
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@RequestMapping("/list")
 	public String list(ModelMap model, @RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "size", defaultValue = "5") Integer size) {
-//		Sort sort = new Sort(Sort.Direction.DESC, "id");
-//		PageRequest pageable = new PageRequest(page, size, sort);
-//		Page<UserInfor> findList = userInforRepostitory.findList(pageable);
+		// Sort sort = new Sort(Sort.Direction.DESC, "id");
+		// PageRequest pageable = new PageRequest(page, size, sort);
+		// Page<UserInfor> findList = userInforRepostitory.findList(pageable);
 		PageRequest pageable = PageRequest.of(page, size);
 		Page<SecurityUser> findList = userInforRepostitory.findAll(pageable);
-		if (findList.getSize()<=0) {
+		if (findList.getSize() <= 0) {
 			return "user/list";
 		}
 		model.addAttribute("list", findList);
 		return "user/list";
 	}
 
-	@PostMapping("/add")
-	@ResponseBody //返回json数据 
-	public String add(@Valid UserParam userParam, BindingResult result, ModelMap model,MultipartFile srcImg) {
+	@RequestMapping("/toSaveUser")
+	public String user() {
+		return "user/saveUser";
+	}
+
+	@PostMapping("/saveUser")
+	@ResponseBody // 返回json数据
+	public String add(@Valid UserParam userParam, BindingResult result, MultipartFile srcImg) {
 		String errorMsg = "";
 		boolean hasErrors = result.hasErrors();
 		if (hasErrors) {
@@ -67,25 +72,22 @@ public class UserInforController {
 			for (ObjectError e : list) {
 				errorMsg = errorMsg + e.getCode() + ":" + e.getDefaultMessage();
 			}
-//			model.addAttribute("errorMsg", errorMsg);
 			return errorMsg;
 		}
 		SecurityUser u = userInforRepostitory.findByuserName(userParam.getUserName());
 		if (u != null) {
-//			model.addAttribute("errorMsg", "用户名已存在！");
 			return "用户名已存在";
 		}
-		//图片处理
-		String subFloder="/user_head_img";
+		// 图片处理
+		String subFloder = "/user_head_img";
 		String filename = srcImg.getOriginalFilename();
-		File file = new File(fileSrc+subFloder);
+		File file = new File(fileSrc + subFloder);
 		if (!file.exists()) {
 			file.mkdirs();
 		}
 		try {
 			srcImg.transferTo(new File(file + "/" + filename));
 		} catch (IllegalStateException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "图片上传失败！";
 		}
@@ -94,8 +96,8 @@ public class UserInforController {
 		SecurityUser userInfor = new SecurityUser();
 		BeanUtils.copyProperties(userParam, userInfor);
 		userInfor.setUserPassword(passwordEncoder.encode(userInfor.getUserPassword()));
-		userInfor.setSrcImg("http://localhost:8080/images"+subFloder+"/"+ filename);
-		System.out.println("--------------------------密码："+passwordEncoder.encode(userInfor.getUserPassword()));
+		userInfor.setSrcImg("http://localhost:8080/images" + subFloder + "/" + filename);
+		System.out.println("--------------------------密码：" + passwordEncoder.encode(userInfor.getUserPassword()));
 		userInforRepostitory.save(userInfor);
 		return "200";
 	}
@@ -113,10 +115,10 @@ public class UserInforController {
 		model.addAttribute("user", userInfor);
 		return userInfor;
 	}
-	
+
 	@Transactional
 	@RequestMapping("/userUpdate")
-	public String update(@Valid UserParam userParam,BindingResult result,Model model ) {
+	public String update(@Valid UserParam userParam, BindingResult result, Model model) {
 		String errorMsg = "";
 		boolean hasErrors = result.hasErrors();
 		if (hasErrors) {
@@ -127,7 +129,7 @@ public class UserInforController {
 			model.addAttribute("errorMsg", errorMsg);
 			return "user/userInforAdd";
 		}
-		
+
 		UserInfor userInfor = new UserInfor();
 		BeanUtils.copyProperties(userParam, userInfor);
 		entityManager.merge(userInfor);

@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest()// 任何请求
 				.authenticated()// 都需要身份认证
 				.and()
-				.headers().frameOptions().disable()//iframe不禁止 你找啥呢
+				.headers().frameOptions().disable()//iframe不禁止
 				.and().csrf() // 关闭csrf 不然不支持post
 				.disable();
 

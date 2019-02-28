@@ -3,23 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <title>用户列表</title>
-<link rel="stylesheet" href="/css/bootstrap.css" />
-<link rel="stylesheet" href="/layer/css/layer.css" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/layer/theme/default/layer.css}"/>
 <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-
-<script
-	src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<!-- <script th:src="@{/js/upload.js}"></script> -->
-<script src="/layer/js/layer.js"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+<script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+<script type="text/javascript" th:src="@{/js/myJs.js}"></script>
 </head>
 <body>
 	<div th:replace="navbar :: html"></div>
 	<div class="container-fluid">
 		<h4 class="text-primary">用户列表</h4>
 		<div>
-			<!-- <a href="#" class="btn btn-info" data-toggle="modal"
-				data-target="#saveUser">添加用户</a> -->
-			<a href="#" class="btn btn-info" onclick="layermsg();">添加用户</a>
+			<a href="#" class="btn btn-info" id="saveUser" >添加用户</a>
 		</div>
 		<div>
 			<table class="table table-bordered table-hover">
@@ -43,13 +41,13 @@
 						<td th:text="${list.email}">1pp</td>
 						<td
 							th:text="${#dates.format(list.regTime, 'yyyy-MM-dd HH:mm:ss')}">1pp</td>
-						<td><button class="btn btn-primary center-block"
+						<td><a class="btn btn-primary center-block"
 								th:data-id="${list.id}"
 								onclick="cz(this.getAttribute('data-id'))" data-toggle="modal"
-								data-target="#myModal">Edit</button></td>
-						<td><button class="btn btn-danger center-block"
+								data-target="#myModal">编辑</a></td>
+						<td><a class="btn btn-danger center-block"
 								th:href="@{/user/delete(id=${list.id})}"
-								onclick="return confirm('确认删除该用户吗？')">Delete</button></td>
+								onclick="return confirm('确认删除该用户吗？')">删除</a></td>
 					</tr>
 
 				</tbody>
@@ -125,161 +123,31 @@
 				</div>
 			</div>
 		</div>
-
-		<!-- 上传图片模态框 -->
-		<!-- <div class="modal fade" id="saveUser" tabindex="-1" role="dialog"
-			aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-hidden="true">&times;</button>
-						<h4 class="modal-title" id="myModalLabel">注册用户</h4>
-					</div>
-					th:action="@{/imgUpload}"
-					<form id="file" class="form-horizontal"
-						enctype="multipart/form-data" method="post">
-						<div class="modal-body">
-							<div class="form-group">
-								<label for="userName" class="col-sm-2 control-label">用户名</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" name="userName"
-										placeholder="用户名">
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="userPassword" class="col-sm-2 control-label">密码</label>
-								<div class="col-sm-10">
-									<input type="password" class="form-control" name="userPassword"
-										placeholder="密码">
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="email" class="col-sm-2 control-label">邮箱</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" name="email"
-										placeholder="邮箱">
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-2 control-label"></label>
-								<div class="col-sm-10">
-									<div th:if="${errorMsg!=null}" class="alert alert-danger"
-										role="alert" th:text="${errorMsg}"></div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="exampleInputFile">选择图片</label> <input type="file"
-									name="data">
-								<p class="help-block">Example block-level help text here.</p>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label"></label>
-							<div class="col-sm-10">
-								<div th:if="${errorMsg!=null}" class="alert alert-danger"
-									role="alert" th:text="${errorMsg}"></div>
-							</div>
-						</div>
-						<div class="alert alert-warning">
-							<a href="#" class="close" data-dismiss="alert"> &times; </a> <strong>警告！</strong>您的网络连接有问题。
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default"
-								data-dismiss="modal">关闭</button>
-							<button class="btn btn-primary" onclick="uploadFiles();">注册</button>
-							<input  class="btn btn-primary" type="button" onclick="uploadFiles();" value="注册" />
-							<input  class="btn btn-primary" type="button" onclick="layermsg();" value="123" />
-						</div>
-					</form>
-				</div>
-			</div>
-		</div> -->
 	</div>
-
+	
+	<!--第二步：添加如下 HTML 代码-->
+<table id="table_id_example" class="display">
+    <thead>
+        <tr>
+            <th>Column 1</th>
+            <th>Column 2</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Row 1 Data 1</td>
+            <td>Row 1 Data 2</td>
+        </tr>
+        <tr>
+            <td>Row 2 Data 1</td>
+            <td>Row 2 Data 2</td>
+        </tr>
+    </tbody>
+</table>
 </body>
-<script>
-	function layermsg() {
-
-		layer.open({
-			type : 2,
-			area : [ '800px', '450px' ],
-			shade : 0.3,
-			maxmin : false,//最大化和最小化按钮
-			resize : false,//拉伸
-			scrollbar : false,//滚动条
-			moveOut : false,//拖动到屏幕外面
-			fixed : false, //不固定
-			content : '/adduser',
-			end : function() {
-				location.reload();
-			},
-			btn : [ '上传', '取消' ], //按钮上传按钮怎么提交的是 模态框的？
-			yes : function(index, layero) {//这是得到了那个页面的form表单，这个data
-				var body = layer.getChildFrame('body', index);//找页面下所有套的子类
-
-				var iframeWin = layero.find('iframe')[0]; //得到iframe页的窗口对象
-				iframeWin.contentWindow.uploadFiles();//doSubmit 是你在弹出层的那个jsp里写的表单提交方法
-				//var da = body.find('#file');//这是你弹出层 表单对象
-				/* console.log(kg)
-				if(kg==200){
-					var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-					parent.layer.close(index); //再执行关闭
-				} */
-			}
-
-		});
-	}
-	/* function uploadFiles(formdata) {我知道，我只是用这个ajax和提示的消息 我想知道 lyer在哪传值啊
-		//var data = new FormData(document.getElementById("file"));
-		var data = new FormData(formdata);
-		var n = false;
-		if ("data" != typeof (data) && data != null && data != "") {
-			$.ajax({
-				url : '/user/add',
-				type : 'POST',
-				data : data,
-				async : false,
-				contentType : false, //不设置内容类型
-				processData : false, //不处理数据
-				success : function(data) {
-						
-						console.log(data);
-						alert(data);
-						if(data.indexOf("成功")>0){
-							return true;
-						} else{
-							return n;
-						}
-				},
-				error : function() {
-					alert("图片上传失败！");
-					return n;
-				}
-			});
-		
-		} else {
-			alert("选择的文件无效！请重新选择");
-			return n;
-		}
-	} */
-	function cz(ko) {
-		$.ajax({
-			url : '/user/toUserUpdate',
-			type : 'POST',
-			data : "id=" + ko,
-			dataType : "json",
-			success : function(data) {
-				console.log(data);
-				$("#id").val(data.id);
-				$("#userName").val(data.userName);
-				$("#userPassword").val(data.userPassword);
-				$("#email").val(data.email);
-			},
-			error : function() {
-				alert("获取失败");
-			}
-		})
-	}
+<script type="text/javascript">
+$(document).ready( function () {
+    $('#table_id_example').DataTable();
+} );
 </script>
 </html>

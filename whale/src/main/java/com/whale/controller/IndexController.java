@@ -20,8 +20,4 @@ public class IndexController {
 	public String index() {
 		return "index";
 	}
-	@RequestMapping("/adduser")
-	public String user() {
-		return "user/userInforAdd";
-	}
 }
