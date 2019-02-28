@@ -9,10 +9,9 @@
 	src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<div th:replace="navbar :: html"></div>
 	<div class="container-filud">
 		<div class="form-container">
-			<form class="form-horizontal" action="/lg" method="POST">
+			<form class="form-horizontal" action="/lg" method="POST" id="loginFrom">
 				<div class="modal-body ">
 					<div class="form-group">
 						<label for="username" class="col-sm-2 control-label">账号:</label>
@@ -31,10 +30,6 @@
 					<div class="alert col-sm-12 alert-warning" th:if="${param.error}">
 						<a href="#" class="close" data-dismiss="alert"> &times; </a> <strong>警告！</strong>用户名或密码错误。
 					</div>
-				</div>
-				<div class="modal-footer" style="border: none;padding-top: 0;">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button class="btn btn-primary" type="submit">Login</button>
 				</div>
 			</form>
 		</div>

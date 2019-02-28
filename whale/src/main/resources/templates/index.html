@@ -3,10 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Whale</title>
-<link type="" rel="stylesheet" href="/css/bootstrap.css" />
+<link type="" rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/layer/theme/default/layer.css}"/>
 <script type="text/javascript" src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
 <script
 	src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+<script type="text/javascript" th:src="@{/js/myJs.js}"></script>
 </head>
 <body>
 	<div th:replace="navbar :: html"></div>

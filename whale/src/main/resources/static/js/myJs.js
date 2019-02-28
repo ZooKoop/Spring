@@ -3,7 +3,7 @@ $(function(){
 		layer.open({
 			type : 2,
 			title :['注册用户','font-size:18px;font-weight:bold;'],
-			area : [ '40%', '90%' ],
+			 area : [ '40%', '90%' ],
 			shade : 0.3,
 			maxmin : false,//最大化和最小化按钮
 			resize : false,//拉伸
@@ -48,8 +48,36 @@ $(function(){
 				}
 			}
 		});
-})
-
+	})
+	/*登陆弹框*/
+	$("#login").on("click",function () {
+		layer.open({
+			type : 2,
+			title :['Whale Login','font-size:18px;font-weight:bold;'],
+			area : [ '50%', '50%' ],
+			shade : 0.3,
+			maxmin : false,//最大化和最小化按钮
+			resize : false,//拉伸
+			scrollbar : false,//滚动条
+			moveOut : false,//拖动到屏幕外面
+			fixed : true, //不固定
+			content : '/login',
+			end : function() {
+				location.reload();
+			},
+			btn : [ 'Login','Sign Up'], //按钮上传按钮怎么提交的是 模态框的？
+			yes : function(index, layero) {
+				layer.getChildFrame('body', index).find('#loginFrom').submit();
+				layer.msg('登陆成功!');
+				layer.close(index);
+				
+			}
+		});
+	})
+	
+	
+	
+	
 	function cz(ko) {
 		$.ajax({
 			url : '/user/toUserUpdate',

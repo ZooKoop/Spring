@@ -1,5 +1,6 @@
 package com.whale.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 //import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -30,9 +32,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginPage("/login")
 				.loginProcessingUrl("/lg")// 前端from表单自定义登陆校验路径
 				.failureUrl("/login?error=true")
-				.defaultSuccessUrl("/")
+//				.defaultSuccessUrl("/")
 //				.failureHandler(myAuthenticationFalureHandler)
 //				.successHandler(myAuthenticationSuccessHandler)// 加自己定义的登陆成功hadler
+				.and()
+				.logout()
+				.logoutSuccessUrl("/")
 				.and()
 				.authorizeRequests()// 表示以下都是授权的配置
 				.antMatchers("/login", "/","/images/**").permitAll()
