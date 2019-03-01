@@ -67,10 +67,34 @@ $(function(){
 			},
 			btn : [ 'Login','Sign Up'], //按钮上传按钮怎么提交的是 模态框的？
 			yes : function(index, layero) {
-				layer.getChildFrame('body', index).find('#loginFrom').submit();
-				layer.msg('登陆成功!');
-				layer.close(index);
-				
+			/*	layer.getChildFrame('body', index).find('#loginFrom').submit();
+				if([[${session?.SPRING_SECURITY_CONTEXT?.authentication?.principal?.username}]]!=null){
+					layer.msg('登陆成功!');
+					layer.close(index);
+				}*/
+//				var iframes = $(layero).find("iframe")[0].contentWindow;//找页面html
+//				var formdata =iframes.document.getElementById("loginFrom").serialize();//序列化表单
+//				console.log(formdata);
+				var formdata = layer.getChildFrame('#loginFrom', index);
+//				layer.alert(formdata);
+				$.ajax({
+					url : '/lg',
+					type : 'POST',
+					dataType:'JSON',
+					data : formdata.serialize(),
+					success : function(data) {
+						console.log(data);
+						if(data.principal.username!=null && data.principal.username!=''){
+							layer.msg('欢迎 '+data.principal.username+' 登陆成功!',{icon: 1,time:1000},function(){
+								layer.close(index);
+							});
+						}
+					},
+					error : function(da) {
+						console.log(da);
+						layer.msg('登陆失败', {icon: 2,time:1000});
+					}
+				});
 			}
 		});
 	})

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 //import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 //import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -16,10 +17,10 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-//	@Autowired
-//	private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
-//	@Autowired
-//	private AuthenticationFailureHandler myAuthenticationFalureHandler;
+	@Autowired
+	private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
+	@Autowired
+	private AuthenticationFailureHandler myAuthenticationFalureHandler;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -33,8 +34,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginProcessingUrl("/lg")// 前端from表单自定义登陆校验路径
 				.failureUrl("/login?error=true")
 //				.defaultSuccessUrl("/")
-//				.failureHandler(myAuthenticationFalureHandler)
-//				.successHandler(myAuthenticationSuccessHandler)// 加自己定义的登陆成功hadler
+				.failureHandler(myAuthenticationFalureHandler)
+				.successHandler(myAuthenticationSuccessHandler)// 加自己定义的登陆成功hadler
 				.and()
 				.logout()
 				.logoutSuccessUrl("/")

@@ -11,7 +11,7 @@
 <body>
 	<div class="container-filud">
 		<div class="form-container">
-			<form class="form-horizontal" action="/lg" method="POST" id="loginFrom">
+			<form class="form-horizontal"  method="POST" id="loginFrom">
 				<div class="modal-body ">
 					<div class="form-group">
 						<label for="username" class="col-sm-2 control-label">账号:</label>
@@ -26,9 +26,6 @@
 							<input type="password" class="form-control" id="password"
 								name="password" value="">
 						</div>
-					</div>
-					<div class="alert col-sm-12 alert-warning" th:if="${param.error}">
-						<a href="#" class="close" data-dismiss="alert"> &times; </a> <strong>警告！</strong>用户名或密码错误。
 					</div>
 				</div>
 			</form>
