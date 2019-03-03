@@ -10,6 +10,8 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,21 +43,33 @@ public class UserInforController {
 	private EntityManager entityManager; // 自动启用一级缓存
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
 	@RequestMapping("/list")
-	public String list(ModelMap model, @RequestParam(value = "page", defaultValue = "0") Integer page,
-			@RequestParam(value = "size", defaultValue = "5") Integer size) {
-		// Sort sort = new Sort(Sort.Direction.DESC, "id");
-		// PageRequest pageable = new PageRequest(page, size, sort);
-		// Page<UserInfor> findList = userInforRepostitory.findList(pageable);
-		PageRequest pageable = PageRequest.of(page, size);
-		Page<SecurityUser> findList = userInforRepostitory.findAll(pageable);
-		if (findList.getSize() <= 0) {
-			return "user/list";
-		}
-		model.addAttribute("list", findList);
+	public String list() {
 		return "user/list";
 	}
+	@RequestMapping("/listInfo")
+	@ResponseBody
+	public JSONObject listInfo() throws JSONException {
+		List<SecurityUser> findAll = userInforRepostitory.findAll();
+		JSONObject object = new JSONObject();
+		object.put("data", findAll);
+		return object;
+	}
+//	@RequestMapping("/listInfo")
+//	@ResponseBody
+//	public String listInfo(ModelMap model, @RequestParam(value = "page", defaultValue = "0") Integer page,
+//			@RequestParam(value = "size", defaultValue = "5") Integer size) {
+//		// Sort sort = new Sort(Sort.Direction.DESC, "id");
+//		// PageRequest pageable = new PageRequest(page, size, sort);
+//		// Page<UserInfor> findList = userInforRepostitory.findList(pageable);
+//		PageRequest pageable = PageRequest.of(page, size);
+//		Page<SecurityUser> findList = userInforRepostitory.findAll(pageable);
+//		if (findList.getSize() <= 0) {
+//			return "user/list";
+//		}
+//		model.addAttribute("list", findList);
+//		return "user/list";
+//	}
 
 	@RequestMapping("/toSaveUser")
 	public String user() {

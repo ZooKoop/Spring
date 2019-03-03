@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <title>用户列表</title>
-<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
-<link rel="stylesheet" type="text/css" th:href="@{/layer/theme/default/layer.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/layer/theme/default/layer.css}" />
 <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
-<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8"
+	src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
 <script type="text/javascript" th:src="@{/layer/layer.js}"></script>
 <script type="text/javascript" th:src="@{/js/myJs.js}"></script>
 </head>
@@ -17,43 +20,50 @@
 	<div class="container-fluid">
 		<h4 class="text-primary">用户列表</h4>
 		<div>
-			<a href="#" class="btn btn-info" id="saveUser" >添加用户</a>
+			<a href="#" class="btn btn-info" id="saveUser">添加用户</a>
 		</div>
-		<div>
-			<table class="table table-bordered table-hover">
-				<thead>
-					<tr>
-						<th>头像</th>
-						<th>账号</th>
-						<th>密码</th>
-						<th>邮箱</th>
-						<th>注册时间</th>
-						<th>编辑</th>
-						<th>删除</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="list:${list}">
-						<td><img style="width: 50px;"
-							class="img-rounded center-block" th:src="${list.srcImg}"></td>
-						<td th:text="${list.userName}">1pp</td>
-						<td th:text="${list.userPassword}">1pp</td>
-						<td th:text="${list.email}">1pp</td>
-						<td
-							th:text="${#dates.format(list.regTime, 'yyyy-MM-dd HH:mm:ss')}">1pp</td>
-						<td><a class="btn btn-primary center-block"
-								th:data-id="${list.id}"
-								onclick="cz(this.getAttribute('data-id'))" data-toggle="modal"
-								data-target="#myModal">编辑</a></td>
-						<td><a class="btn btn-danger center-block"
-								th:href="@{/user/delete(id=${list.id})}"
-								onclick="return confirm('确认删除该用户吗？')">删除</a></td>
-					</tr>
-
-				</tbody>
-			</table>
-		</div>
-		<ul class="pagination">
+		<!--第二步：添加如下 HTML 代码-->
+		<table id="table_id_example" class="display">
+			<thead>
+				<tr>
+					<th>头像</th>
+				<!-- 	<th>账号</th>
+					<th>密码</th>
+					<th>邮箱</th>
+					<th>注册时间</th>
+					<th>编辑</th>
+					<th>删除</th> -->
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>头像</th>
+				<!-- 	<th>账号</th>
+					<th>密码</th>
+					<th>邮箱</th>
+					<th>注册时间</th>
+					<th>编辑</th>
+					<th>删除</th> -->
+				</tr>
+			</tfoot>
+			<tbody>
+				<!-- <tr th:each="list:${list}">
+					<td><img style="width: 50px;" class="img-rounded center-block"
+						th:src="${list.srcImg}"></td>
+					<td th:text="${list.userName}">1pp</td>
+					<td th:text="${list.userPassword}">1pp</td>
+					<td th:text="${list.email}">1pp</td>
+					<td th:text="${#dates.format(list.regTime, 'yyyy-MM-dd HH:mm:ss')}">1pp</td>
+					<td><a class="btn btn-primary center-block"
+						th:data-id="${list.id}" onclick="cz(this.getAttribute('data-id'))"
+						data-toggle="modal" data-target="#myModal">编辑</a></td>
+					<td><a class="btn btn-danger center-block"
+						th:href="@{/user/delete(id=${list.id})}"
+						onclick="return confirm('确认删除该用户吗？')">删除</a></td>
+				</tr> -->
+			</tbody>
+		</table>
+		<!-- <ul class="pagination">
 			<li><a th:if="${list.number} gt 0"
 				th:href="@{/user/list(page=${list.number-1})}">&laquo;</a></li>
 
@@ -70,9 +80,9 @@
 			<li><a th:text="'总页数'+${list.totalPages}"></a></li>
 			<li><a th:if="${list.number} lt ${list.totalPages-1}"
 				th:href="@{/user/list(page=${list.number+1})}">&raquo;</a></li>
-		</ul>
+		</ul> -->
 		<!-- 模态框（Modal） -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 			aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -122,32 +132,32 @@
 					</form>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
-	
-	<!--第二步：添加如下 HTML 代码-->
-<table id="table_id_example" class="display">
-    <thead>
-        <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Row 1 Data 1</td>
-            <td>Row 1 Data 2</td>
-        </tr>
-        <tr>
-            <td>Row 2 Data 1</td>
-            <td>Row 2 Data 2</td>
-        </tr>
-    </tbody>
-</table>
 </body>
 <script type="text/javascript">
-$(document).ready( function () {
-    $('#table_id_example').DataTable();
-} );
+	$(document).ready(function() {
+		$('#table_id_example').DataTable({
+			"pagingType":   "full_numbers",
+			 "language": {
+                 "lengthMenu": "每页 _MENU_ 条记录",
+                 "zeroRecords": "没有找到记录",
+                 "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
+                 "infoEmpty": "无记录",
+                 "infoFiltered": "(从 _MAX_ 条记录过滤)"
+             },
+             "paging":true,
+             "bProcessing" : true, //DataTables载入数据时，是否显示‘进度’提示  
+             "bServerSide" : true,   //是否启动服务器端数据导入 
+             ajax:{
+             	url:'/user/listInfo',
+             	type:'post'
+             },
+             columns: [
+                 { data: 'userName' },
+             ],
+
+		});
+	});
 </script>
 </html>

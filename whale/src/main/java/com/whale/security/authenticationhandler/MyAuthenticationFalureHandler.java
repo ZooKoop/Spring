@@ -46,7 +46,7 @@ public class MyAuthenticationFalureHandler extends SimpleUrlAuthenticationFailur
 //			response.getWriter().write(objectMapper.writeValueAsString(exception));
 			 Map<String, Object> map = new HashMap<>();
 	            map.put("code","1002");
-	            map.put("msg","登录失败");
+	            map.put("msg","用户名或密码错误，登录失败！");
 	            map.put("data",exception.getMessage());
 	            response.setContentType("application/json;charset=UTF-8");
 	            response.getWriter().write(objectMapper.writeValueAsString(map));
