@@ -26,24 +26,22 @@
 		<table id="table_id_example" class="display">
 			<thead>
 				<tr>
-					<th>头像</th>
-				<!-- 	<th>账号</th>
+					<th>ID</th>
+					<th>账号</th>
 					<th>密码</th>
 					<th>邮箱</th>
 					<th>注册时间</th>
 					<th>编辑</th>
-					<th>删除</th> -->
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<th>头像</th>
-				<!-- 	<th>账号</th>
+					<th>ID</th>
+					<th>账号</th>
 					<th>密码</th>
 					<th>邮箱</th>
 					<th>注册时间</th>
 					<th>编辑</th>
-					<th>删除</th> -->
 				</tr>
 			</tfoot>
 			<tbody>
@@ -136,28 +134,95 @@
 	</div>
 </body>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$('#table_id_example').DataTable({
-			"pagingType":   "full_numbers",
-			 "language": {
-                 "lengthMenu": "每页 _MENU_ 条记录",
-                 "zeroRecords": "没有找到记录",
-                 "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
-                 "infoEmpty": "无记录",
-                 "infoFiltered": "(从 _MAX_ 条记录过滤)"
-             },
-             "paging":true,
-             "bProcessing" : true, //DataTables载入数据时，是否显示‘进度’提示  
-             "bServerSide" : true,   //是否启动服务器端数据导入 
-             ajax:{
-             	url:'/user/listInfo',
-             	type:'post'
-             },
-             columns: [
-                 { data: 'userName' },
-             ],
+$(document).ready(function() {
+	$('#table_id_example').removeClass('dataTable display');
+	$('#table_id_example').DataTable({
+		"pagingType" : "full_numbers",
+		"language" : {
+			"decimal" : "",
+			"emptyTable" : "No data available in table",
+			"info" : "当前显示第 _START_ 至 _END_ 项，共 _TOTAL_ 项。",
+			"infoEmpty" : "当前显示第 0 至 0 项，共 0 项",
+			"infoFiltered" : "(由 _MAX_ 项结果过滤)",
+			"infoPostFix" : "",
+			"thousands" : ",",
+			"lengthMenu" : "每页 _MENU_ 项",
+			"loadingRecords" : "载入中...",
+			"processing" : "处理中...",
+			"search" : "搜索:",
+			"zeroRecords" : "没有匹配结果",
+			"paginate" : {
+				"first" : "首页",
+				"previous" : "上页",
+				"next" : "下页",
+				"last" : "末页"
+			}
+		},
+		paging : true,//paging属性必须为true才能实现默认初始值得功能
+		bSort: true,
+		bAutoWidth : true,//自动宽度
+		ordering : true, //排序
+		//bPaginate : true, //翻页功能
+		bProcessing : true, //DataTables载入数据时，是否显示‘进度’提示  
+		serverSide : true, //是否启动服务器端数据导入 
+		searching : false, //是否禁用原生搜索(false为禁用,true为使用)
+		renderer: "Bootstrap", //渲染样式：Bootstrap和jquery-ui
+		//"stripeClasses": ["odd", "even"], //为奇偶行加上样式，兼容不支持CSS伪类的场合
+		lengthMenu : [ 10, 20, 50, 70, 100 ],
+		columns : [ {
+			data : 'id'
+		}, {
+			data : 'userName'
+		}, {
+			data : 'userPassword'
+		}, {
+			data : 'email'
+		}, {
+			data : 'regTime'
+		}, {
+			data : 'srcImg'
+		} ],
+		ajax: function (data, callback, settings) {
+			//封装请求参数
+			var param = {};
+			param.size = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+			//param.start = data.start;//开始的记录序号
+			param.page = (data.start / data.length);//当前页码
+			//param.search = data.search.value;//搜索条件
+			//if (data.order.length > 0) {
+			//param.order = data.columns[data.order[0].column].data;
+			//param.dir = data.order[0].dir;
+			//}
+			console.log(param);
+			//ajax请求数据
+			$.ajax({
+			type: "GET",
+			url: "/user/listInfo",
+			cache: false, //禁用缓存
+			data: param, //传入组装的参数
+			dataType: "json",
+			success: function (result) {
+			//console.log(result);
+			//setTimeout仅为测试延迟效果
+			setTimeout(function () {
+			//封装返回数据
+			var returnData = {};
+			returnData.draw = result.draw;//这里直接自行返回了draw计数器,应该由后台返回
+			returnData.recordsTotal = result.totalElements;//返回数据全部记录
+			returnData.recordsFiltered = result.totalElements;//后台不实现过滤功能，每次查询均视作全部结果
+			returnData.data = result.content;//返回的数据列表
+			console.log(returnData);
+			//调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+			//此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+			callback(returnData);
+			}, 200);
+			}
+			});
+		}
+			
+			
 
-		});
 	});
+});
 </script>
 </html>

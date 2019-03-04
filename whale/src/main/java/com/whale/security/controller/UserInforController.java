@@ -49,11 +49,14 @@ public class UserInforController {
 	}
 	@RequestMapping("/listInfo")
 	@ResponseBody
-	public JSONObject listInfo() throws JSONException {
-		List<SecurityUser> findAll = userInforRepostitory.findAll();
-		JSONObject object = new JSONObject();
-		object.put("data", findAll);
-		return object;
+	public Page<SecurityUser> listInfo(
+//			@RequestParam(value = "start", defaultValue = "1") Integer start,
+			@RequestParam(value = "page") Integer page,
+			@RequestParam(value = "size", defaultValue = "5") Integer size
+			) {
+		PageRequest pageable = PageRequest.of(page, size);
+		Page<SecurityUser> findList = userInforRepostitory.findAll(pageable);
+		return findList;
 	}
 //	@RequestMapping("/listInfo")
 //	@ResponseBody
