@@ -23,7 +23,7 @@
 			<a href="#" class="btn btn-info" id="saveUser">添加用户</a>
 		</div>
 		<!--第二步：添加如下 HTML 代码-->
-		<table id="table_id_example" class="display">
+		<table id="table_id_example" class="table table-striped table-bordered">
 			<thead>
 				<tr>
 					<th>ID</th>
@@ -31,6 +31,7 @@
 					<th>密码</th>
 					<th>邮箱</th>
 					<th>注册时间</th>
+					<th>头像</th>
 					<th>编辑</th>
 				</tr>
 			</thead>
@@ -41,6 +42,7 @@
 					<th>密码</th>
 					<th>邮箱</th>
 					<th>注册时间</th>
+					<th>头像</th>
 					<th>编辑</th>
 				</tr>
 			</tfoot>
@@ -135,23 +137,23 @@
 </body>
 <script type="text/javascript">
 $(document).ready(function() {
-	$('#table_id_example').removeClass('dataTable display');
-	$('#table_id_example').DataTable({
-		"pagingType" : "full_numbers",
-		"language" : {
-			"decimal" : "",
-			"emptyTable" : "No data available in table",
-			"info" : "当前显示第 _START_ 至 _END_ 项，共 _TOTAL_ 项。",
-			"infoEmpty" : "当前显示第 0 至 0 项，共 0 项",
-			"infoFiltered" : "(由 _MAX_ 项结果过滤)",
-			"infoPostFix" : "",
-			"thousands" : ",",
-			"lengthMenu" : "每页 _MENU_ 项",
-			"loadingRecords" : "载入中...",
-			"processing" : "处理中...",
-			"search" : "搜索:",
-			"zeroRecords" : "没有匹配结果",
-			"paginate" : {
+
+	var myTables=$('#table_id_example').DataTable({
+		pagingType : "full_numbers",
+		language : {
+			decimal : "",
+			emptyTable : "No data available in table",
+			info : "当前显示第 _START_ 至 _END_ 项，共 _TOTAL_ 项。",
+			infoEmpty : "当前显示第 0 至 0 项，共 0 项",
+			infoFiltered : "(由 _MAX_ 项结果过滤)",
+			infoPostFix : "",
+			thousands : ",",
+			lengthMenu : "每页 _MENU_ 项",
+			loadingRecords : "载入中...",
+			processing : "处理中...",
+			search : "搜索:",
+			zeroRecords : "没有匹配结果",
+			paginate : {
 				"first" : "首页",
 				"previous" : "上页",
 				"next" : "下页",
@@ -168,7 +170,7 @@ $(document).ready(function() {
 		searching : false, //是否禁用原生搜索(false为禁用,true为使用)
 		renderer: "Bootstrap", //渲染样式：Bootstrap和jquery-ui
 		//"stripeClasses": ["odd", "even"], //为奇偶行加上样式，兼容不支持CSS伪类的场合
-		lengthMenu : [ 10, 20, 50, 70, 100 ],
+		lengthMenu : [ 5, 20, 50, 70, 100 ],
 		columns : [ {
 			data : 'id'
 		}, {
@@ -178,10 +180,31 @@ $(document).ready(function() {
 		}, {
 			data : 'email'
 		}, {
-			data : 'regTime'
+			data : 'regTime',
+			title: "注册时间",
+			render:function(data, type, row, meta){
+				//console.log(new Date(parseInt(Date.parse(data))).toLocaleString())
+ 				return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
+			} 
 		}, {
-			data : 'srcImg'
-		} ],
+			data : 'srcImg',
+			title: "头像",
+			render:function(data, type, row, meta){
+				if(data==null){
+					return "无";
+				}
+				return "<img class='img-rounded center-block' style='width:50px' src='" + data + "' />";
+			}
+		}],
+	    columnDefs: [{
+	        //   指定第最后一列
+
+	        targets: 6,
+	        render: function(data, type, row, meta) {
+	            return '<a class="_del" type="button" href="#" >删除</a>';
+/* 	            return "<a class='btn btn-info'  href='#'>修改</a>  <a class='btn btn-danger'  href='/user/delete?id="+row.id+"' onclick='return confirm(确认删除该用户吗？)'>删除</a>"; */
+	        }
+	    }],
 		ajax: function (data, callback, settings) {
 			//封装请求参数
 			var param = {};
@@ -193,36 +216,55 @@ $(document).ready(function() {
 			//param.order = data.columns[data.order[0].column].data;
 			//param.dir = data.order[0].dir;
 			//}
-			console.log(param);
+			//console.log(param);
 			//ajax请求数据
 			$.ajax({
-			type: "GET",
-			url: "/user/listInfo",
-			cache: false, //禁用缓存
-			data: param, //传入组装的参数
-			dataType: "json",
-			success: function (result) {
-			//console.log(result);
-			//setTimeout仅为测试延迟效果
-			setTimeout(function () {
-			//封装返回数据
-			var returnData = {};
-			returnData.draw = result.draw;//这里直接自行返回了draw计数器,应该由后台返回
-			returnData.recordsTotal = result.totalElements;//返回数据全部记录
-			returnData.recordsFiltered = result.totalElements;//后台不实现过滤功能，每次查询均视作全部结果
-			returnData.data = result.content;//返回的数据列表
-			console.log(returnData);
-			//调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
-			//此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
-			callback(returnData);
-			}, 200);
-			}
+				type: "GET",
+				url: "/user/listInfo",
+				cache: false, //禁用缓存
+				data: param, //传入组装的参数
+				dataType: "json",
+				success: function (result) {
+				//console.log(result);
+				//setTimeout仅为测试延迟效果
+					setTimeout(function () {
+					//封装返回数据
+					var returnData = {};
+					returnData.draw = result.draw;//这里直接自行返回了draw计数器,应该由后台返回
+					returnData.recordsTotal = result.totalElements;//返回数据全部记录
+					returnData.recordsFiltered = result.totalElements;//后台不实现过滤功能，每次查询均视作全部结果
+					returnData.data = result.content;//返回的数据列表
+					console.log(returnData);
+					//调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+					//此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+					callback(returnData);
+					}, 10);
+				}
 			});
 		}
-			
-			
-
 	});
+	$('#table_id_example').removeClass('dataTable display');
+	// 数据删除
+    $('#table_id_example').on( 'click', '._del', function () {//._del是数组中删除按钮的类
+        var data = myTables.row( $(this).parents('tr')).data();
+        $.ajax({
+            url: '/user/delete',
+            type: 'get',
+            dataType: 'json',
+            data: {id: data.id},
+            success: function(data) {
+	        	console.log(data)
+	        	if(data==200){
+	            	//如果后台删除成功，则刷新表格，并提示用户删除成功
+	                layer.msg("删除成功！",{icon:1,time:2000});
+	                //保留分页信息
+	                //myTables.ajax.reload(null, false);
+	                //不保留分页信息
+	                myTables.ajax.reload();
+	        	}
+	        }
+        })
+    });
 });
 </script>
 </html>

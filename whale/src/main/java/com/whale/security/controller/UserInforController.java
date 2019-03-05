@@ -120,9 +120,11 @@ public class UserInforController {
 	}
 
 	@RequestMapping("/delete")
-	public String delete(String id) {
+	@ResponseBody
+	public String delete(@RequestParam(value = "id") String id) {
 		userInforRepostitory.deleteById(id);
-		return "redirect:/user/list";
+		return "200";
+		//return "redirect:/user/list";
 	}
 
 	@RequestMapping("/toUserUpdate")
