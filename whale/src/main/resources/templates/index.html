@@ -12,7 +12,8 @@
 <script type="text/javascript" th:src="@{/js/myJs.js}"></script>
 
 </head>
-<body style="background-color: #000;">
+<body>
+	<p class="alert alert-danger" th:if="${errormessage}!=null">请登陆</p>
 	<div th:replace="navbar :: html"></div>
 	<div class="container-fluid">
 	</div>

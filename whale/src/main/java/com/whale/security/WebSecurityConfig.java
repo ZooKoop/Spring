@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 //import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 //import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -46,6 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authenticated()// 都需要身份认证
 				.and()
 				.headers().frameOptions().disable()//iframe不禁止
+				.and()
+				.exceptionHandling().authenticationEntryPoint(new MyAuthenticationEntryPoint())
 				.and().csrf() // 关闭csrf 不然不支持post
 				.disable();
 

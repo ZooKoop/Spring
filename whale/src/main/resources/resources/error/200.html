@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>跳转。。。</title>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.css" />
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<p class="alert alert-info text-center">请登陆，<span id="num">3</span>秒后自动跳转首页。。。</p>
+	<a class="btn center-block" href="/" >手动跳转。。。</a>
+</body>
+<script type="text/javascript">
+	//3秒钟之后跳转到指定的页面，数字不动态变动
+/* 	setTimeout(function(){
+		window.location.href='/';
+	},3000); */
+	var tol=document.getElementById("num").innerText,
+	    timer=setInterval("ontime()",1000);
+	function ontime(){
+		//alert(tol)
+		tol>0 ? tol-- : clearInterval(timer);
+		if(tol==0){
+			window.location.href='/';
+		}
+		document.getElementById("num").innerText=tol;
+	}
+</script>
+</html>
