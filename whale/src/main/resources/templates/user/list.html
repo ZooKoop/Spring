@@ -3,66 +3,75 @@
 <head>
 <meta charset="UTF-8">
 <title>用户列表</title>
-<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" />
-<link rel="stylesheet" type="text/css"
-	th:href="@{/layer/theme/default/layer.css}" />
 <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<!-- boot引用 -->
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.css" />
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<!-- dataTables引用 -->
 <link rel="stylesheet" type="text/css"
 	href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8"
 	src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
-<script type="text/javascript" th:src="@{/layer/layer.js}"></script>
-<script type="text/javascript" th:src="@{/js/myJs.js}"></script>
+<!-- layer引用 -->
+<link rel="stylesheet" type="text/css" href="/layer/theme/default/layer.css" />
+<script type="text/javascript" src="/layer/layer.js"></script>
+<!-- 自定义引用 -->
+<script type="text/javascript" src="/js/myJs.js"></script>
 </head>
 <body>
 	<div th:replace="navbar :: html"></div>
 	<div class="container-fluid">
-		<h4 class="text-primary">用户列表</h4>
-		<div>
-			<a href="#" class="btn btn-info" id="saveUser">添加用户</a>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+		    	<h4 class="text-primary">用户列表</h4>
+		    </div>
+		    <div class="panel-body">
+		       	<a href="#" class="btn" id="saveUser"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" title="添加用户"></span></a>
+		    </div>
+		    <div class="table-responsive">
+				<!--第二步：添加如下 HTML 代码-->
+				<table id="table_id_example" class="table table-hover">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>账号</th>
+							<th>密码</th>
+							<th>邮箱</th>
+							<th>注册时间</th>
+							<th>头像</th>
+							<th>编辑</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th>ID</th>
+							<th>账号</th>
+							<th>密码</th>
+							<th>邮箱</th>
+							<th>注册时间</th>
+							<th>头像</th>
+							<th>编辑</th>
+						</tr>
+					</tfoot>
+					<tbody>
+						<!-- <tr th:each="list:${list}">
+							<td><img style="width: 50px;" class="img-rounded center-block"
+								th:src="${list.srcImg}"></td>
+							<td th:text="${list.userName}">1pp</td>
+							<td th:text="${list.userPassword}">1pp</td>
+							<td th:text="${list.email}">1pp</td>
+							<td th:text="${#dates.format(list.regTime, 'yyyy-MM-dd HH:mm:ss')}">1pp</td>
+							<td><a class="btn btn-primary center-block"
+								th:data-id="${list.id}" onclick="cz(this.getAttribute('data-id'))"
+								data-toggle="modal" data-target="#myModal">编辑</a></td>
+							<td><a class="btn btn-danger center-block"
+								th:href="@{/user/delete(id=${list.id})}"
+								onclick="return confirm('确认删除该用户吗？')">删除</a></td>
+						</tr> -->
+					</tbody>
+				</table>
+		    </div>
 		</div>
-		<!--第二步：添加如下 HTML 代码-->
-		<table id="table_id_example" class="table table-striped table-bordered">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>账号</th>
-					<th>密码</th>
-					<th>邮箱</th>
-					<th>注册时间</th>
-					<th>头像</th>
-					<th>编辑</th>
-				</tr>
-			</thead>
-			<tfoot>
-				<tr>
-					<th>ID</th>
-					<th>账号</th>
-					<th>密码</th>
-					<th>邮箱</th>
-					<th>注册时间</th>
-					<th>头像</th>
-					<th>编辑</th>
-				</tr>
-			</tfoot>
-			<tbody>
-				<!-- <tr th:each="list:${list}">
-					<td><img style="width: 50px;" class="img-rounded center-block"
-						th:src="${list.srcImg}"></td>
-					<td th:text="${list.userName}">1pp</td>
-					<td th:text="${list.userPassword}">1pp</td>
-					<td th:text="${list.email}">1pp</td>
-					<td th:text="${#dates.format(list.regTime, 'yyyy-MM-dd HH:mm:ss')}">1pp</td>
-					<td><a class="btn btn-primary center-block"
-						th:data-id="${list.id}" onclick="cz(this.getAttribute('data-id'))"
-						data-toggle="modal" data-target="#myModal">编辑</a></td>
-					<td><a class="btn btn-danger center-block"
-						th:href="@{/user/delete(id=${list.id})}"
-						onclick="return confirm('确认删除该用户吗？')">删除</a></td>
-				</tr> -->
-			</tbody>
-		</table>
 		<!-- <ul class="pagination">
 			<li><a th:if="${list.number} gt 0"
 				th:href="@{/user/list(page=${list.number-1})}">&laquo;</a></li>
@@ -162,7 +171,7 @@ $(document).ready(function() {
 		},
 		paging : true,//paging属性必须为true才能实现默认初始值得功能
 		bSort: true,
-		bAutoWidth : true,//自动宽度
+		//bAutoWidth : true,//自动宽度
 		ordering : true, //排序
 		//bPaginate : true, //翻页功能
 		bProcessing : true, //DataTables载入数据时，是否显示‘进度’提示  
@@ -193,18 +202,24 @@ $(document).ready(function() {
 				if(data==null){
 					return "无";
 				}
-				return "<img class='img-rounded center-block' style='width:50px' src='" + data + "' />";
+				return "<img class='img-rounded center-block img-thumbnail img-responsive' style='width:80px' src='" + data + "' />";
 			}
 		}],
-	    columnDefs: [{
-	        //   指定第最后一列
-
-	        targets: 6,
-	        render: function(data, type, row, meta) {
-	            return '<a class="_del" type="button" href="#" >删除</a>';
-/* 	            return "<a class='btn btn-info'  href='#'>修改</a>  <a class='btn btn-danger'  href='/user/delete?id="+row.id+"' onclick='return confirm(确认删除该用户吗？)'>删除</a>"; */
-	        }
-	    }],
+	    columnDefs: [
+	    	{
+		        //   指定第最后一列
+		        targets: 6,
+		        render: function(data, type, row, meta) {
+		            return '<a class="_eidt btn btn-info" type="button" href="#" data-toggle="tooltip" title="添加用户" ><span class="glyphicon glyphicon-list-alt"></span> 详情</a> <a class="_eidt btn btn-warning" type="button" href="#" > <span class="glyphicon glyphicon-pencil"></span> 编辑</a> <a class="_del btn btn-danger" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span> 删除</a>';
+		        }
+	    	},
+	        {
+	    		//隐藏第一列
+	            targets: 0,
+	            visible: false,
+	            searchable: false
+	          }
+	    	],
 		ajax: function (data, callback, settings) {
 			//封装请求参数
 			var param = {};
@@ -266,5 +281,7 @@ $(document).ready(function() {
         })
     });
 });
+
+$(function () { $("[data-toggle='tooltip']").tooltip(); });
 </script>
 </html>
