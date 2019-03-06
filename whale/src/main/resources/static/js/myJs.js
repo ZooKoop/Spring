@@ -65,6 +65,7 @@ $(function(){
 			end : function() {
 				location.reload();
 			},
+			btnAlign: 'c',
 			btn : [ 'Login','Sign Up'], //按钮上传按钮怎么提交的是 模态框的？
 			yes : function(index, layero) {
 //			layer.getChildFrame('body', index).find('#loginFrom').submit();//表单提交

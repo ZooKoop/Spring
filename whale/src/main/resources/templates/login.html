@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<title>Whale Login</title>
-<link rel="stylesheet" href="/css/bootstrap.css" />
-<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-<script
-	src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<head th:replace="common/common_pub :: common_header('')">
+	<meta charset="UTF-8">
 </head>
 <body>
-	<div class="container-filud">
-		<div class="form-container">
-			<form class="form-horizontal"  method="POST" id="loginFrom">
+	<div class="container-fluid ">
+		<div class="row center-block" style="width: 50%">
+			<form method="POST" id="loginFrom">
+				<input type="text" class="form-control" id="username"
+					style="margin: 20px 0;" name="username" placeholder="用户名" required
+					autofocus> <input type="password" style="margin: 20px 0;"
+					class="form-control" id="password" name="password" placeholder="密码"
+					required autofocus>
+			</form>
+			<!-- 			<form class="form-horizontal"  method="POST" id="loginFrom">
 				<div class="modal-body ">
 					<div class="form-group">
 						<label for="username" class="col-sm-2 control-label">账号:</label>
@@ -28,7 +30,7 @@
 						</div>
 					</div>
 				</div>
-			</form>
+			</form> -->
 		</div>
 	</div>
 </body>

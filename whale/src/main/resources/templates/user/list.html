@@ -1,25 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<title>用户列表</title>
-<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-<!-- boot引用 -->
-<link rel="stylesheet" type="text/css" href="/css/bootstrap.css" />
-<script type="text/javascript" src="/js/bootstrap.min.js"></script>
-<!-- dataTables引用 -->
-<link rel="stylesheet" type="text/css"
-	href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8"
-	src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
-<!-- layer引用 -->
-<link rel="stylesheet" type="text/css" href="/layer/theme/default/layer.css" />
-<script type="text/javascript" src="/layer/layer.js"></script>
-<!-- 自定义引用 -->
-<script type="text/javascript" src="/js/myJs.js"></script>
+<head th:replace="common/common_pub :: common_header('用户列表')">
+	<meta charset="UTF-8">
 </head>
 <body>
-	<div th:replace="navbar :: html"></div>
+	<div th:replace="common/common_pub :: navbar_"></div>
 	<div class="container-fluid">
 		<div class="panel panel-default">
 			<div class="panel-heading">
@@ -210,7 +195,7 @@ $(document).ready(function() {
 		        //   指定第最后一列
 		        targets: 6,
 		        render: function(data, type, row, meta) {
-		            return '<a class="_eidt btn btn-info" type="button" href="#" data-toggle="tooltip" title="添加用户" ><span class="glyphicon glyphicon-list-alt"></span> 详情</a> <a class="_eidt btn btn-warning" type="button" href="#" > <span class="glyphicon glyphicon-pencil"></span> 编辑</a> <a class="_del btn btn-danger" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span> 删除</a>';
+		            return '<a class="_eidt btn btn-info" type="button" href="#" data-toggle="tooltip" title="添加用户" ><span class="glyphicon glyphicon-list-alt"></span> 详情</a> <a class="_eidt btn btn-warning" type="button" href="#" > <span class="glyphicon glyphicon-edit"></span> 编辑</a> <a class="_del btn btn-danger" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span> 删除</a>';
 		        }
 	    	},
 	        {
