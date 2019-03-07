@@ -6,19 +6,20 @@
 <body>
 	<div th:replace="common/common_pub :: navbar_"></div>
 	<div class="container-fluid">
-		<div class="panel panel-default">
+		<div class="panel panel-info">
 			<div class="panel-heading">
-		    	<h4 class="text-primary">用户列表</h4>
+		    	用户列表
 		    </div>
 		    <div class="panel-body">
-		       	<a href="#" class="btn" id="saveUser"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" title="添加用户"></span></a>
+		       	<a href="#" id="saveUser"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" title="添加用户"></span></a>
 		    </div>
-		    <div class="table-responsive">
+		    <div class="panel-body">
 				<!--第二步：添加如下 HTML 代码-->
-				<table id="table_id_example" class="table table-hover">
+				<table id="table_id_example" >
 					<thead>
 						<tr>
 							<th>ID</th>
+							<th><input type="checkbox" class="" name="select_all" id="select-all" > 全选</th>
 							<th>账号</th>
 							<th>密码</th>
 							<th>邮箱</th>
@@ -30,6 +31,7 @@
 					<tfoot>
 						<tr>
 							<th>ID</th>
+							<th></th>
 							<th>账号</th>
 							<th>密码</th>
 							<th>邮箱</th>
@@ -154,20 +156,27 @@ $(document).ready(function() {
 				"last" : "末页"
 			}
 		},
+		destroy : true, //销毁表格对象
+		deferRender:true,//延迟渲染
 		paging : true,//paging属性必须为true才能实现默认初始值得功能
 		bSort: true,
-		//bAutoWidth : true,//自动宽度
+		bAutoWidth : false,//自动宽度
 		ordering : true, //排序
 		//bPaginate : true, //翻页功能
 		bProcessing : true, //DataTables载入数据时，是否显示‘进度’提示  
 		serverSide : true, //是否启动服务器端数据导入 
 		searching : false, //是否禁用原生搜索(false为禁用,true为使用)
-		renderer: "Bootstrap", //渲染样式：Bootstrap和jquery-ui
+		//renderer: "Bootstrap", //渲染样式：Bootstrap和jquery-ui
 		//"stripeClasses": ["odd", "even"], //为奇偶行加上样式，兼容不支持CSS伪类的场合
 		lengthMenu : [ 5, 20, 50, 70, 100 ],
 		columns : [ {
 			data : 'id'
-		}, {
+		},{
+			data:null,
+			render:function(data, type, row, meta){
+				return "<input type='checkbox' name='onDutyToId'  value='" + data + "'>";
+			}
+		},{
 			data : 'userName'
 		}, {
 			data : 'userPassword'
@@ -193,7 +202,7 @@ $(document).ready(function() {
 	    columnDefs: [
 	    	{
 		        //   指定第最后一列
-		        targets: 6,
+		        targets: 7,
 		        render: function(data, type, row, meta) {
 		            return '<a class="_eidt btn btn-info" type="button" href="#" data-toggle="tooltip" title="添加用户" ><span class="glyphicon glyphicon-list-alt"></span> 详情</a> <a class="_eidt btn btn-warning" type="button" href="#" > <span class="glyphicon glyphicon-edit"></span> 编辑</a> <a class="_del btn btn-danger" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span> 删除</a>';
 		        }
@@ -203,8 +212,7 @@ $(document).ready(function() {
 	            targets: 0,
 	            visible: false,
 	            searchable: false
-	          }
-	    	],
+	        }],
 		ajax: function (data, callback, settings) {
 			//封装请求参数
 			var param = {};
@@ -243,7 +251,7 @@ $(document).ready(function() {
 			});
 		}
 	});
-	$('#table_id_example').removeClass('dataTable display');
+	$('#table_id_example').removeClass('dataTable').addClass('table table-bordered table-hover table-striped');
 	// 数据删除
     $('#table_id_example').on( 'click', '._del', function () {//._del是数组中删除按钮的类
         var data = myTables.row( $(this).parents('tr')).data();
@@ -265,8 +273,7 @@ $(document).ready(function() {
 	        }
         })
     });
+    $("[data-toggle='tooltip']").tooltip();
 });
-
-$(function () { $("[data-toggle='tooltip']").tooltip(); });
 </script>
 </html>

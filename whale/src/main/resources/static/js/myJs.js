@@ -3,7 +3,7 @@ $(function(){
 		layer.open({
 			type : 2,
 			title :['注册用户','font-size:18px;font-weight:bold;'],
-			 area : [ '40%', '90%' ],
+			area : [ '40%', '90%' ],
 			shade : 0.3,
 			maxmin : false,//最大化和最小化按钮
 			resize : false,//拉伸
