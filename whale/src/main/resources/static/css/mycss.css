@@ -4,4 +4,11 @@
 .navbar{
 	color:#fff;
 	border-radius: 0;
+	margin: 0 0 1px 0;
+}
+#table_id_example_processing{
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
 }

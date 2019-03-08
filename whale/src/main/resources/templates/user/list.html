@@ -8,10 +8,11 @@
 	<div class="container-fluid">
 		<div class="panel panel-info">
 			<div class="panel-heading">
-		    	用户列表
+		    	<p><i class="icon-list"></i>  用户列表</p>
 		    </div>
 		    <div class="panel-body">
-		       	<a href="#" id="saveUser"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" title="添加用户"></span></a>
+	    		<span>操作</span>
+	    		<a href="#" id="saveUser"><span class="glyphicon glyphicon-plus" data-toggle="tooltip" title="添加用户"></span></a>
 		    </div>
 		    <div class="panel-body">
 				<!--第二步：添加如下 HTML 代码-->
@@ -20,24 +21,24 @@
 						<tr>
 							<th>ID</th>
 							<th><input type="checkbox" class="" name="select_all" id="select-all" > 全选</th>
-							<th>账号</th>
-							<th>密码</th>
-							<th>邮箱</th>
-							<th>注册时间</th>
-							<th>头像</th>
-							<th>编辑</th>
+							<th>账号 <i class="icon-user-md"></i></th>
+							<th>密码 <i class="icon-key"></th>
+							<th>邮箱 <i class="icon-envelope"></th>
+							<th>注册时间 <i class="icon-time"></i></th>
+							<th>头像 <i class="icon-picture"></i></th>
+							<th>编辑 <i class="icon-file"></i></th>
 						</tr>
 					</thead>
 					<tfoot>
 						<tr>
 							<th>ID</th>
 							<th></th>
-							<th>账号</th>
-							<th>密码</th>
-							<th>邮箱</th>
-							<th>注册时间</th>
-							<th>头像</th>
-							<th>编辑</th>
+							<th>账号 <i class="icon-user-md"></i></th>
+							<th>密码 <i class="icon-key"></th>
+							<th>邮箱 <i class="icon-envelope"></th>
+							<th>注册时间 <i class="icon-time"></i></th>
+							<th>头像 <i class="icon-picture"></i></th>
+							<th>编辑 <i class="icon-file"></i></th>
 						</tr>
 					</tfoot>
 					<tbody>
@@ -184,14 +185,14 @@ $(document).ready(function() {
 			data : 'email'
 		}, {
 			data : 'regTime',
-			title: "注册时间",
+			//title: "注册时间",
 			render:function(data, type, row, meta){
 				//console.log(new Date(parseInt(Date.parse(data))).toLocaleString())
  				return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
 			} 
 		}, {
 			data : 'srcImg',
-			title: "头像",
+			//title: "头像",
 			render:function(data, type, row, meta){
 				if(data==null){
 					return "无";

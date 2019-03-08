@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<title>用户添加</title>
-<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
-<link rel="stylesheet" type="text/css" th:href="@{/layer/theme/default/layer.css}"/>
-<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/myJs.js}"></script>
-<script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+<head th:replace="common/common_pub :: common_header('用户列表')">
+	<meta charset="UTF-8">
 </head>
 <body>
 	<div class="container" style="margin:10px">

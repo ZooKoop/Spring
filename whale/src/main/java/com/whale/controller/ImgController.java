@@ -1,4 +1,4 @@
-package com.whale.security.controller;
+package com.whale.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImgController {
 	@Value("${img.src}")
 	private String fileSrc;
-
+	
+	@RequestMapping("/toupload")
+	public String toUpLoad() {
+		return "upload";
+	}
 	@RequestMapping(value = "/userUpLoad", method = RequestMethod.POST)
 	@ResponseBody
 	public String upLoad(MultipartFile uploadFile) {

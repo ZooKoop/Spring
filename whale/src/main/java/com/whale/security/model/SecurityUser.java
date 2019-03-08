@@ -2,7 +2,13 @@ package com.whale.security.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import org.hibernate.annotations.GenericGenerator;
+
+import com.whale.model.AllImages;
 
 @Entity
 @Table(name = "SECURITY_USER")
@@ -40,6 +48,18 @@ public class SecurityUser implements Serializable {
 	
 	@Column(name = "SRC_IMG")
 	private String srcImg;
+	
+	//@OneToMany (mappedBy = "Articles"),mappedBy指向的是要关联的属性，而不是要关联的类
+	@OneToMany(targetEntity=AllImages.class,mappedBy="securityUser")
+	private Set<AllImages> imgList = new HashSet<>();
+
+	public Set<AllImages> getImgList() {
+		return imgList;
+	}
+
+	public void setImgList(Set<AllImages> imgList) {
+		this.imgList = imgList;
+	}
 
 	public String getId() {
 		return id;
