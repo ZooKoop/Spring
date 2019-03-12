@@ -2,11 +2,47 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<head th:replace="common/common_pub :: common_header('')">
+<meta charset="UTF-8">
 </head>
 <body>
-	<div class="uploadImgBtn" id="uploadImgBtn">
-		<input class="uploadImg" type="file" name="file" multiple id="file">
+	<div class="container kv-main">
+
+		<br>
+		<form enctype="multipart/form-data">
+
+			<div class="form-group">
+				<input id="file-1" name="uploadFile" type="file" multiple
+					class="file" data-overwrite-initial="false" data-min-file-count="2">
+			</div>
+
+		</form>
 	</div>
+
 </body>
+<script>
+	$("#file-1").fileinput({
+		uploadUrl : '/userUpLoad', // you must set a valid URL here else you will get an error
+		allowedFileExtensions : [ 'jpg', 'png', 'gif', 'jpeg' ],
+		overwriteInitial : false,//是否显示预览
+		language : 'zh',
+		maxFileSize : 1024 * 10,
+		maxFilesNum : 10,
+		//allowedFileTypes: ['image', 'video', 'flash'],
+		slugCallback : function(filename) {
+			return filename.replace('(', '_').replace(']', '_');
+		}
+	}).on("filebatchselected", function(event, files) {
+		//alert(0)
+	}).on("fileuploaded", function(event, data) {
+		//alert(data.response.status)
+		console.log(data.response.status)
+		if(data.response.status){
+			layer.msg("上传成功！",{icon:1,time:2000});
+		}else{
+			layer.msg("上传失败！",{icon:1,time:2000});
+		}
+	});
+</script>
+
 </html>

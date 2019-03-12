@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutSuccessUrl("/")
 				.and()
 				.authorizeRequests()// 表示以下都是授权的配置
-				.antMatchers("/login", "/","/images/**").permitAll()
+				.antMatchers("/login", "/").permitAll()
 				.anyRequest()// 任何请求
 				.authenticated()// 都需要身份认证
 				.and()
@@ -56,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		// 不加页面无样式，报错
-		web.ignoring().antMatchers("/js/**", "/css/**", "/images/**","/layer/**");
+		web.ignoring().antMatchers("/js/**", "/css/**", "/img/**","/fonts/**","/layer/**");
 	}
 
 }
