@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 </head>
 <body>
+<div th:replace="common/common_pub :: navbar_"></div>
 	<div class="container kv-main">
 
 		<br>
@@ -38,9 +39,9 @@
 		//alert(data.response.status)
 		console.log(data.response.status)
 		if(data.response.status){
-			layer.msg("上传成功！",{icon:1,time:2000});
+			layer.msg("上传成功！");
 		}else{
-			layer.msg("上传失败！",{icon:1,time:2000});
+			layer.msg(data.response.error+"上传失败！",{icon:2,time:2000});
 		}
 	});
 </script>

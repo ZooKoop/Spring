@@ -10,14 +10,11 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.whale.model.UserInfor;
 import com.whale.param.UserParam;
 import com.whale.security.model.SecurityUser;
 import com.whale.security.repository.SecurityUserRepository;
@@ -43,36 +38,38 @@ public class UserInforController {
 	private EntityManager entityManager; // 自动启用一级缓存
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
 	@RequestMapping("/list")
 	public String list() {
 		return "user/list";
 	}
+
 	@RequestMapping("/listInfo")
 	@ResponseBody
 	public Page<SecurityUser> listInfo(
-//			@RequestParam(value = "start", defaultValue = "1") Integer start,
+			// @RequestParam(value = "start", defaultValue = "1") Integer start,
 			@RequestParam(value = "page") Integer page,
-			@RequestParam(value = "size", defaultValue = "5") Integer size
-			) {
+			@RequestParam(value = "size", defaultValue = "5") Integer size) {
 		PageRequest pageable = PageRequest.of(page, size);
 		Page<SecurityUser> findList = userInforRepostitory.findAll(pageable);
 		return findList;
 	}
-//	@RequestMapping("/listInfo")
-//	@ResponseBody
-//	public String listInfo(ModelMap model, @RequestParam(value = "page", defaultValue = "0") Integer page,
-//			@RequestParam(value = "size", defaultValue = "5") Integer size) {
-//		// Sort sort = new Sort(Sort.Direction.DESC, "id");
-//		// PageRequest pageable = new PageRequest(page, size, sort);
-//		// Page<UserInfor> findList = userInforRepostitory.findList(pageable);
-//		PageRequest pageable = PageRequest.of(page, size);
-//		Page<SecurityUser> findList = userInforRepostitory.findAll(pageable);
-//		if (findList.getSize() <= 0) {
-//			return "user/list";
-//		}
-//		model.addAttribute("list", findList);
-//		return "user/list";
-//	}
+	// @RequestMapping("/listInfo")
+	// @ResponseBody
+	// public String listInfo(ModelMap model, @RequestParam(value = "page",
+	// defaultValue = "0") Integer page,
+	// @RequestParam(value = "size", defaultValue = "5") Integer size) {
+	// // Sort sort = new Sort(Sort.Direction.DESC, "id");
+	// // PageRequest pageable = new PageRequest(page, size, sort);
+	// // Page<UserInfor> findList = userInforRepostitory.findList(pageable);
+	// PageRequest pageable = PageRequest.of(page, size);
+	// Page<SecurityUser> findList = userInforRepostitory.findAll(pageable);
+	// if (findList.getSize() <= 0) {
+	// return "user/list";
+	// }
+	// model.addAttribute("list", findList);
+	// return "user/list";
+	// }
 
 	@RequestMapping("/toSaveUser")
 	public String user() {
@@ -108,7 +105,7 @@ public class UserInforController {
 			e.printStackTrace();
 			return "图片上传失败！";
 		}
-		//存库
+		// 存库
 		userParam.setId(UUID.randomUUID().toString());
 		SecurityUser userInfor = new SecurityUser();
 		BeanUtils.copyProperties(userParam, userInfor);
@@ -124,7 +121,7 @@ public class UserInforController {
 	public String delete(@RequestParam(value = "id") String id) {
 		userInforRepostitory.deleteById(id);
 		return "200";
-		//return "redirect:/user/list";
+		// return "redirect:/user/list";
 	}
 
 	@RequestMapping("/toUserUpdate")
@@ -149,7 +146,7 @@ public class UserInforController {
 			return "user/userInforAdd";
 		}
 
-		UserInfor userInfor = new UserInfor();
+		SecurityUser userInfor = new SecurityUser();
 		BeanUtils.copyProperties(userParam, userInfor);
 		entityManager.merge(userInfor);
 		return "redirect:/user/list";
