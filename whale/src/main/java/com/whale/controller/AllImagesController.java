@@ -37,46 +37,34 @@ public class AllImagesController {
 
 	@PostMapping(value = "/userUpLoad")
 	@ResponseBody
-	public Map<String, Object> upLoad(@RequestParam("uploadFile")MultipartFile[] uploadFile, Authentication authentication) {
+	public Map<String, Object> upLoad(MultipartFile uploadFile, Authentication authentication) {
 		String username = authentication.getName();
 		SecurityUser byuserName = securityUserRepository.findByuserName(username);
 		Map<String, Object> json = new HashMap<String, Object>();
+		String filename = uploadFile.getOriginalFilename();
 		if (null != byuserName) {
 			File file = new File(fileSrc + "/all_Img/" + username);
 			if (!file.exists()) {
 				file.mkdirs();
 			}
-			try {
-				for (int i = 0; i < uploadFile.length; i++) {
-				if (!uploadFile[i].isEmpty()) {
-					String filename = uploadFile[i].getOriginalFilename();
-						AllImages allImages = new AllImages();
-						allImages.setImgName(filename);
-						allImages.setImgPath(file + "/" + filename);
-						allImages.setSecurityUser(byuserName);
-						allImagesRepostitory.save(allImages);
-						uploadFile[i].transferTo(new File(file + "/" + filename));
+			if (!uploadFile.isEmpty()) {
+				try {
+					AllImages allImages = new AllImages();
+					allImages.setImgName(filename);
+					allImages.setImgPath(file + "/" + filename);
+					allImages.setSecurityUser(byuserName);
+					allImagesRepostitory.save(allImages);
+					uploadFile.transferTo(new File(file + "/" + filename));
+					json.put("status", true);
+					json.put("msg", filename);
+					return json;
+				} catch (IllegalStateException | IOException e) {
+					e.printStackTrace();
+					json.put("status", false);
+					json.put("error", filename);
+					return json;
 				}
 			}
-			} catch (IllegalStateException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				json.put("status", false);
-				//json.put("error", uploadFile[i].getOriginalFilename());
-				return json;
-			}
-
-			// String filename = uploadFile.getOriginalFilename();
-			// try {
-			// uploadFile.transferTo(new File(file + "/" + filename));
-			// } catch (IllegalStateException | IOException e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// json.put("status", false);
-			// return json;
-			// }
-			json.put("status", true);
-			return json;
 		}
 		json.put("status", false);
 		return json;

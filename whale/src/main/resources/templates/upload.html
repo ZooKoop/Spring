@@ -26,9 +26,18 @@
 		uploadUrl : '/userUpLoad', // you must set a valid URL here else you will get an error
 		allowedFileExtensions : [ 'jpg', 'png', 'gif', 'jpeg' ],
 		overwriteInitial : false,//是否显示预览
+		//showCaption: true,//是否显示标题
+		//showUpload: true, //是否显示上传按钮
+		//showClose:true,//是否显示关闭按钮
+		//autoReplace:false,//是否自动替换当前图片，设置为true时，再次选择文件，
+        showPreview: true,  //展前预览
 		language : 'zh',
 		maxFileSize : 1024 * 10,
-		maxFilesNum : 10,
+		browseClass:"btn btn-primary",//按钮样式
+		maxFileCount:0,//允许同时上传的最大文件数
+		previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+        msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+        enctype: 'multipart/form-data',
 		//allowedFileTypes: ['image', 'video', 'flash'],
 		slugCallback : function(filename) {
 			return filename.replace('(', '_').replace(']', '_');
@@ -39,7 +48,7 @@
 		//alert(data.response.status)
 		console.log(data.response.status)
 		if(data.response.status){
-			layer.msg("上传成功！");
+			layer.msg(data.response.msg+" - 上传成功！",{time:3000});
 		}else{
 			layer.msg(data.response.error+"上传失败！",{icon:2,time:2000});
 		}
