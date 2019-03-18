@@ -12,3 +12,14 @@
     left: 50%;
     top: 50%;
 }
+/* Õº∆¨≈≈∞Ê */
+.my_left{
+	float: left;
+	width:100%;
+	background: #151314;
+	color: #fff;
+}
+#table_images tr{
+	float: left;
+	width:20%;
+}

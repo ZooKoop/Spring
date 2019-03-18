@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 </head>
 <body>
-<div th:replace="common/common_pub :: navbar_"></div>
+	<div th:replace="common/common_pub :: navbar_"></div>
 	<div class="container kv-main">
 
 		<br>
@@ -16,12 +16,106 @@
 				<input id="file-1" name="uploadFile" type="file" multiple
 					class="file" data-overwrite-initial="false" data-min-file-count="2">
 			</div>
-
 		</form>
 	</div>
-
+	<!-- 	<div class="container">
+		<img th:each="list:${list}" style="width: 30%; float: left"
+			class="img-rounded center-block" th:src="${list.imgPath}">
+	</div> -->
+	<div class="container">
+		<table id="table_images" style="width:100%">
+			<tr>
+				<th>ID</th>
+				<th></th>
+			</tr>
+		</table>
+	</div>
 </body>
 <script>
+	$(document).ready(function() {
+		$('#table_images').DataTable({
+			pagingType : "full_numbers",
+			colReorder: true,
+			language : {
+				decimal : "",
+				emptyTable : "No data available in table",
+				info : "当前显示第 _START_ 至 _END_ 项，共 _TOTAL_ 项。",
+				infoEmpty : "当前显示第 0 至 0 项，共 0 项",
+				infoFiltered : "(由 _MAX_ 项结果过滤)",
+				infoPostFix : "",
+				thousands : ",",
+				lengthMenu : "每页 _MENU_ 项",
+				loadingRecords : "载入中...",
+				processing : "处理中...",
+				search : "搜索:",
+				zeroRecords : "没有匹配结果",
+				paginate : {
+					"first" : "首页",
+					"previous" : "上页",
+					"next" : "下页",
+					"last" : "末页"
+				}
+			},
+			paging : true,//paging属性必须为true才能实现默认初始值得功能
+			serverSide : true, //是否启动服务器端数据导入
+			lengthMenu : [ 2,5, 20, 50, 70, 100 ],
+			columns : [{
+				data : 'imgPath',
+				title: "图片",
+				//class:"my_left",
+				render:function(data, type, row, meta){
+					return "<img class='img-rounded center-block img-thumbnail img-responsive' src='" + data + "' />";
+				}
+			},{
+				data : 'imgName',
+				class:"my_left",
+				render:function(data, type, row, meta){
+					return "<div class='my_left text-center img-rounded'>"+data+"</div>";
+				}
+			}],
+			ajax: function (data, callback, settings) {
+				//封装请求参数
+				var param = {};
+				param.size = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+				console.log(data.length)
+				//param.start = data.start;//开始的记录序号
+				param.page = (data.start / data.length);//当前页码
+				//param.search = data.search.value;//搜索条件
+				//if (data.order.length > 0) {
+				//param.order = data.columns[data.order[0].column].data;
+				//param.dir = data.order[0].dir;
+				//}
+				//console.log(param);
+				//ajax请求数据
+				$.ajax({
+					type: "GET",
+					url: "/queryAll",
+					cache: false, //禁用缓存
+					data: param, //传入组装的参数
+					dataType: "json",
+					success: function (result) {
+					//console.log(result);
+					//setTimeout仅为测试延迟效果
+						setTimeout(function () {
+						//封装返回数据
+						var returnData = {};
+						returnData.draw = result.draw;//这里直接自行返回了draw计数器,应该由后台返回
+						returnData.recordsTotal = result.totalElements;//返回数据全部记录
+						returnData.recordsFiltered = result.totalElements;//后台不实现过滤功能，每次查询均视作全部结果
+						returnData.data = result.content;//返回的数据列表
+						console.log(returnData);
+						$("tr").css("display","inline-block");
+						//调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+						//此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+						callback(returnData);
+						}, 10);
+					}
+				});
+			}
+		});
+	});
+	
+
 	$("#file-1").fileinput({
 		uploadUrl : '/userUpLoad', // you must set a valid URL here else you will get an error
 		allowedFileExtensions : [ 'jpg', 'png', 'gif', 'jpeg' ],
@@ -30,14 +124,14 @@
 		//showUpload: true, //是否显示上传按钮
 		//showClose:true,//是否显示关闭按钮
 		//autoReplace:false,//是否自动替换当前图片，设置为true时，再次选择文件，
-        showPreview: true,  //展前预览
+		showPreview : true, //展前预览
 		language : 'zh',
 		maxFileSize : 1024 * 10,
-		browseClass:"btn btn-primary",//按钮样式
-		maxFileCount:0,//允许同时上传的最大文件数
-		previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
-        msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
-        enctype: 'multipart/form-data',
+		browseClass : "btn btn-primary",//按钮样式
+		maxFileCount : 0,//允许同时上传的最大文件数
+		previewFileIcon : "<i class='glyphicon glyphicon-king'></i>",
+		msgFilesTooMany : "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+		enctype : 'multipart/form-data',
 		//allowedFileTypes: ['image', 'video', 'flash'],
 		slugCallback : function(filename) {
 			return filename.replace('(', '_').replace(']', '_');
@@ -47,10 +141,15 @@
 	}).on("fileuploaded", function(event, data) {
 		//alert(data.response.status)
 		console.log(data.response.status)
-		if(data.response.status){
-			layer.msg(data.response.msg+" - 上传成功！",{time:3000});
-		}else{
-			layer.msg(data.response.error+"上传失败！",{icon:2,time:2000});
+		if (data.response.status) {
+			layer.msg(data.response.msg + " - 上传成功！", {
+				time : 3000
+			});
+		} else {
+			layer.msg(data.response.error + "上传失败！", {
+				icon : 2,
+				time : 2000
+			});
 		}
 	});
 </script>

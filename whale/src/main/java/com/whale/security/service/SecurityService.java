@@ -29,9 +29,9 @@ public class SecurityService implements UserDetailsService {
 		Logger log = Logger.getLogger("名字随便起");
 		log.info("登录用户名：" + username); // 根据用户名查找用户信息
 		// 静态权限：admin 这些在实际开发中需要从数据库中获取
-		return new User(user.getUserName(),user.getUserPassword(),true,true,true,true,
-				AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
-//		return new User(user.getUserName(),passwordEncoder.encode(user.getUserPassword()),true,true,true,true,
+//		return new User(user.getUserName(),user.getUserPassword(),true,true,true,true,
 //				AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+		return new User(user.getUserName(),passwordEncoder.encode(user.getUserPassword()),true,true,true,true,
+				AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
 	}
 }

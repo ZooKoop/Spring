@@ -3,12 +3,17 @@ package com.whale.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,7 +56,7 @@ public class AllImagesController {
 				try {
 					AllImages allImages = new AllImages();
 					allImages.setImgName(filename);
-					allImages.setImgPath(file + "/" + filename);
+					allImages.setImgPath("http://localhost:8080/images/all_Img/"+username + "/" + filename);
 					allImages.setSecurityUser(byuserName);
 					allImagesRepostitory.save(allImages);
 					uploadFile.transferTo(new File(file + "/" + filename));
@@ -69,4 +74,19 @@ public class AllImagesController {
 		json.put("status", false);
 		return json;
 	};
+	@GetMapping("/queryAll")
+	@ResponseBody
+	public Page<AllImages> queryAll(
+			@RequestParam(value = "page") Integer page,
+			@RequestParam(value = "size", defaultValue = "5") Integer size) {
+		PageRequest pageable = PageRequest.of(page, size);
+		Page<AllImages> findAll = allImagesRepostitory.findAll(pageable);
+		return findAll;
+	}
+//	@GetMapping("/queryAll")
+//	public String queryAll(Model model) {
+//		List<AllImages> findAll = allImagesRepostitory.findAll();
+//		model.addAttribute("list",findAll);
+//		return "upload";
+//	}
 }

@@ -18,6 +18,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.whale.security.model.SecurityUser;
 
 /**
@@ -41,6 +44,7 @@ public class AllImages implements Serializable{
 	private String description;
 	
 	//@CollectionTable(name = "SECURITY_USER", joinColumns = @JoinColumn(name = "securityUserId"))
+	@JsonBackReference
 	@ManyToOne(targetEntity=SecurityUser.class)
 	@JoinColumn(name="securityUserId")
 	private SecurityUser securityUser;
