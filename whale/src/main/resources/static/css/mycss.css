@@ -1,5 +1,5 @@
 .table > tbody > tr > td{
-	            vertical-align: middle;
+	vertical-align: middle;
 }
 .navbar{
 	color:#fff;
@@ -13,28 +13,45 @@
     top: 50%;
 }
 /* Í¼Æ¬ÅÅ°æ */
-#table_images>tbody .my_left{
-	float: left;
-	width:100%;
-	height: 100px;
+#table_images>tbody .my_td_img{
+	display: block;
+	color: #fff;
+	overflow: hidden;
+	height:145px;
+	background: rgba(23,22,20,.5);
+}
+.my_td_titel{
+	/* display: block; */
 	background: rgba(23,22,20,.5);
 	color: #fff;
-	position: absolute;
-	bottom: -80px;
+	/* position: absolute;
+	bottom: -100px; */
 	border-radius: 0 0 6px 6px;
+	height: 10px;
+	transition: height 2s;
+	-webkit-transition: height 2s; /* Safari */
+	position: absolute;
+    bottom: 0;
+    width: 91.5%;
 }
-#table_images{
+/* .my_td_titel>div{
+	position: relative;
+    bottom: 36px;
+    background: #000;
+} */
+/* #table_images{
 	background: rgba(23,22,20,.1);
-}
+} */
 #table_images>tbody tr{
+	position: relative;
+	box-sizing:border-box;
 	box-shadow: 5px 5px 5px #888888;
 	display: inline-block;
-	width:19%;
-	height:145px;
-	margin: 10px 1% 0 0;
-	position: relative;
-	overflow: hidden;
+	width:20%;
+	padding: 10px;
+	background: #bdcad4;
+	vertical-align: bottom;
 }
-/* #table_images>tbody tr:hover > td div{
-	height:145px;
-} */
+#table_images>tbody tr:hover > .my_td_titel{
+	height: 100px;
+}

@@ -23,10 +23,6 @@
 	</div> -->
 	<div class="container">
 		<table id="table_images" style="width:100%">
-			<tr>
-				<th></th>
-				<th></th>
-			</tr>
 		</table>
 	</div>
 </body>
@@ -63,17 +59,17 @@
 			},
 			paging : true,//paging属性必须为true才能实现默认初始值得功能
 			serverSide : true, //是否启动服务器端数据导入
-			lengthMenu : [ 5, 20, 50, 70, 100 ],
+			lengthMenu : [ 20, 50, 70, 100 ],
 			columns : [{
 				data : 'imgPath',
 				//title: "图片",
-				//class:"my_left",
+				class:"my_td_img",
 				render:function(data, type, row, meta){
-					return "<img class='img-rounded center-block img-thumbnail img-responsive' src='" + data + "' />";
+					return "<img class='center-block img-thumbnail img-responsive' src='" + data + "'style='border-radius: 0;' />";
 				}
 			},{
 				data : 'securityUser.userName',
-				class:"my_left",
+				class:"my_td_titel",
 				render:function(data, type, row, meta){
 					return "<div class='text-center'>"+data+"</div>";
 				}
