@@ -187,6 +187,7 @@ $(document).ready(function() {
 			data : 'regTime',
 			//title: "注册时间",
 			render:function(data, type, row, meta){
+				//console.log(data)
 				//console.log(new Date(parseInt(Date.parse(data))).toLocaleString())
  				return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
 			} 

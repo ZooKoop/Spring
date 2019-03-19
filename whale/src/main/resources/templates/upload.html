@@ -8,7 +8,6 @@
 <body>
 	<div th:replace="common/common_pub :: navbar_"></div>
 	<div class="container kv-main">
-
 		<br>
 		<form enctype="multipart/form-data">
 
@@ -25,7 +24,7 @@
 	<div class="container">
 		<table id="table_images" style="width:100%">
 			<tr>
-				<th>ID</th>
+				<th></th>
 				<th></th>
 			</tr>
 		</table>
@@ -33,9 +32,15 @@
 </body>
 <script>
 	$(document).ready(function() {
+		$("#table_images>tbody tr").hover(function(){
+			$('.my_left').stop(true).animate({bottom:'0'});
+			},function(){
+				$('.my_left').stop(true).animate({bottom:'-80px'});
+		});
 		$('#table_images').DataTable({
 			pagingType : "full_numbers",
 			colReorder: true,
+			ordering : false, //排序
 			language : {
 				decimal : "",
 				emptyTable : "No data available in table",
@@ -58,19 +63,19 @@
 			},
 			paging : true,//paging属性必须为true才能实现默认初始值得功能
 			serverSide : true, //是否启动服务器端数据导入
-			lengthMenu : [ 2,5, 20, 50, 70, 100 ],
+			lengthMenu : [ 5, 20, 50, 70, 100 ],
 			columns : [{
 				data : 'imgPath',
-				title: "图片",
+				//title: "图片",
 				//class:"my_left",
 				render:function(data, type, row, meta){
 					return "<img class='img-rounded center-block img-thumbnail img-responsive' src='" + data + "' />";
 				}
 			},{
-				data : 'imgName',
+				data : 'securityUser.userName',
 				class:"my_left",
 				render:function(data, type, row, meta){
-					return "<div class='my_left text-center img-rounded'>"+data+"</div>";
+					return "<div class='text-center'>"+data+"</div>";
 				}
 			}],
 			ajax: function (data, callback, settings) {
@@ -114,7 +119,6 @@
 			}
 		});
 	});
-	
 
 	$("#file-1").fileinput({
 		uploadUrl : '/userUpLoad', // you must set a valid URL here else you will get an error

@@ -83,10 +83,4 @@ public class AllImagesController {
 		Page<AllImages> findAll = allImagesRepostitory.findAll(pageable);
 		return findAll;
 	}
-//	@GetMapping("/queryAll")
-//	public String queryAll(Model model) {
-//		List<AllImages> findAll = allImagesRepostitory.findAll();
-//		model.addAttribute("list",findAll);
-//		return "upload";
-//	}
 }

@@ -10,13 +10,18 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.whale.model.AllImages;
 
 @Entity
@@ -44,13 +49,14 @@ public class SecurityUser implements Serializable {
 	private String email;
 
 	@Column(name = "REG_TIME")
+	@Temporal(TemporalType.TIMESTAMP)//实体类会封装成完整的时间“yyyy-MM-dd hh:MM:ss”的 Date类型
 	private Date regTime = new Date();
 	
 	@Column(name = "SRC_IMG")
 	private String srcImg;
-	
 	//@OneToMany (mappedBy = "Articles"),mappedBy指向的是要关联的属性，而不是要关联的类
 	@OneToMany(targetEntity=AllImages.class,mappedBy="securityUser")
+	@JsonIgnore
 	private Set<AllImages> imgList = new HashSet<>();
 
 	public Set<AllImages> getImgList() {
