@@ -8,12 +8,7 @@
 	<div class="container">
 		<div class="row">
 			 <div class="col-md-6 my_login">
-			 	<div class="my_login_content">
-			 		注册
-			 	</div>
-			 </div>
-			 <div class="col-md-6 my_login">
-			 	<form class="form-horizontal my_login_content"  method="POST" id="loginFrom">
+			 	<form action="/lg" class="form-horizontal my_login_content"  method="POST" id="loginFrom">
 					<div class="form-group">
 						<label for="username" class="col-sm-2 control-label">账号:</label>
 						<div class="col-sm-10">
@@ -28,6 +23,18 @@
 								name="password" value="">
 						</div>
 					</div>
+					<div class="form-group" th:if="${param.error}" style=" margin-bottom: 0;"> 
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-10">
+							 <div class="alert alert-danger alert-dismissable" style=" margin-bottom: 0;">
+					            <button type="button" class="close" data-dismiss="alert"
+					                    aria-hidden="true">
+					                &times;
+					            </button>
+					             	 账号或密码错误！
+					        </div>
+						</div>
+					</div>
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10">
 							<div class="checkbox">
@@ -37,14 +44,18 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group"  style=" margin-bottom: 0;">
 						<div class="col-sm-offset-2 col-sm-10">
 							<button type="submit" class="btn btn-default">登录</button>
 						</div>
 					</div>
 				</form>
 			 </div>
-			 
+			 <div class="col-md-6 my_login">
+			 	<div class="my_login_content">
+			 		注册
+			 	</div>
+			 </div>
 		</div>
 			
 		<!-- <div class="row center-block">
@@ -58,5 +69,6 @@
 			</form>
 		</div> -->
 	</div>
+	<div th:replace="common/common_pub :: footer_"></div>
 </body>
 </html>

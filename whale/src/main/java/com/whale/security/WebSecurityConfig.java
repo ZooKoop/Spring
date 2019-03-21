@@ -33,10 +33,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.formLogin() // http.httpBasic() //使用回之前的认证方式
 				.loginPage("/login")
 				.loginProcessingUrl("/lg")// 前端from表单自定义登陆校验路径
+				.successHandler(myAuthenticationSuccessHandler)// 加自己定义的登陆成功hadler
+				.failureHandler(myAuthenticationFalureHandler)
 				.failureUrl("/login?error=true")
 //				.defaultSuccessUrl("/")
-				.failureHandler(myAuthenticationFalureHandler)
-				.successHandler(myAuthenticationSuccessHandler)// 加自己定义的登陆成功hadler
 				.and()
 				.logout()
 				.logoutSuccessUrl("/")
@@ -47,8 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authenticated()// 都需要身份认证
 				.and()
 				.headers().frameOptions().disable()//iframe不禁止
-				.and()
-				.exceptionHandling().authenticationEntryPoint(new MyAuthenticationEntryPoint())
+//				.and()//访问受保护页面，跳转
+//				.exceptionHandling().authenticationEntryPoint(new MyAuthenticationEntryPoint())
 				.and().csrf() // 关闭csrf 不然不支持post
 				.disable();
 
