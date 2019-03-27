@@ -4,10 +4,6 @@
 package com.whale.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -48,6 +44,10 @@ public class AllImages implements Serializable{
 	@JoinColumn(name="securityUserId")
 	private SecurityUser securityUser;
 	
+	@ManyToOne(targetEntity=ImgType.class)
+	@JoinColumn(name="imgTypeId")
+	private ImgType imgType;
+	
 	public String getId() {
 		return id;
 	}
@@ -78,5 +78,10 @@ public class AllImages implements Serializable{
 	public void setSecurityUser(SecurityUser securityUser) {
 		this.securityUser = securityUser;
 	}
-	
+	public ImgType getImgType() {
+		return imgType;
+	}
+	public void setImgType(ImgType imgType) {
+		this.imgType = imgType;
+	}
 }

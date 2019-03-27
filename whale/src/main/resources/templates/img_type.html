@@ -11,11 +11,6 @@
 		<br>
 		<form enctype="multipart/form-data">
 			<div class="form-group">
-				<input class="form-control" type="text" name="img_title" placeholder="输入标题名" style="margin-bottom: 10px;">
-				<select id="type" class="form-control" style="margin-bottom: 10px;">
-						<option>选择类别</option>
-						<option th:each="list:${imgTypes}" th:value="${list.id}" th:text="${list.typeName}"></option>
-				</select>
 				<input id="file-1" name="uploadFile" type="file" multiple
 					class="file" data-overwrite-initial="false" data-min-file-count="2">
 			</div>
@@ -33,11 +28,6 @@
 </body>
 <script>
 	$(document).ready(function() {
-		$("#table_images>tbody tr").hover(function(){
-			$('.my_left').stop(true).animate({bottom:'0'});
-			},function(){
-				$('.my_left').stop(true).animate({bottom:'-80px'});
-		});
 		$('#table_images').DataTable({
 			pagingType : "full_numbers",
 			colReorder: true,

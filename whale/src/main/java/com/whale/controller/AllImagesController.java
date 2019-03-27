@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -19,9 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.whale.model.AllImages;
+import com.whale.model.ImgType;
 import com.whale.repostitory.AllImagesRepostitory;
+import com.whale.repostitory.ImgTypeRepostitory;
 import com.whale.security.model.SecurityUser;
 import com.whale.security.repository.SecurityUserRepository;
 
@@ -34,9 +34,13 @@ public class AllImagesController {
 	private SecurityUserRepository securityUserRepository;
 	@Autowired
 	private AllImagesRepostitory allImagesRepostitory;
+	@Autowired
+	private ImgTypeRepostitory imgTypeRepostitory;
 
 	@RequestMapping("/toupload")
-	public String toUpLoad() {
+	public String toUpLoad(Model model) {
+		List<ImgType> imgTypes = imgTypeRepostitory.findAll();
+		model.addAttribute("imgTypes",imgTypes);
 		return "upload";
 	}
 
