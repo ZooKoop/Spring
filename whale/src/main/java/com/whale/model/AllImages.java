@@ -36,6 +36,8 @@ public class AllImages implements Serializable{
 	private String imgName;
 	@Column(name = "IMG_PATH")
 	private String imgPath;
+	@Column(name = "IMG_TITLE")
+	private String imgTitle;
 	@Column(name = "DESCRIPTION")
 	private String description;
 	
@@ -84,4 +86,11 @@ public class AllImages implements Serializable{
 	public void setImgType(ImgType imgType) {
 		this.imgType = imgType;
 	}
+	public String getImgTitle() {
+		return imgTitle;
+	}
+	public void setImgTitle(String imgTitle) {
+		this.imgTitle = imgTitle;
+	}
+	
 }

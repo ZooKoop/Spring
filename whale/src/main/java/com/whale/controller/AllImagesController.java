@@ -46,9 +46,10 @@ public class AllImagesController {
 
 	@PostMapping(value = "/userUpLoad")
 	@ResponseBody
-	public Map<String, Object> upLoad(MultipartFile uploadFile, Authentication authentication) {
+	public Map<String, Object> upLoad(MultipartFile uploadFile, Authentication authentication,AllImages allImages,String imgTypeId) {
 		String username = authentication.getName();
 		SecurityUser byuserName = securityUserRepository.findByuserName(username);
+		ImgType imgType = imgTypeRepostitory.findById(imgTypeId).get();//加上get（）
 		Map<String, Object> json = new HashMap<String, Object>();
 		String filename = uploadFile.getOriginalFilename();
 		if (null != byuserName) {
@@ -58,10 +59,11 @@ public class AllImagesController {
 			}
 			if (!uploadFile.isEmpty()) {
 				try {
-					AllImages allImages = new AllImages();
+					//AllImages allImages = new AllImages();
 					allImages.setImgName(filename);
 					allImages.setImgPath("http://localhost:8080/images/all_Img/"+username + "/" + filename);
 					allImages.setSecurityUser(byuserName);
+					allImages.setImgType(imgType);
 					allImagesRepostitory.save(allImages);
 					uploadFile.transferTo(new File(file + "/" + filename));
 					json.put("status", true);
