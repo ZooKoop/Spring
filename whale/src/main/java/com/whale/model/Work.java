@@ -34,16 +34,16 @@ public class Work implements Serializable{
 	private String description;
 	
 	/*
-	 * 是否发包
+	 * 是否发包 0/1
 	 */
 	@Column(name = "ISCREATE")
-	private boolean isCreate;
+	private Integer isCreate;
 	
 	/*
-	 * 是否有测试用例
+	 * 是否有测试用例0/1
 	 */
 	@Column(name = "ISEXAMPLE")
-	private boolean isExample;
+	private Integer isExample;
 	
 	/*
 	 * 包含哪些版本
@@ -92,27 +92,6 @@ public class Work implements Serializable{
 		this.description = description;
 	}
 
-
-	public boolean isCreate() {
-		return isCreate;
-	}
-
-
-	public void setCreate(boolean isCreate) {
-		this.isCreate = isCreate;
-	}
-
-
-	public boolean isExample() {
-		return isExample;
-	}
-
-
-	public void setExample(boolean isExample) {
-		this.isExample = isExample;
-	}
-
-
 	public String getVersion() {
 		return version;
 	}
@@ -140,6 +119,26 @@ public class Work implements Serializable{
 
 	public void setDateTime(Date dateTime) {
 		this.dateTime = dateTime;
+	}
+
+
+	public Integer getIsCreate() {
+		return isCreate;
+	}
+
+
+	public void setIsCreate(Integer isCreate) {
+		this.isCreate = isCreate;
+	}
+
+
+	public Integer getIsExample() {
+		return isExample;
+	}
+
+
+	public void setIsExample(Integer isExample) {
+		this.isExample = isExample;
 	}
 	
 }

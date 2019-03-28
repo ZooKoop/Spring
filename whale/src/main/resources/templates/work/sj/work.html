@@ -9,7 +9,7 @@
 	<div th:replace="common/common_pub :: navbar_"></div>
 	<div class="container kv-main">
 		<!-- 按钮触发模态框 -->
-		<button class="btn btn-primary" data-toggle="modal" data-target="#add" style="    margin: 10px 0;">
+		<button class="btn btn-info" data-toggle="modal" data-target="#add" style="    margin: 10px 0;">
 			添加TICKET
 		</button>
 		<!-- 模态框（Modal） -->
@@ -43,8 +43,8 @@
 								<label for="isCreate" class="col-sm-2 control-label">发包状态</label>
 								<div class="col-sm-10">
 									<select id="isCreate" name="isCreate" class="selectpicker form-control" title="是否发包">
-											<option value="false">未发包</option>
-											<option value="true">已发包</option>
+											<option value="0">未发包</option>
+											<option value="1">已发包</option>
 									</select>
 								</div>
 							</div>
@@ -52,8 +52,8 @@
 								<label for="isExample" class="col-sm-2 control-label">测试用例</label>
 								<div class="col-sm-10">
 									<select id="isExample" name="isExample" class="selectpicker form-control" title="是否有测试用例">
-											<option value="false">无</option>
-											<option value="true">有</option>
+											<option value="0">无</option>
+											<option value="1">有</option>
 									</select>
 								</div>
 							</div>
@@ -87,27 +87,16 @@
 		</div>
 	</div>
 	<div class="container">
-		<table id="my_work" >
-			<thead>
-				<tr>
-					<!-- <th><input type="checkbox" class="" name="select_all" id="select-all" > 全选</th> -->
-					<th>Ticket号<i class="icon-user-md"></i></th>
-					<th>Ticket描述 <i class="icon-key"></th>
-					<th>发包 <i class="icon-envelope"></th>
-					<th>测试用例 <i class="icon-time"></i></th>
-					<th>版本 <i class="icon-picture"></i></th>
-					<th>日期 <i class="icon-file"></i></th>
-				</tr>
-			</thead>
+		<table id="my_work" class="table table-bordered table-hover table-striped">
 		</table>
 	</div>
 	<div th:replace="common/common_pub :: footer_"></div>
 </body>
 <script>
 	$(document).ready(function() {
-		$('#my_work').DataTable({
+		var workTables=$('#my_work').DataTable({
 			pagingType : "full_numbers",
-			colReorder: true,
+			//colReorder: true,
 			ordering : false, //排序
 			language : {
 				decimal : "",
@@ -134,47 +123,60 @@
 			lengthMenu : [ 20, 50, 70, 100 ],
 			columns : [{
 				data : 'ticketNumber',
-				title: "Ticket号"
-				//class:"my_td_img",
-				/* render:function(data, type, row, meta){
-					return "<img class='center-block img-thumbnail img-responsive' src='" + data + "'style='border-radius: 0;' />";
-				} */
+				title: "Ticket号",
+ 				render:function(data, type, row, meta){
+					return "#"+ data +"";
+				} 
 			},{
 				data : 'description',
 				defaultContent:"",
 				title: "Ticket描述"
-				//class:"my_td_titel",
 				/* render:function(data, type, row, meta){
 					return "<div class='text-center'>"+data+"</div>";
 				} */
 			},{
 				data : 'isCreate',
 				defaultContent:"",
-				title: "是否发包"
-				/* render:function(data, type, row, meta){
-					return "<div>"+data+"</div>";
-				} */
+				title: "发包",
+				render:function(data, type, row, meta){
+					console.log(data)
+					if(data>0){
+						return "<p style='margin: 0;'>已发</p>";
+					}else{
+						return "<p style='margin: 0;color:red'>未发</p>";
+					}		
+				}
 			},{
 				data : 'isExample',
 				defaultContent:"",
-				title: "测试用例"
-				/* render:function(data, type, row, meta){
-					return "<div>"+data+"</div>";
-				} */
+				title: "测试用例",
+				render:function(data, type, row, meta){
+					if(data>0){
+						return "<p style='margin: 0;'>有</p>";
+					}else{
+						return "<p style='margin: 0;color:red'>无</p>";
+					}			
+				}
 			},{
 				data : 'version',
 				defaultContent:"",
-				title: "版本"
-				/* render:function(data, type, row, meta){
+				title: "版本",
+				render:function(data, type, row, meta){
 					return "<div>"+data+"</div>";
-				} */
+				}
 			},{
 				data : 'dateTime',
 				defaultContent:"",
-				title: "时间"
-				/* render:function(data, type, row, meta){
-					return "<div>"+data+"</div>";
-				} */
+				title: "时间",
+				render:function(data, type, row, meta){
+					return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
+				}
+			},{
+				data : null,
+				title: "操作",
+				render:function(data, type, row, meta){
+					return '<a class="_eidt btn btn-info" type="button" href="#" > <span class="glyphicon glyphicon-edit"></span> 编辑</a> <a class="_del btn btn-danger" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span> 删除</a>';
+				}
 			}],
 			ajax: function (data, callback, settings) {
 				//封装请求参数
@@ -207,7 +209,7 @@
 						returnData.recordsFiltered = result.totalElements;//后台不实现过滤功能，每次查询均视作全部结果
 						returnData.data = result.content;//返回的数据列表
 						console.log(returnData);
-						$("tr").css("display","inline-block");
+						//$("tr").css("display","inline-block");
 						//调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
 						//此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
 						callback(returnData);
@@ -216,30 +218,30 @@
 				});
 			}
 		});
-	});
-	$("#add_submit").on("click",function(){
-		$.ajax({
-			type: "post",
-			url: "/work/add",
-			dataType: "json",//预期服务器返回的数据类型
-			data: $('#add_form').serialize(),
-            success: function (result) {
-                console.log("----------"+result.msg);//打印服务端返回的数据(调试用)
-                if(result.success=="200"){
-	                $('#add').on('hide.bs.modal',function() {
-	                	 layer.alert("添加成功！");
-	                })
-                }
-                if(result.fail=="400"){
-	            	layer.alert("添加失败！");
-                }
-                if(result.repeat =="222"){
-	            	layer.alert("Ticket已存在！");
-                }
-            },
-            error : function() {
-                alert("异常！");
-            }
+		$("#add_submit").on("click",function(){
+			$.ajax({
+				type: "post",
+				url: "/work/add",
+				dataType: "json",//预期服务器返回的数据类型
+				data: $('#add_form').serialize(),
+	            success: function (result) {
+	                console.log("----------"+result.msg);//打印服务端返回的数据(调试用)
+	                if(result.success=="200"){
+	               	 	layer.alert("添加成功！");
+		                $("#add").modal('hide');
+		                workTables.ajax.reload();
+	                }
+	                if(result.fail=="400"){
+		            	layer.alert("添加失败！");
+	                }
+	                if(result.repeat =="222"){
+		            	layer.alert("Ticket已存在！");
+	                }
+	            },
+	            error : function() {
+	                alert("异常！");
+	            }
+			});
 		});
 	});
 </script>
