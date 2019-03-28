@@ -44,7 +44,7 @@ body{
     bottom: 10px;
     width:calc(100% - 20px);
 }
-#table_images>tbody tr{
+#table_images>tbody>tr{
 	position: relative;
 	box-sizing:border-box;
 	box-shadow: 5px 5px 5px #888888;
@@ -56,3 +56,4 @@ body{
 #table_images>tbody tr:hover > .my_td_titel{
 	height: calc(100% - 20px);
 }
+

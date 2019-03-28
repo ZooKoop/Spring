@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<head th:replace="common/common_pub :: common_header('')">
+<meta charset="UTF-8">
+</head>
+<body>
+	<div th:replace="common/common_pub :: navbar_"></div>
+	<div class="container kv-main">
+		<!-- 按钮触发模态框 -->
+		<button class="btn btn-primary" data-toggle="modal" data-target="#add" style="    margin: 10px 0;">
+			添加TICKET
+		</button>
+		<!-- 模态框（Modal） -->
+		<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							添加TICKET
+						</h4>
+					</div>
+					<div class="modal-body">
+						<form id="add_form" class="form-horizontal" role="form">
+							<div class="form-group">
+								<label for="ticketNumber" class="col-sm-2 control-label">Ticket</label>
+								<div class="col-sm-10">
+									<input type="number" class="form-control" id="ticketNumber" name="ticketNumber"
+										   placeholder="请输入Ticket号">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="description" class="col-sm-2 control-label">描述</label>
+								<div class="col-sm-10">
+									<textarea id="description" class="form-control" name="description" placeholder="Ticket描述。。。"></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="isCreate" class="col-sm-2 control-label">发包状态</label>
+								<div class="col-sm-10">
+									<select id="isCreate" name="isCreate" class="selectpicker form-control" title="是否发包">
+											<option value="false">未发包</option>
+											<option value="true">已发包</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="isExample" class="col-sm-2 control-label">测试用例</label>
+								<div class="col-sm-10">
+									<select id="isExample" name="isExample" class="selectpicker form-control" title="是否有测试用例">
+											<option value="false">无</option>
+											<option value="true">有</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="isExample" class="col-sm-2 control-label">选择版本</label>
+								<div class="col-sm-10">
+									<select id="isExample" name="version" class="selectpicker form-control" multiple title="选择版本(可多选)" data-live-search="true">
+										<option value="Trunk">Trunk</option>
+									    <option value="317">317</option>
+									    <option value="316">316</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="dateTime" class="col-sm-2 control-label">日期</label>
+								<div class="col-sm-10">
+									<input type="date" id="dateTime" name="dateTime" class="form-control">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+						</button>
+						<button id="add_submit" type="button" class="btn btn-primary">
+							提交
+						</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal -->
+		</div>
+	</div>
+	<div class="container">
+		<table id="my_work" >
+			<thead>
+				<tr>
+					<!-- <th><input type="checkbox" class="" name="select_all" id="select-all" > 全选</th> -->
+					<th>Ticket号<i class="icon-user-md"></i></th>
+					<th>Ticket描述 <i class="icon-key"></th>
+					<th>发包 <i class="icon-envelope"></th>
+					<th>测试用例 <i class="icon-time"></i></th>
+					<th>版本 <i class="icon-picture"></i></th>
+					<th>日期 <i class="icon-file"></i></th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<div th:replace="common/common_pub :: footer_"></div>
+</body>
+<script>
+	$(document).ready(function() {
+		$('#my_work').DataTable({
+			pagingType : "full_numbers",
+			colReorder: true,
+			ordering : false, //排序
+			language : {
+				decimal : "",
+				emptyTable : "No data available in table",
+				info : "当前显示第 _START_ 至 _END_ 项，共 _TOTAL_ 项。",
+				infoEmpty : "当前显示第 0 至 0 项，共 0 项",
+				infoFiltered : "(由 _MAX_ 项结果过滤)",
+				infoPostFix : "",
+				thousands : ",",
+				lengthMenu : "每页 _MENU_ 项",
+				loadingRecords : "载入中...",
+				processing : "处理中...",
+				search : "搜索:",
+				zeroRecords : "没有匹配结果",
+				paginate : {
+					"first" : "首页",
+					"previous" : "上页",
+					"next" : "下页",
+					"last" : "末页"
+				}
+			},
+			paging : true,//paging属性必须为true才能实现默认初始值得功能
+			serverSide : true, //是否启动服务器端数据导入
+			lengthMenu : [ 20, 50, 70, 100 ],
+			columns : [{
+				data : 'ticketNumber',
+				title: "Ticket号"
+				//class:"my_td_img",
+				/* render:function(data, type, row, meta){
+					return "<img class='center-block img-thumbnail img-responsive' src='" + data + "'style='border-radius: 0;' />";
+				} */
+			},{
+				data : 'description',
+				defaultContent:"",
+				title: "Ticket描述"
+				//class:"my_td_titel",
+				/* render:function(data, type, row, meta){
+					return "<div class='text-center'>"+data+"</div>";
+				} */
+			},{
+				data : 'isCreate',
+				defaultContent:"",
+				title: "是否发包"
+				/* render:function(data, type, row, meta){
+					return "<div>"+data+"</div>";
+				} */
+			},{
+				data : 'isExample',
+				defaultContent:"",
+				title: "测试用例"
+				/* render:function(data, type, row, meta){
+					return "<div>"+data+"</div>";
+				} */
+			},{
+				data : 'version',
+				defaultContent:"",
+				title: "版本"
+				/* render:function(data, type, row, meta){
+					return "<div>"+data+"</div>";
+				} */
+			},{
+				data : 'dateTime',
+				defaultContent:"",
+				title: "时间"
+				/* render:function(data, type, row, meta){
+					return "<div>"+data+"</div>";
+				} */
+			}],
+			ajax: function (data, callback, settings) {
+				//封装请求参数
+				var param = {};
+				param.size = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+				console.log(data.length)
+				//param.start = data.start;//开始的记录序号
+				param.page = (data.start / data.length);//当前页码
+				//param.search = data.search.value;//搜索条件
+				//if (data.order.length > 0) {
+				//param.order = data.columns[data.order[0].column].data;
+				//param.dir = data.order[0].dir;
+				//}
+				//console.log(param);
+				//ajax请求数据
+				$.ajax({
+					type: "GET",
+					url: "/work/queryAll",
+					cache: false, //禁用缓存
+					data: param, //传入组装的参数
+					dataType: "json",
+					success: function (result) {
+					//console.log(result);
+					//setTimeout仅为测试延迟效果
+						setTimeout(function () {
+						//封装返回数据
+						var returnData = {};
+						returnData.draw = result.draw;//这里直接自行返回了draw计数器,应该由后台返回
+						returnData.recordsTotal = result.totalElements;//返回数据全部记录
+						returnData.recordsFiltered = result.totalElements;//后台不实现过滤功能，每次查询均视作全部结果
+						returnData.data = result.content;//返回的数据列表
+						console.log(returnData);
+						$("tr").css("display","inline-block");
+						//调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+						//此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+						callback(returnData);
+						}, 10);
+					}
+				});
+			}
+		});
+	});
+	$("#add_submit").on("click",function(){
+		$.ajax({
+			type: "post",
+			url: "/work/add",
+			dataType: "json",//预期服务器返回的数据类型
+			data: $('#add_form').serialize(),
+            success: function (result) {
+                console.log("----------"+result.msg);//打印服务端返回的数据(调试用)
+                if(result.success=="200"){
+	                $('#add').on('hide.bs.modal',function() {
+	                	 layer.alert("添加成功！");
+	                })
+                }
+                if(result.fail=="400"){
+	            	layer.alert("添加失败！");
+                }
+                if(result.repeat =="222"){
+	            	layer.alert("Ticket已存在！");
+                }
+            },
+            error : function() {
+                alert("异常！");
+            }
+		});
+	});
+</script>
+
+</html>

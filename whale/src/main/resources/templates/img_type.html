@@ -21,14 +21,14 @@
 			class="img-rounded center-block" th:src="${list.imgPath}">
 	</div> -->
 	<div class="container">
-		<table id="table_images" style="width:100%">
+		<table id="img_type" style="width:100%">
 		</table>
 	</div>
 	<div th:replace="common/common_pub :: footer_"></div>
 </body>
 <script>
 	$(document).ready(function() {
-		$('#table_images').DataTable({
+		$('#img_type').DataTable({
 			pagingType : "full_numbers",
 			colReorder: true,
 			ordering : false, //排序
