@@ -13,7 +13,7 @@
 			添加TICKET
 		</button>
 		<!-- 模态框（Modal） -->
-		<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+		<div class="modal fade" id="add"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -97,7 +97,7 @@
 		var workTables=$('#my_work').DataTable({
 			pagingType : "full_numbers",
 			//colReorder: true,
-			ordering : false, //排序
+			//ordering : false, //排序
 			language : {
 				decimal : "",
 				emptyTable : "No data available in table",
@@ -118,12 +118,24 @@
 					"last" : "末页"
 				}
 			},
+			 buttons: [
+			        {
+			            extend: 'excel',
+			            text: 'Save current page',
+			            exportOptions: {
+			                modifier: {
+			                    page: 'current'
+			                }
+			            }
+			        }
+			    ],
 			paging : true,//paging属性必须为true才能实现默认初始值得功能
 			serverSide : true, //是否启动服务器端数据导入
-			lengthMenu : [ 20, 50, 70, 100 ],
+			lengthMenu : [ 5,20, 50, 70, 100 ],
 			columns : [{
 				data : 'ticketNumber',
 				title: "Ticket号",
+				name : 'ticketNumber',
  				render:function(data, type, row, meta){
 					return "#"+ data +"";
 				} 
@@ -139,7 +151,7 @@
 				defaultContent:"",
 				title: "发包",
 				render:function(data, type, row, meta){
-					console.log(data)
+					//console.log(data)
 					if(data>0){
 						return "<p style='margin: 0;'>已发</p>";
 					}else{
@@ -149,7 +161,7 @@
 			},{
 				data : 'isExample',
 				defaultContent:"",
-				title: "测试用例",
+				title: "用例",
 				render:function(data, type, row, meta){
 					if(data>0){
 						return "<p style='margin: 0;'>有</p>";
@@ -175,22 +187,24 @@
 				data : null,
 				title: "操作",
 				render:function(data, type, row, meta){
-					return '<a class="_eidt btn btn-info" type="button" href="#" > <span class="glyphicon glyphicon-edit"></span> 编辑</a> <a class="_del btn btn-danger" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span> 删除</a>';
+					return '<a class="_eidt btn btn-info" type="button" href="#" > <span class="glyphicon glyphicon-edit"></span></a> <a class="_del btn btn-danger" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span></a>';
 				}
 			}],
 			ajax: function (data, callback, settings) {
 				//封装请求参数
 				var param = {};
 				param.size = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
-				console.log(data.length)
+				//console.log(data.length)
 				//param.start = data.start;//开始的记录序号
 				param.page = (data.start / data.length);//当前页码
 				//param.search = data.search.value;//搜索条件
-				//if (data.order.length > 0) {
-				//param.order = data.columns[data.order[0].column].data;
-				//param.dir = data.order[0].dir;
-				//}
-				//console.log(param);
+				 if (data.order.length > 0) {
+					//param.order = data.columns[data.order[3].column].data;
+					param.order = data.columns[5].data;
+					param.dir = data.order[0].dir;
+					console.log(param.order+"----------"+param.dir);
+				} 
+				
 				//ajax请求数据
 				$.ajax({
 					type: "GET",
@@ -228,7 +242,13 @@
 	                console.log("----------"+result.msg);//打印服务端返回的数据(调试用)
 	                if(result.success=="200"){
 	               	 	layer.alert("添加成功！");
+	               	 	//这俩需要一起用hide
 		                $("#add").modal('hide');
+		                $('#add').on('hide.bs.modal', '.modal', function () {
+		                    $(this).removeData('bs.modal');
+		                });
+		                //下边至清空input，不清空下拉框
+		                /* document.getElementById("add_form").reset(); */
 		                workTables.ajax.reload();
 	                }
 	                if(result.fail=="400"){

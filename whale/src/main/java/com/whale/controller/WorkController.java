@@ -32,8 +32,10 @@ public class WorkController {
 	@GetMapping("/queryAll")
 	@ResponseBody
 	public Page<Work> queryAll(@RequestParam(value = "page") Integer page,
-			@RequestParam(value = "size", defaultValue = "5") Integer size) {
-		Page<Work> queryAll = workServices.queryAll(page,size);
+			@RequestParam(value = "size", defaultValue = "5") Integer size,
+			@RequestParam(value = "order") String order
+			) {
+		Page<Work> queryAll = workServices.queryAll(page,size,order);
 		return queryAll;
 	}
 	@PostMapping("/add")
