@@ -57,5 +57,16 @@ public class WorkController {
 		}
 		return hashMap;
 	}
-	
-}
+	@GetMapping("/delete")
+	@ResponseBody
+	public String del(String id) {
+		try {
+			workServices.del(id);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "400";
+		}
+		return "200";
+	}
+};

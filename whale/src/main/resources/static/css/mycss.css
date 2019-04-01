@@ -15,6 +15,21 @@ body{
     left: 50%;
     top: 50%;
 }
+/*按钮样式*/
+.my_btn{
+	background-color: #55575f;
+	color: #fff;
+}
+/*tables样式*/
+.my_tables_tr{
+	color: #ddd;
+	background: #55575f;
+}
+.my_tables_tr_group{
+	background: #ddd;
+	color: #55575f;
+}
+
 /* 登陆样式*/
 .my_login{
 	box-sizing: border-box;
@@ -56,4 +71,3 @@ body{
 #table_images>tbody tr:hover > .my_td_titel{
 	height: calc(100% - 20px);
 }
-

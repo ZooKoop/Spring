@@ -6,7 +6,7 @@
 <body>
 	<div th:replace="common/common_pub :: navbar_"></div>
 	<div class="container-fluid">
-		<div class="panel panel-info">
+		<div class="panel">
 			<div class="panel-heading">
 		    	<p><i class="icon-list"></i>  用户列表</p>
 		    </div>
@@ -16,9 +16,9 @@
 		    </div>
 		    <div class="panel-body">
 				<!--第二步：添加如下 HTML 代码-->
-				<table id="table_id_example" >
+				<table id="table_id_example"  class="table table-hover table-striped">
 					<thead>
-						<tr>
+						<tr class="my_tables_tr">
 							<th>ID</th>
 							<th><input type="checkbox" class="" name="select_all" id="select-all" > 全选</th>
 							<th>账号 <i class="icon-user-md"></i></th>
@@ -30,7 +30,7 @@
 						</tr>
 					</thead>
 					<tfoot>
-						<tr>
+						<tr class="my_tables_tr">
 							<th>ID</th>
 							<th></th>
 							<th>账号 <i class="icon-user-md"></i></th>
@@ -133,150 +133,4 @@
 	</div>
 	<div th:replace="common/common_pub :: footer_"></div>
 </body>
-<script type="text/javascript">
-$(document).ready(function() {
-
-	var myTables=$('#table_id_example').DataTable({
-		pagingType : "full_numbers",
-		language : {
-			decimal : "",
-			emptyTable : "No data available in table",
-			info : "当前显示第 _START_ 至 _END_ 项，共 _TOTAL_ 项。",
-			infoEmpty : "当前显示第 0 至 0 项，共 0 项",
-			infoFiltered : "(由 _MAX_ 项结果过滤)",
-			infoPostFix : "",
-			thousands : ",",
-			lengthMenu : "每页 _MENU_ 项",
-			loadingRecords : "载入中...",
-			processing : "处理中...",
-			search : "搜索:",
-			zeroRecords : "没有匹配结果",
-			paginate : {
-				"first" : "首页",
-				"previous" : "上页",
-				"next" : "下页",
-				"last" : "末页"
-			}
-		},
-		destroy : true, //销毁表格对象
-		deferRender:true,//延迟渲染
-		paging : true,//paging属性必须为true才能实现默认初始值得功能
-		bSort: true,
-		bAutoWidth : false,//自动宽度
-		ordering : true, //排序
-		//bPaginate : true, //翻页功能
-		bProcessing : true, //DataTables载入数据时，是否显示‘进度’提示  
-		serverSide : true, //是否启动服务器端数据导入 
-		searching : false, //是否禁用原生搜索(false为禁用,true为使用)
-		//renderer: "Bootstrap", //渲染样式：Bootstrap和jquery-ui
-		//"stripeClasses": ["odd", "even"], //为奇偶行加上样式，兼容不支持CSS伪类的场合
-		lengthMenu : [ 5, 20, 50, 70, 100 ],
-		columns : [ {
-			data : 'id'
-		},{
-			data:null,
-			render:function(data, type, row, meta){
-				return "<input type='checkbox' name='onDutyToId'  value='" + data + "'>";
-			}
-		},{
-			data : 'userName'
-		}, {
-			data : 'userPassword'
-		}, {
-			data : 'email'
-		}, {
-			data : 'regTime',
-			//title: "注册时间",
-			render:function(data, type, row, meta){
-				//console.log(data)
-				//console.log(new Date(parseInt(Date.parse(data))).toLocaleString())
- 				return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
-			} 
-		}, {
-			data : 'srcImg',
-			//title: "头像",
-			render:function(data, type, row, meta){
-				if(data==null){
-					return "无";
-				}
-				return "<img class='img-rounded center-block img-thumbnail img-responsive' style='width:80px' src='" + data + "' />";
-			}
-		}],
-	    columnDefs: [
-	    	{
-		        //   指定第最后一列
-		        targets: 7,
-		        render: function(data, type, row, meta) {
-		            return '<a class="_eidt btn btn-info" type="button" href="#" data-toggle="tooltip" title="添加用户" ><span class="glyphicon glyphicon-list-alt"></span> 详情</a> <a class="_eidt btn btn-warning" type="button" href="#" > <span class="glyphicon glyphicon-edit"></span> 编辑</a> <a class="_del btn btn-danger" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span> 删除</a>';
-		        }
-	    	},
-	        {
-	    		//隐藏第一列
-	            targets: 0,
-	            visible: false,
-	            searchable: false
-	        }],
-		ajax: function (data, callback, settings) {
-			//封装请求参数
-			var param = {};
-			param.size = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
-			//param.start = data.start;//开始的记录序号
-			param.page = (data.start / data.length);//当前页码
-			//param.search = data.search.value;//搜索条件
-			//if (data.order.length > 0) {
-			//param.order = data.columns[data.order[0].column].data;
-			//param.dir = data.order[0].dir;
-			//}
-			//console.log(param);
-			//ajax请求数据
-			$.ajax({
-				type: "GET",
-				url: "/user/listInfo",
-				cache: false, //禁用缓存
-				data: param, //传入组装的参数
-				dataType: "json",
-				success: function (result) {
-				//console.log(result);
-				//setTimeout仅为测试延迟效果
-					setTimeout(function () {
-					//封装返回数据
-					var returnData = {};
-					returnData.draw = result.draw;//这里直接自行返回了draw计数器,应该由后台返回
-					returnData.recordsTotal = result.totalElements;//返回数据全部记录
-					returnData.recordsFiltered = result.totalElements;//后台不实现过滤功能，每次查询均视作全部结果
-					returnData.data = result.content;//返回的数据列表
-					console.log(returnData);
-					//调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
-					//此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
-					callback(returnData);
-					}, 10);
-				}
-			});
-		}
-	});
-	$('#table_id_example').removeClass('dataTable').addClass('table table-bordered table-hover table-striped');
-	// 数据删除
-    $('#table_id_example').on( 'click', '._del', function () {//._del是数组中删除按钮的类
-        var data = myTables.row( $(this).parents('tr')).data();
-        $.ajax({
-            url: '/user/delete',
-            type: 'get',
-            dataType: 'json',
-            data: {id: data.id},
-            success: function(data) {
-	        	console.log(data)
-	        	if(data==200){
-	            	//如果后台删除成功，则刷新表格，并提示用户删除成功
-	                layer.msg("删除成功！",{icon:1,time:2000});
-	                //保留分页信息
-	                //myTables.ajax.reload(null, false);
-	                //不保留分页信息
-	                myTables.ajax.reload();
-	        	}
-	        }
-        })
-    });
-    $("[data-toggle='tooltip']").tooltip();
-});
-</script>
 </html>

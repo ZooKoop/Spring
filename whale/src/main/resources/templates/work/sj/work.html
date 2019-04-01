@@ -7,263 +7,146 @@
 </head>
 <body>
 	<div th:replace="common/common_pub :: navbar_"></div>
-	<div class="container kv-main">
-		<!-- 按钮触发模态框 -->
-		<button class="btn btn-info" data-toggle="modal" data-target="#add" style="    margin: 10px 0;">
-			添加TICKET
-		</button>
-		<!-- 模态框（Modal） -->
-		<div class="modal fade" id="add"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-							&times;
-						</button>
-						<h4 class="modal-title" id="myModalLabel">
-							添加TICKET
-						</h4>
-					</div>
-					<div class="modal-body">
-						<form id="add_form" class="form-horizontal" role="form">
-							<div class="form-group">
-								<label for="ticketNumber" class="col-sm-2 control-label">Ticket</label>
-								<div class="col-sm-10">
-									<input type="number" class="form-control" id="ticketNumber" name="ticketNumber"
-										   placeholder="请输入Ticket号">
-								</div>
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="add" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">添加TICKET</h4>
+				</div>
+				<div class="modal-body">
+					<form id="add_form" class="form-horizontal" role="form">
+						<div class="form-group">
+							<label for="ticketNumber" class="col-sm-2 control-label">Ticket</label>
+							<div class="col-sm-10">
+								<input type="number" class="form-control" id="ticketNumber"
+									name="ticketNumber" placeholder="请输入Ticket号">
 							</div>
-							<div class="form-group">
-								<label for="description" class="col-sm-2 control-label">描述</label>
-								<div class="col-sm-10">
-									<textarea id="description" class="form-control" name="description" placeholder="Ticket描述。。。"></textarea>
-								</div>
+						</div>
+						<div class="form-group">
+							<label for="description" class="col-sm-2 control-label">描述</label>
+							<div class="col-sm-10">
+								<textarea id="description" class="form-control"
+									name="description" placeholder="Ticket描述。。。"></textarea>
 							</div>
-							<div class="form-group">
-								<label for="isCreate" class="col-sm-2 control-label">发包状态</label>
-								<div class="col-sm-10">
-									<select id="isCreate" name="isCreate" class="selectpicker form-control" title="是否发包">
-											<option value="0">未发包</option>
-											<option value="1">已发包</option>
-									</select>
-								</div>
+						</div>
+						<div class="form-group">
+							<label for="isCreate" class="col-sm-2 control-label">发包</label>
+							<div class="col-sm-3">
+								<select id="isCreate" name="isCreate"
+									class="selectpicker form-control" title="Trunk">
+									<option value="0">未发包</option>
+									<option value="1">已发包</option>
+									<option value="2">无</option>
+								</select>
 							</div>
-							<div class="form-group">
-								<label for="isExample" class="col-sm-2 control-label">测试用例</label>
-								<div class="col-sm-10">
-									<select id="isExample" name="isExample" class="selectpicker form-control" title="是否有测试用例">
-											<option value="0">无</option>
-											<option value="1">有</option>
-									</select>
-								</div>
+							<div class="col-sm-3">
+								<select id="isCreate" name="isCreate317"
+									class="selectpicker form-control" title="317">
+									<option value="0">未发包</option>
+									<option value="1">已发包</option>
+									<option value="2">无</option>
+								</select>
 							</div>
-							<div class="form-group">
-								<label for="isExample" class="col-sm-2 control-label">选择版本</label>
-								<div class="col-sm-10">
-									<select id="isExample" name="version" class="selectpicker form-control" multiple title="选择版本(可多选)" data-live-search="true">
-										<option value="Trunk">Trunk</option>
-									    <option value="317">317</option>
-									    <option value="316">316</option>
-									</select>
-								</div>
+							<div class="col-sm-3">
+								<select id="isCreate" name="isCreate316"
+									class="selectpicker form-control" title="316">
+									<option value="0">未发包</option>
+									<option value="1">已发包</option>
+									<option value="2">无</option>
+								</select>
 							</div>
-							<div class="form-group">
-								<label for="dateTime" class="col-sm-2 control-label">日期</label>
-								<div class="col-sm-10">
-									<input type="date" id="dateTime" name="dateTime" class="form-control">
-								</div>
+						</div>
+						<div class="form-group">
+							<label for="isExample" class="col-sm-2 control-label">测试用例</label>
+							<div class="col-sm-10">
+								<select id="isExample" name="isExample"
+									class="selectpicker form-control" title="是否有测试用例">
+									<option value="0">无</option>
+									<option value="1">有</option>
+								</select>
 							</div>
-						</form>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">关闭
-						</button>
-						<button id="add_submit" type="button" class="btn btn-primary">
-							提交
-						</button>
-					</div>
-				</div><!-- /.modal-content -->
-			</div><!-- /.modal -->
+						</div>
+						<div class="form-group">
+							<label for="isExample" class="col-sm-2 control-label">选择版本</label>
+							<div class="col-sm-10">
+								<select id="isExample" name="version"
+									class="selectpicker form-control" multiple title="选择版本(可多选)"
+									data-live-search="true">
+									<option value="Trunk">Trunk</option>
+									<option value="317">317</option>
+									<option value="316">316</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="dateTime" class="col-sm-2 control-label">日期</label>
+							<div class="col-sm-10">
+								<input type="date" id="dateTime" name="dateTime"
+									class="form-control">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+					</button>
+					<button id="add_submit" type="button" class="btn btn-primary">
+						提交</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
 		</div>
+		<!-- /.modal -->
 	</div>
-	<div class="container">
-		<table id="my_work" class="table table-bordered table-hover table-striped">
-		</table>
+	<div class="container-fuild">
+			<div class="panel-body">
+				<!-- 按钮触发模态框 -->
+				<button class="btn" data-toggle="modal" data-target="#add"
+					style="margin: 10px 0;">添加TICKET</button>
+				<div class="panel">
+				<table id="my_work" class="table table-hover table-striped">
+					<thead>
+						<tr class="my_tables_tr">
+							<th colspan="3"></th>
+							<th class="text-center my_tables_tr_group" colspan="3" style="width: 25%;">发包</th>
+							<th colspan="4"></th>
+						</tr>
+						<tr class="my_tables_tr">
+							<th class="text-center">id</th>
+							<th class="text-center">TicketNumber</th>
+							<th class="text-center" style="width: 25%;">TicketDescription</th>
+							<th class="text-center my_tables_tr_group" style="width: 5%;">Trunk</th>
+							<th class="text-center my_tables_tr_group" style="width: 5%;">316</th>
+							<th class="text-center my_tables_tr_group" style="width: 5%;">317</th>
+							<th class="text-center" style="width: 5%;">Example</th>
+							<th class="text-center">Version</th>
+							<th class="text-center">Time</th>
+							<th class="text-center">Edit</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr class="my_tables_tr">
+							<th class="text-center" colspan="2">TicketNumber</th>
+							<th class="text-center" style="width: 25%;">TicketDescription</th>
+							<th class="text-center" style="width: 5%;">Trunk</th>
+							<th class="text-center" style="width: 5%;">316</th>
+							<th class="text-center" style="width: 5%;">317</th>
+							<th class="text-center">Example</th>
+							<th class="text-center">Version</th>
+							<th class="text-center">Time</th>
+							<th class="text-center">Edit</th>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
 	</div>
 	<div th:replace="common/common_pub :: footer_"></div>
 </body>
-<script>
-	$(document).ready(function() {
-		var workTables=$('#my_work').DataTable({
-			pagingType : "full_numbers",
-			//colReorder: true,
-			//ordering : false, //排序
-			language : {
-				decimal : "",
-				emptyTable : "No data available in table",
-				info : "当前显示第 _START_ 至 _END_ 项，共 _TOTAL_ 项。",
-				infoEmpty : "当前显示第 0 至 0 项，共 0 项",
-				infoFiltered : "(由 _MAX_ 项结果过滤)",
-				infoPostFix : "",
-				thousands : ",",
-				lengthMenu : "每页 _MENU_ 项",
-				loadingRecords : "载入中...",
-				processing : "处理中...",
-				search : "搜索:",
-				zeroRecords : "没有匹配结果",
-				paginate : {
-					"first" : "首页",
-					"previous" : "上页",
-					"next" : "下页",
-					"last" : "末页"
-				}
-			},
-			 buttons: [
-			        {
-			            extend: 'excel',
-			            text: 'Save current page',
-			            exportOptions: {
-			                modifier: {
-			                    page: 'current'
-			                }
-			            }
-			        }
-			    ],
-			paging : true,//paging属性必须为true才能实现默认初始值得功能
-			serverSide : true, //是否启动服务器端数据导入
-			lengthMenu : [ 5,20, 50, 70, 100 ],
-			columns : [{
-				data : 'ticketNumber',
-				title: "Ticket号",
-				name : 'ticketNumber',
- 				render:function(data, type, row, meta){
-					return "#"+ data +"";
-				} 
-			},{
-				data : 'description',
-				defaultContent:"",
-				title: "Ticket描述"
-				/* render:function(data, type, row, meta){
-					return "<div class='text-center'>"+data+"</div>";
-				} */
-			},{
-				data : 'isCreate',
-				defaultContent:"",
-				title: "发包",
-				render:function(data, type, row, meta){
-					//console.log(data)
-					if(data>0){
-						return "<p style='margin: 0;'>已发</p>";
-					}else{
-						return "<p style='margin: 0;color:red'>未发</p>";
-					}		
-				}
-			},{
-				data : 'isExample',
-				defaultContent:"",
-				title: "用例",
-				render:function(data, type, row, meta){
-					if(data>0){
-						return "<p style='margin: 0;'>有</p>";
-					}else{
-						return "<p style='margin: 0;color:red'>无</p>";
-					}			
-				}
-			},{
-				data : 'version',
-				defaultContent:"",
-				title: "版本",
-				render:function(data, type, row, meta){
-					return "<div>"+data+"</div>";
-				}
-			},{
-				data : 'dateTime',
-				defaultContent:"",
-				title: "时间",
-				render:function(data, type, row, meta){
-					return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
-				}
-			},{
-				data : null,
-				title: "操作",
-				render:function(data, type, row, meta){
-					return '<a class="_eidt btn btn-info" type="button" href="#" > <span class="glyphicon glyphicon-edit"></span></a> <a class="_del btn btn-danger" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span></a>';
-				}
-			}],
-			ajax: function (data, callback, settings) {
-				//封装请求参数
-				var param = {};
-				param.size = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
-				//console.log(data.length)
-				//param.start = data.start;//开始的记录序号
-				param.page = (data.start / data.length);//当前页码
-				//param.search = data.search.value;//搜索条件
-				 if (data.order.length > 0) {
-					//param.order = data.columns[data.order[3].column].data;
-					param.order = data.columns[5].data;
-					param.dir = data.order[0].dir;
-					console.log(param.order+"----------"+param.dir);
-				} 
-				
-				//ajax请求数据
-				$.ajax({
-					type: "GET",
-					url: "/work/queryAll",
-					cache: false, //禁用缓存
-					data: param, //传入组装的参数
-					dataType: "json",
-					success: function (result) {
-					//console.log(result);
-					//setTimeout仅为测试延迟效果
-						setTimeout(function () {
-						//封装返回数据
-						var returnData = {};
-						returnData.draw = result.draw;//这里直接自行返回了draw计数器,应该由后台返回
-						returnData.recordsTotal = result.totalElements;//返回数据全部记录
-						returnData.recordsFiltered = result.totalElements;//后台不实现过滤功能，每次查询均视作全部结果
-						returnData.data = result.content;//返回的数据列表
-						console.log(returnData);
-						//$("tr").css("display","inline-block");
-						//调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
-						//此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
-						callback(returnData);
-						}, 10);
-					}
-				});
-			}
-		});
-		$("#add_submit").on("click",function(){
-			$.ajax({
-				type: "post",
-				url: "/work/add",
-				dataType: "json",//预期服务器返回的数据类型
-				data: $('#add_form').serialize(),
-	            success: function (result) {
-	                console.log("----------"+result.msg);//打印服务端返回的数据(调试用)
-	                if(result.success=="200"){
-	               	 	layer.alert("添加成功！");
-	               	 	//这俩需要一起用hide
-		                $("#add").modal('hide');
-		                $('#add').on('hide.bs.modal', '.modal', function () {
-		                    $(this).removeData('bs.modal');
-		                });
-		                //下边至清空input，不清空下拉框
-		                /* document.getElementById("add_form").reset(); */
-		                workTables.ajax.reload();
-	                }
-	                if(result.fail=="400"){
-		            	layer.alert("添加失败！");
-	                }
-	                if(result.repeat =="222"){
-		            	layer.alert("Ticket已存在！");
-	                }
-	            },
-	            error : function() {
-	                alert("异常！");
-	            }
-			});
-		});
-	});
-</script>
 
 </html>

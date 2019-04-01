@@ -25,4 +25,7 @@ public class WorkServices {
 	public boolean add(Work work) {
 		return workRepostitory.save(work)!=null ? true:false;
 	}
+	public void del(String id) {
+		workRepostitory.deleteById(id);
+	}
 }
