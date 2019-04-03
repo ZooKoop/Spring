@@ -2,7 +2,6 @@ package com.whale.model;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,7 +42,6 @@ public class Work implements Serializable {
 	private Integer isCreate317;
 	@Column(name = "ISCREATE316")
 	private Integer isCreate316;
-
 	/*
 	 * 是否有测试用例0/1
 	 */
@@ -65,7 +63,7 @@ public class Work implements Serializable {
 	@ManyToOne(targetEntity = SecurityUser.class)
 	@JoinColumn(name = "securityUserId")
 	private SecurityUser securityUser;
-
+	
 	public String getId() {
 		return id;
 	}

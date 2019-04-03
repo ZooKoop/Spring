@@ -102,7 +102,7 @@ $(function(){
 	});
 	/* ---------------------------work页面参数------------------- */
 	var work_tables = tables_init('#my_work',language,work_columns,work_columnDefs,work_ajax);
-	del_f('#my_work','/work/delete','._del',work_tables);
+	del_f('#my_work','/back/work/delete','._del',work_tables);
 	
 	/*删除封装*/
 	function del_f(tab_id,urls,del_class,tab_name){
@@ -225,7 +225,7 @@ var list_ajax = function (data, callback, settings) {
 	// ajax请求数据
 	$.ajax({
 		type: "GET",
-		url: "/user/listInfo",
+		url: "/back/user/listInfo",
 		cache: false, // 禁用缓存
 		data: param, // 传入组装的参数
 		dataType: "json",
@@ -396,7 +396,7 @@ var work_ajax = function (data, callback, settings) {
 	// ajax请求数据
 	$.ajax({
 		type: "GET",
-		url: "/work/queryAll",
+		url: "/back/work/queryAll",
 		cache: false, // 禁用缓存
 		data: param, // 传入组装的参数
 		dataType: "json",

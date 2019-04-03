@@ -2,7 +2,6 @@ package com.whale.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
@@ -12,56 +11,40 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.whale.model.Work;
-import com.whale.security.repository.SecurityUserRepository;
-import com.whale.services.WorkServices;
+import com.whale.model.WorkOpction;
+import com.whale.services.WorkOpctionServices;
 @Controller
-@RequestMapping("/back/work")
-public class WorkController {
+@RequestMapping("/workOpction")
+public class WorkOpctionController {
 	@Autowired
-	private WorkServices workServices;
-	@Autowired
-	private SecurityUserRepository securityUserRepository;
-	@GetMapping("/toWork")
+	private WorkOpctionServices w;
+	@GetMapping("/toWorkOpction")
 	public String toWork() {
 		
-		return "back/work/sj/work";
+		return "work/sj/work";
 	}
 	
 	@GetMapping("/queryAll")
 	@ResponseBody
-	public Page<Work> queryAll(@RequestParam(value = "page") Integer page,
+	public Page<WorkOpction> queryAll(@RequestParam(value = "page") Integer page,
 			@RequestParam(value = "size", defaultValue = "5") Integer size,
 			@RequestParam(value = "order") String order
 			) {
-		Page<Work> queryAll = workServices.queryAll(page,size,order);
+		Page<WorkOpction> queryAll = w.queryAll(page,size,order);
 		return queryAll;
 	}
 	@PostMapping("/add")
 	@ResponseBody
-	public Map<String, Object> add(Work work,Authentication authentication) {
+	public Map<String, Object> add(WorkOpction work,Authentication authentication) {
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
-		if (work.getTicketNumber()!=null) {
-			if (workServices.findByTicketNumber(work.getTicketNumber())) {
-				hashMap.put("repeat", "222");
-			}else {
-				work.setSecurityUser(securityUserRepository.findByuserName(authentication.getName()));
-				boolean add = workServices.add(work);
-				if (add) {
-					hashMap.put("success", "200");
-				}
-			}
-		}else {
-			hashMap.put("fail", "400");
-		}
+		w.add(work);
 		return hashMap;
 	}
 	@GetMapping("/delete")
 	@ResponseBody
 	public String del(String id) {
 		try {
-			workServices.del(id);
+			w.del(id);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

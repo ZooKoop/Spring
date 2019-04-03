@@ -20,4 +20,8 @@ public class IndexController {
 	public String index() {
 		return "index";
 	}
+	@RequestMapping("/back/index")
+	public String backIndex() {
+		return "back/index";
+	}
 }

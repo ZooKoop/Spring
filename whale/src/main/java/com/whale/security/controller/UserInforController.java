@@ -28,7 +28,7 @@ import com.whale.security.repository.SecurityUserRepository;
 
 @Controller
 
-@RequestMapping("/user")
+@RequestMapping("back/user")
 public class UserInforController {
 	@Value("${img.src}")
 	private String fileSrc;
@@ -41,7 +41,7 @@ public class UserInforController {
 
 	@RequestMapping("/list")
 	public String list() {
-		return "user/list";
+		return "back/user/list";
 	}
 
 	@RequestMapping("/listInfo")
@@ -73,7 +73,7 @@ public class UserInforController {
 
 	@RequestMapping("/toSaveUser")
 	public String user() {
-		return "user/saveUser";
+		return "back/user/saveUser";
 	}
 
 	@PostMapping("/saveUser")
@@ -143,12 +143,12 @@ public class UserInforController {
 				errorMsg = errorMsg + e.getCode() + ":" + e.getDefaultMessage();
 			}
 			model.addAttribute("errorMsg", errorMsg);
-			return "user/userInforAdd";
+			return "back/user/userInforAdd";
 		}
 
 		SecurityUser userInfor = new SecurityUser();
 		BeanUtils.copyProperties(userParam, userInfor);
 		entityManager.merge(userInfor);
-		return "redirect:/user/list";
+		return "redirect:back//user/list";
 	}
 }
