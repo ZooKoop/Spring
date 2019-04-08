@@ -72,4 +72,24 @@ body{
 	height: calc(100% - 20px);
 }
 
-
+/* 导航样式 */
+#main-nav{
+	background: #55575f;
+}
+.nav-pills > li > a,
+.nav > li > a 
+{
+	color: #ddd;
+}
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li > a:hover,
+.nav > li > a:hover,/* 二级目录下a划过样式 */
+.nav-pills > li.active > a:focus,/* 一级目录下a添加active以后样式 */
+.nav > li.active > a:focus{
+	/* color: #ddd; */
+	background-color: #222;
+}
+.nav-pills > li > a {
+    border-radius: 0px;
+}
