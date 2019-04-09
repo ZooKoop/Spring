@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head th:fragment="common_header(title)">
 <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<head th:fragment="common_header(title)">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 <title th:text="${title}"></title>
 <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
 <!-- boot引用 -->
@@ -28,6 +30,17 @@
 <!-- 自定义引用 -->
 <link rel="stylesheet" type="text/css" href="/css/mycss.css" />
 <script type="text/javascript" src="/js/myJs.js"></script>
+<!-- admin导航 -->
+<link rel="stylesheet" href="/css/AdminLTE.css">
+<link rel="stylesheet" href="/css/skins/skin-blue.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="/css/Ionicons/css/ionicons.min.css">
+<!-- Font Awesome -->
+  <link rel="stylesheet" href="/css/font-awesome/css/font-awesome.min.css">
+<!-- Google Font -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<script type="text/javascript" src="/js/adminlte.min.js"></script>
 </head>
 <body>
 	<nav class="navbar navbar-inverse" role="navigation"
@@ -67,10 +80,13 @@
 		</div>
 	</nav>
 
-	<footer class="navbar-fixed-bottom" th:fragment="footer_" style="background: #222; color: #9d9d9d;">
-	   <div class="container-fuild text-center">
-	     	<h6>Copyright &copy;2019 Whale</h6>
-	   </div>
+	<footer th:fragment="footer" style="width:100%;background: #222; color: #9d9d9d;position: absolute;
+    bottom: 0;padding-left:1em">
+	 	<h5 class="text-left">Copyright &copy;2019 Whale</h5>
+	</footer>
+	<footer th:fragment="footer_" style="border-top: 1px solid #fff; width:100%;background: #d2d6de; color: #9d9d9d;position: absolute;
+    bottom: 0;padding-left:1em">
+	 	<h5 class="text-left" style="color:#222;font-weight: bold;">Copyright &copy;2019 Whale</h5>
 	</footer>
 
 	<th:block th:fragment="">

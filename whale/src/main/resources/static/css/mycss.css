@@ -1,6 +1,6 @@
-body{
+/* body{
 	padding-bottom: 33px;
-}
+} */
 .table > tbody > tr > td{
 	vertical-align: middle;
 }
@@ -71,9 +71,11 @@ body{
 #table_images>tbody tr:hover > .my_td_titel{
 	height: calc(100% - 20px);
 }
-
+.panel-body {
+    padding: 0;
+}
 /* 导航样式 */
-#main-nav{
+/* #main-nav{
 	background: #55575f;
 }
 .nav-pills > li > a,
@@ -84,12 +86,12 @@ body{
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li > a:hover,
-.nav > li > a:hover,/* 二级目录下a划过样式 */
-.nav-pills > li.active > a:focus,/* 一级目录下a添加active以后样式 */
+.nav > li > a:hover,二级目录下a划过样式
+.nav-pills > li.active > a:focus,一级目录下a添加active以后样式
 .nav > li.active > a:focus{
-	/* color: #ddd; */
+	color: #ddd;
 	background-color: #222;
 }
 .nav-pills > li > a {
     border-radius: 0px;
-}
+} */

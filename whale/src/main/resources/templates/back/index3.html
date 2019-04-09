@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<head th:replace="common/common_pub :: common_header('')">
+</head>
+<body>
+	<div th:replace="common/common_pub :: navbar_"></div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2">
+				<ul id="main-nav" class="nav nav-pills nav-stacked work_left_wrok"> <!-- nav-stacked垂直导航 -->
+					<li ><a href="#"> <i
+							class="glyphicon glyphicon-th-large"></i> 首页
+					</a></li>
+					<li><a href="/back/work/toWork" target="menuFrame"> <i
+							class="glyphicon glyphicon-credit-card"></i> TICKET
+					</a></li>
+					<li ><a href="#systemSetting" class="nav-header collapsed"
+						data-toggle="collapse"> <i class="glyphicon glyphicon-cog"></i>
+							系统管理 <span class="pull-right glyphicon glyphicon-chevron-down"></span>
+					</a>
+						<ul id="systemSetting" class="nav nav-list collapse secondmenu"
+							style="height: 0px;">
+							<li><a href="#"><i class="glyphicon glyphicon-user"></i>用户管理</a></li>
+							<li><a href="#"><i class="glyphicon glyphicon-th-list"></i>菜单管理</a></li>
+							<li><a href="#"><i class="glyphicon glyphicon-asterisk"></i>角色管理</a></li>
+							<li><a href="#"><i class="glyphicon glyphicon-edit"></i>修改密码</a></li>
+							<li><a href="#"><i class="glyphicon glyphicon-eye-open"></i>日志查看</a></li>
+						</ul></li>
+				</ul>
+			</div>
+			<div class="col-md-10" id="work_right">
+			<iframe id="work_iframe" name="menuFrame" scrolling="yes" frameborder="0" width="100%" height="100%" >
+             </iframe>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+ 	$(function(){
+		$("#main-nav li").on("click",function(){
+			$(this).addClass("active").siblings("li").removeClass("active");
+		})
+		reinitIframe =function (){
+			var iframe = document.getElementById("work_iframe");
+			try{
+				var bHeight = iframe.contentWindow.document.body.scrollHeight;
+				var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+				var height = Math.max(bHeight, dHeight);
+				iframe.height = height;
+				console.log(height);
+			}catch (ex){
+				
+			}
+		}
+		window.setInterval("reinitIframe()", 200);
+	}) 
+</script>
+</html>
