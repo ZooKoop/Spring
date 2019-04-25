@@ -1,4 +1,27 @@
 $(function(){
+	$("#my_nav li").on("click",function(){
+		$(this).addClass("active").siblings().removeClass("active");
+		//$(this).find("i").first().toggleClass("rotate_");
+	})
+	/*左侧导航栏-跳转保存样式*/
+	$("#my_nav a").each(function(){
+		$this = $(this);
+		//alert($this[0].href + "==========" + window.location);
+		if($this[0].href==String(window.location)){
+			//alert($(this).parents())
+			//console.log($(this).parent().parent().prev().html()+"1111111111111111111111111111111111111")
+		    $this.parent().addClass("active").siblings().removeClass("active");
+			$this.parent().parent().parent().siblings().removeClass("active");//去除默认样式
+			if(String(window.location).indexOf("/back/user/list")>0){
+				//$this.parent().parent().prev().addClass("active");//只有系统管理改变样式
+				$this.parent().parent().parent().addClass("active");//系统管理下的所有都包括
+				$this.parent().parent().parent().find("i").first().addClass("rotate_");//系统管理下的所有都包括
+				$this.parent().addClass("active_two").removeClass("active");//二级菜单样式
+				$this.parent().parent().addClass("in");
+			}
+		}
+	});
+	
 	/* 登陆弹框 */
 	$("#login").on("click",function () {
 		layer.open({

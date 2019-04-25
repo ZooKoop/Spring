@@ -5,10 +5,11 @@
 </head>
 <body>
 	<div th:replace="common/common_pub :: navbar_"></div>
-	<div class="container-fluid">
-		<div class="panel">
+	<div class="row" style="width:100%;">
+		<div th:replace="common/common_pub :: left_nav"></div>
+		<div class="panel col-md-10">
 			<div class="panel-heading">
-		    	<p><i class="icon-list"></i>  用户列表</p>
+		    	<p>用户列表</p>
 		    </div>
 		    <div class="panel-body">
 	    		<span>操作</span>
@@ -21,24 +22,24 @@
 						<tr class="my_tables_tr">
 							<th>ID</th>
 							<th><input type="checkbox" class="" name="select_all" id="select-all" > 全选</th>
-							<th>账号 <i class="icon-user-md"></i></th>
-							<th>密码 <i class="icon-key"></th>
-							<th>邮箱 <i class="icon-envelope"></th>
-							<th>注册时间 <i class="icon-time"></i></th>
-							<th>头像 <i class="icon-picture"></i></th>
-							<th>编辑 <i class="icon-file"></i></th>
+							<th>账号</th>
+							<th>密码</th>
+							<th>邮箱 </th>
+							<th>注册时间 </th>
+							<th>头像 </th>
+							<th>编辑 </th>
 						</tr>
 					</thead>
 					<tfoot>
 						<tr class="my_tables_tr">
 							<th>ID</th>
 							<th></th>
-							<th>账号 <i class="icon-user-md"></i></th>
-							<th>密码 <i class="icon-key"></th>
-							<th>邮箱 <i class="icon-envelope"></th>
-							<th>注册时间 <i class="icon-time"></i></th>
-							<th>头像 <i class="icon-picture"></i></th>
-							<th>编辑 <i class="icon-file"></i></th>
+							<th>账号</th>
+							<th>密码 </th>
+							<th>邮箱</th>
+							<th>注册时间 </th>
+							<th>头像 </th>
+							<th>编辑 </th>
 						</tr>
 					</tfoot>
 					<tbody>
@@ -131,6 +132,5 @@
 			</div>
 		</div> -->
 	</div>
-	<div th:replace="common/common_pub :: footer_"></div>
 </body>
 </html>

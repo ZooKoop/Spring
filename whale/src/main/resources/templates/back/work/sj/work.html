@@ -5,6 +5,7 @@
 <head th:replace="common/common_pub :: common_header('')">
 </head>
 <body>
+	
 	<!-- 模态框（Modal） -->
 	<div class="modal fade" id="add" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true"
@@ -101,8 +102,10 @@
 		</div>
 		<!-- /.modal -->
 	</div>
-	<div class="container-fuild">
-			<div class="panel-body">
+	<div th:replace="common/common_pub :: navbar_"></div>
+	<div class="row" style="width:100%;">
+		<div th:replace="common/common_pub :: left_nav"></div>
+		<div class="panel-body col-md-10">
 				<!-- 按钮触发模态框 -->
 				<button class="btn" data-toggle="modal" data-target="#add"
 					style="margin: 10px 0;">添加TICKET</button>
@@ -145,5 +148,4 @@
 		</div>
 	</div>
 </body>
-
 </html>

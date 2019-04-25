@@ -1,6 +1,12 @@
 /* body{
 	padding-bottom: 33px;
 } */
+a:hover{ 
+    text-decoration:none; //去掉默认下滑线
+}
+li{
+	list-style-type:none;
+}
 .table > tbody > tr > td{
 	vertical-align: middle;
 }
@@ -75,23 +81,48 @@
     padding: 0;
 }
 /* 导航样式 */
-/* #main-nav{
+#my_nav{
 	background: #55575f;
+	margin: 0;
+    padding: 0;
+    
 }
-.nav-pills > li > a,
-.nav > li > a 
+#my_nav > li > a
 {
 	color: #ddd;
+	width:100%;
+	display: block;
+	padding:10px;
 }
-.nav-pills > li.active > a,
-.nav-pills > li.active > a:hover,
-.nav-pills > li > a:hover,
+#systemSetting > li > a
+{
+	color: #ddd;
+	width:100%;
+	display: block;
+	padding:10px 10px 10px 25px;
+}
+/* #my_nav > li.active,
+#my_nav > li.active > a:hover,
+#my_nav > li > a:hover,
 .nav > li > a:hover,二级目录下a划过样式
 .nav-pills > li.active > a:focus,一级目录下a添加active以后样式
-.nav > li.active > a:focus{
+.nav > li.active > a:focus{ */
+
+#my_nav > li.active,
+#my_nav > li.active > a:hover,
+#my_nav > li > a:hover,
+#my_nav > li > a.active,
+#my_nav > li.active > a:focus{
 	color: #ddd;
 	background-color: #222;
 }
-.nav-pills > li > a {
-    border-radius: 0px;
-} */
+#systemSetting > li.active_two,
+#systemSetting > li.active_two:hover,
+#systemSetting > li.active_two > a,
+#systemSetting > li > a:hover{
+	color: #222;
+	background-color: #b3b3b3;
+}
+.rotate_{
+	transform:rotate(90deg);
+}
