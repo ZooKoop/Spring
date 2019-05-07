@@ -9,4 +9,6 @@ import com.whale.model.WorkOpction;
 public interface WorkOpctionRepostitory extends JpaRepository<WorkOpction, String> {
 	@Query("select a from WorkOpction a")
 	Page<WorkOpction> findList(Pageable pageable);
+
+	WorkOpction findByOpctionCode(String opctionCode);
 }

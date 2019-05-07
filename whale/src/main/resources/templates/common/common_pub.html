@@ -95,7 +95,7 @@
 		  <li th:class="${F_O=='one'}? 'active' : ''"><a href="#systemSetting" data-toggle="collapse">系统管理<i id="xitong" th:class="${F_O=='one'}? 'glyphicon glyphicon-play pull-right rotate_' : 'glyphicon glyphicon-play pull-right'"></i></a>
 		 		<ul id="systemSetting" th:class="${F_O=='one'}? 'collapse in' : 'collapse'" style="padding:0">
 					<li th:class="${queryUrl=='/back/user/list'}? 'active_two' : ''"><a th:href="@{/back/user/list}"><i class="glyphicon glyphicon-user"></i> 用户管理</a></li>
-					<li><a href="#"><i class="glyphicon glyphicon-th-list"></i> 菜单管理</a></li>
+					<li th:class="${queryUrl=='/back/workopction/toWorkOpction'}? 'active_two' : ''"><a th:href="@{/back/workopction/toWorkOpction}"><i class="glyphicon glyphicon-th-list"></i> 系统参数</a></li>
 					<li><a href="#"><i class="glyphicon glyphicon-asterisk"></i> 角色管理</a></li>
 					<li><a href="#"><i class="glyphicon glyphicon-edit"></i> 修改密码</a></li>
 					<li><a href="#"><i class="glyphicon glyphicon-eye-open"></i> 日志查看</a></li>

@@ -29,7 +29,6 @@ public class WorkController {
 	@GetMapping("/toWork")
 	public String toWork(HttpServletRequest httpServletRequest,Model model) {
 		String queryUrl = httpServletRequest.getRequestURI();
-		System.err.println(queryUrl);
 		model.addAttribute("queryUrl",queryUrl);
 		return "back/work/sj/work";
 	}

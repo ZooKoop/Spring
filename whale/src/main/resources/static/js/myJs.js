@@ -124,49 +124,58 @@ $(function(){
 		});
 	});
 	/* ---------------------------work页面参数------------------- */
-	var work_tables = tables_init('#my_work',language,work_columns,work_columnDefs,work_ajax);
+	var work_tables = tables_init('#my_work',language,work_columns,hideone_columnDefs,work_ajax);
 	del_f('#my_work','/back/work/delete','._del',work_tables);
+	addInit("#add_submit","/back/work/add",'#add_form',"#add",work_tables);
+	/* ---------------------------opction页面参数------------------- */
+	var opction_tables = tables_init('#opction_table',language,opction_columns,hideone_columnDefs,opction_ajax);
+	del_f('#opction_table','/back/workopction/delete','._del',opction_tables);
+	addInit("#btnOpction","/back/workopction/add",'#opction_form',"#opctionModel",opction_tables);
 	
 	/*删除封装*/
 	function del_f(tab_id,urls,del_class,tab_name){
 		$(tab_id).on('click',del_class, function () {//._del是数组中删除按钮的类
-		    var data = tab_name.row( $(this).parents('tr')).data().id;
-		    del(urls,data,tab_name)
+			var data = tab_name.row( $(this).parents('tr')).data().id;
+			del(urls,data,tab_name)
 		});
 	};
-	/*boot弹出框提交*/
-	$("#add_submit").on("click",function(){
-		$.ajax({
-			type: "post",
-			url: "/work/add",
-			dataType: "json",// 预期服务器返回的数据类型
-			data: $('#add_form').serialize(),
-			success: function (result) {
-				// console.log("----------"+result.msg);//打印服务端返回的数据(调试用)
-				if(result.success=="200"){
-					layer.alert("添加成功！");
-					// 这俩需要一起用hide
-					$("#add").modal('hide');
-					$('#add').on('hide.bs.modal', '.modal', function () {
-						$(this).removeData('bs.modal');
-					});
-					// 下边至清空input，不清空下拉框
-					/* document.getElementById("add_form").reset(); */
-					work_tables.ajax.reload();
+	/*boot弹出框添加封装*/
+	function addInit(btnID,url,formName,modelID,vartables){
+		$(btnID).on("click",function(){
+			$.ajax({
+				type: "post",
+				url: url,
+				dataType: "json",// 预期服务器返回的数据类型
+				data: $(formName).serialize(),
+				success: function (result) {
+					// console.log("----------"+result.msg);//打印服务端返回的数据(调试用)
+					if(result.success=="200"){
+						layer.alert("添加成功！");
+						// 这俩需要一起用hide
+						$(modelID).modal('hide');
+						$(modelID).on('hide.bs.modal','.modal', function () {
+							$(modelID).removeData("bs.modal");
+						});
+						// 下边至清空input，不清空下拉框
+						/* document.getElementById("add_form").reset(); */
+						vartables.ajax.reload();
+					}
+					if(result.fail=="400"){
+						layer.alert("添加失败！");
+					}
+					if(result.repeat =="222"){
+						layer.alert("已存在，重新添加！");
+					}
+				},
+				error : function() {
+					alert("异常！");
 				}
-				if(result.fail=="400"){
-					layer.alert("添加失败！");
-				}
-				if(result.repeat =="222"){
-					layer.alert("Ticket已存在！");
-				}
-			},
-			error : function() {
-				alert("异常！");
-			}
+			});
 		});
-	});
+	};
 });
+/*--------------------------------------------------------------------*/
+
 
 /*tables初始化封装 */
 function tables_init(tablesid,language,columns,columnDefs,ajax){
@@ -442,7 +451,62 @@ var work_ajax = function (data, callback, settings) {
 		}
 	});
 };
-var work_columnDefs = [{
+/*------------------opction页面参数---------------------- */
+var opction_columns = [{
+	data : 'id'
+},{
+	data : 'opctionCode'
+},{
+	data : 'opction'
+},{
+	data : null,
+	title: "操作",
+	render:function(data, type, row, meta){
+		return '<a class="_eidt btn btn-info" type="button" href="#" > <span class="glyphicon glyphicon-edit"></span></a> <a class="_del btn btn-danger" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span></a>';
+	}
+}];
+var opction_ajax = function (data, callback, settings) {
+	// 封装请求参数
+	var param = {};
+	param.size = data.length;// 页面显示记录条数，在页面显示每页显示多少项的时候
+	// console.log(data.length)
+	// param.start = data.start;//开始的记录序号
+	param.page = (data.start / data.length);// 当前页码
+	// param.search = data.search.value;//搜索条件
+//	if (data.order.length > 0) {
+//		 param.order = data.columns[data.order[3].column].data;
+//		param.order = data.columns[7].data;
+//		param.dir = data.order[0].dir;
+//		console.log(param.order+"----------"+param.dir);
+//	} 
+	
+	// ajax请求数据
+	$.ajax({
+		type: "GET",
+		url: "/back/workopction/queryAll",
+		cache: false, // 禁用缓存
+		data: param, // 传入组装的参数
+		dataType: "json",
+		success: function (result) {
+			// console.log(result);
+			// setTimeout仅为测试延迟效果
+			setTimeout(function () {
+				// 封装返回数据
+				var returnData = {};
+				returnData.draw = result.draw;// 这里直接自行返回了draw计数器,应该由后台返回
+				returnData.recordsTotal = result.totalElements;// 返回数据全部记录
+				returnData.recordsFiltered = result.totalElements;// 后台不实现过滤功能，每次查询均视作全部结果
+				returnData.data = result.content;// 返回的数据列表
+				console.log(returnData);
+				// $("tr").css("display","inline-block");
+				// 调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+				// 此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+				callback(returnData);
+			}, 10);
+		}
+	});
+};
+var hideone_columnDefs = [{
 	// 隐藏第一列
 	targets: 0,
 	visible: false,

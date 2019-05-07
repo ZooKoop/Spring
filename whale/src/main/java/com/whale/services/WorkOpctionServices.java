@@ -12,9 +12,9 @@ public class WorkOpctionServices {
 	@Autowired
 	private WorkOpctionRepostitory w;
 	
-	public Page<WorkOpction> queryAll(Integer page,Integer size,String order) {
-		Sort sort = new Sort(Sort.Direction.DESC,order);
-		PageRequest pageable = PageRequest.of(page, size,sort);
+	public Page<WorkOpction> queryAll(Integer page,Integer size) {
+//		Sort sort = new Sort(Sort.Direction.DESC,order);
+		PageRequest pageable = PageRequest.of(page, size);
 		return w.findAll(pageable);
 	}
 	
@@ -23,5 +23,9 @@ public class WorkOpctionServices {
 	}
 	public void del(String id) {
 		w.deleteById(id);
+	}
+
+	public boolean findByOpctionCode(String opctionCode) {
+		return w.findByOpctionCode(opctionCode)!=null ? true:false;
 	}
 }

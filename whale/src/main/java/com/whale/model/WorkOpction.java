@@ -21,27 +21,31 @@ public class WorkOpction implements Serializable {
 	@Column(name = "ID")
 	private String id;
 
-	@Column(name = "WORK_OPCTION")
-	private Integer workOpction;
-	
-	@ManyToOne(targetEntity=Work.class)
-	@JoinColumn(name="workId")
-	private Work work;
-
+	@Column(name = "OPCTION_CODE")
+	private String opctionCode;
+	@Column(name = "OPCTION")
+	private String opction;
 	public String getId() {
 		return id;
 	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
-	public Integer getWorkOpction() {
-		return workOpction;
+	public String getOpctionCode() {
+		return opctionCode;
 	}
-
-	public void setWorkOpction(Integer workOpction) {
-		this.workOpction = workOpction;
+	public void setOpctionCode(String opctionCode) {
+		this.opctionCode = opctionCode;
+	}
+	public String getOpction() {
+		return opction;
+	}
+	public void setOpction(String opction) {
+		this.opction = opction;
 	}
 	
+//	@ManyToOne(targetEntity=Work.class)
+//	@JoinColumn(name="workId")
+//	private Work work;
+
 }
