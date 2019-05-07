@@ -3,10 +3,13 @@ package com.whale.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +27,10 @@ public class WorkController {
 	@Autowired
 	private SecurityUserRepository securityUserRepository;
 	@GetMapping("/toWork")
-	public String toWork() {
-		
+	public String toWork(HttpServletRequest httpServletRequest,Model model) {
+		String queryUrl = httpServletRequest.getRequestURI();
+		System.err.println(queryUrl);
+		model.addAttribute("queryUrl",queryUrl);
 		return "back/work/sj/work";
 	}
 	

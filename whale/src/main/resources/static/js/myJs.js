@@ -1,10 +1,10 @@
 $(function(){
 	$("#my_nav li").on("click",function(){
 		$(this).addClass("active").siblings().removeClass("active");
-		//$(this).find("i").first().toggleClass("rotate_");
+		$("#xitong").toggleClass("rotate_");
 	})
 	/*左侧导航栏-跳转保存样式*/
-	$("#my_nav a").each(function(){
+	/*$("#my_nav a").each(function(){
 		$this = $(this);
 		//alert($this[0].href + "==========" + window.location);
 		if($this[0].href==String(window.location)){
@@ -20,7 +20,7 @@ $(function(){
 				$this.parent().parent().addClass("in");
 			}
 		}
-	});
+	});*/
 	
 	/* 登陆弹框 */
 	$("#login").on("click",function () {

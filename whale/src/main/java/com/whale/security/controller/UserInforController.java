@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -40,7 +41,9 @@ public class UserInforController {
 	private PasswordEncoder passwordEncoder;
 
 	@RequestMapping("/list")
-	public String list() {
+	public String list(HttpServletRequest request,Model model) {
+		model.addAttribute("F_O", "one");
+		model.addAttribute("queryUrl", request.getRequestURI());
 		return "back/user/list";
 	}
 
