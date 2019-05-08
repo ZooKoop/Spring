@@ -70,7 +70,7 @@ $(function(){
 	$("[data-toggle='tooltip']").tooltip();
 	/* ---------------------------list页面参数------------------- */
 	var myTables = tables_init('#table_id_example',language,list_columns,list_columnDefs,list_ajax);
-	del_f('#table_id_example','/user/delete','._del',myTables);
+	del_f('#table_id_example','/back/user/delete','._del',myTables);
 	/*使用layer弹框，子ifram页面，父页面提交*/
 	$("#saveUser").on("click",function () {
 		layer.open({
@@ -139,42 +139,43 @@ $(function(){
 			del(urls,data,tab_name)
 		});
 	};
-	/*boot弹出框添加封装*/
-	function addInit(btnID,url,formName,modelID,vartables){
-		$(btnID).on("click",function(){
-			$.ajax({
-				type: "post",
-				url: url,
-				dataType: "json",// 预期服务器返回的数据类型
-				data: $(formName).serialize(),
-				success: function (result) {
-					// console.log("----------"+result.msg);//打印服务端返回的数据(调试用)
-					if(result.success=="200"){
-						layer.alert("添加成功！");
-						// 这俩需要一起用hide
-						$(modelID).modal('hide');
-						$(modelID).on('hide.bs.modal','.modal', function () {
-							$(modelID).removeData("bs.modal");
-						});
-						// 下边至清空input，不清空下拉框
-						/* document.getElementById("add_form").reset(); */
-						vartables.ajax.reload();
-					}
-					if(result.fail=="400"){
-						layer.alert("添加失败！");
-					}
-					if(result.repeat =="222"){
-						layer.alert("已存在，重新添加！");
-					}
-				},
-				error : function() {
-					alert("异常！");
-				}
-			});
-		});
-	};
 });
 /*--------------------------------------------------------------------*/
+/*boot弹出框添加封装*/
+function addInit(btnID,url,formName,modelID,vartables){
+	$(btnID).on("click",function(){
+		$.ajax({
+			type: "post",
+			url: url,
+			dataType: "json",// 预期服务器返回的数据类型
+			data: $(formName).serialize(),
+			success: function (result) {
+				// console.log("----------"+result.msg);//打印服务端返回的数据(调试用)
+				if(result.success=="200"){
+					layer.alert("添加成功！");
+					// 这俩需要一起用hide
+					$(modelID).modal('hide');
+					/*$(modelID).on('hide.bs.modal','.modal', function () {
+						$(this).removeData("bs.modal");
+					});*/
+					$(formName)[0].reset();
+					// 下边至清空input，不清空下拉框
+					/* document.getElementById("add_form").reset(); */
+					vartables.ajax.reload();
+				}
+				if(result.fail=="400"){
+					layer.alert("添加失败！");
+				}
+				if(result.repeat =="222"){
+					layer.alert("已存在，重新添加！");
+				}
+			},
+			error : function() {
+				alert("异常！");
+			}
+		});
+	});
+};
 
 
 /*tables初始化封装 */

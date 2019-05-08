@@ -87,7 +87,8 @@ li{
 	width:100%;
 	display: block;
 	padding:10px;
-	text-decoration:none; //去掉默认下滑线
+	text-decoration:none;
+	
 }
 #systemSetting > li > a
 {
@@ -95,7 +96,7 @@ li{
 	width:100%;
 	display: block;
 	padding:10px 10px 10px 25px;
-	text-decoration:none; //去掉默认下滑线
+	text-decoration:none;
 }
 /* #my_nav > li.active,
 #my_nav > li.active > a:hover,
@@ -111,6 +112,10 @@ li{
 #my_nav > li.active > a:focus{
 	color: #ddd;
 	background-color: #55575f;
+}
+#my_nav > li.active,
+#my_nav > li:hover{
+	border-left: 3px solid #d9534f;
 }
 #systemSetting > li.active_two,
 #systemSetting > li.active_two:hover,
