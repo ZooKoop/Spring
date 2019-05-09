@@ -130,7 +130,7 @@ $(function(){
 	/* ---------------------------opction页面参数------------------- */
 	var opction_tables = tables_init('#opction_table',language,opction_columns,hideone_columnDefs,opction_ajax);
 	del_f('#opction_table','/back/workopction/delete','._del',opction_tables);
-	addInit("#btnOpction","/back/workopction/add",'#opction_form',"#opctionModel",opction_tables);
+	addInit("","/back/workopction/add",'#opction_form',"#opctionModel",opction_tables);
 	
 	/*删除封装*/
 	function del_f(tab_id,urls,del_class,tab_name){
