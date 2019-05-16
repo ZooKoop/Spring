@@ -68,9 +68,9 @@ $(function(){
 	});
 	/* 提示初始化 */
 	$("[data-toggle='tooltip']").tooltip();
-	/* ---------------------------list页面参数------------------- */
+	/* ---------------------------userlist页面参数------------------- */
 	var myTables = tables_init('#table_id_example',language,list_columns,list_columnDefs,list_ajax);
-	del_f('#table_id_example','/back/user/delete','._del',myTables);
+	/*del_f('#table_id_example','/back/user/delete','._del',myTables);*/
 	/*使用layer弹框，子ifram页面，父页面提交*/
 	$("#saveUser").on("click",function () {
 		layer.open({
@@ -83,7 +83,7 @@ $(function(){
 			scrollbar : false,// 滚动条
 			moveOut : false,// 拖动到屏幕外面
 			fixed : false, // 不固定
-			content : '/user/toSaveUser',
+			content : '/back/user/toSaveUser',
 			end : function() {
 				location.reload();
 			},
@@ -98,7 +98,7 @@ $(function(){
 				if ("formdata" != typeof (formdata) && formdata != null
 						&& formdata != "") {
 					$.ajax({
-						url : '/user/saveUser',
+						url : '/back/user/saveUser',
 						type : 'POST',
 						data : formdata,
 						contentType : false, // 不设置内容类型
@@ -125,25 +125,76 @@ $(function(){
 	});
 	/* ---------------------------work页面参数------------------- */
 	var work_tables = tables_init('#my_work',language,work_columns,hideone_columnDefs,work_ajax);
-	del_f('#my_work','/back/work/delete','._del',work_tables);
-	addInit("#add_submit","/back/work/add",'#add_form',"#add",work_tables);
+	/*添加初始化、校验*/
+	validatorInit('#add_form',null,'#add_submit','/back/work/add','#add',work_tables);
+	/*删除*/
+	$('#my_work').on('click','._del', function () {//._del是数组中删除按钮的类
+		var data = work_tables.row( $(this).parents('tr')).data().id;
+		del('/back/work/delete',data,work_tables)
+	});
 	/* ---------------------------opction页面参数------------------- */
 	var opction_tables = tables_init('#opction_table',language,opction_columns,hideone_columnDefs,opction_ajax);
-	del_f('#opction_table','/back/workopction/delete','._del',opction_tables);
-	addInit("","/back/workopction/add",'#opction_form',"#opctionModel",opction_tables);
-	
-	/*删除封装*/
-	function del_f(tab_id,urls,del_class,tab_name){
-		$(tab_id).on('click',del_class, function () {//._del是数组中删除按钮的类
-			var data = tab_name.row( $(this).parents('tr')).data().id;
-			del(urls,data,tab_name)
-		});
-	};
+	/*添加初始化、校验*/
+	validatorInit('#opction_form',opctionFields,'#btnOpction','/back/workopction/add','#opctionModel',opction_tables);
+	/*删除*/
+	$('#opction_table').on('click','._del', function () {//._del是数组中删除按钮的类
+		var data = opction_tables.row( $(this).parents('tr')).data().id;
+		del('/back/workopction/delete',data,opction_tables)
+	});
+	/* ---------------------------opction页面参数------------------- */
 });
-/*--------------------------------------------------------------------*/
+/*初始化 . -. -..--------------------------------------------------------------------*/
+
+/* ================= 校验 ... - .- .-. - ================= */
+
+/*公共校验初始化、添加时校验*/
+function validatorInit(formID,opctionFields,addBtnID,url,modelID,vartables){
+	$(formID).bootstrapValidator({
+		message : '通用的验证失败消息',//好像从来没出现过
+		feedbacklcons : feedbacklcons,
+		fields : opctionFields
+	});
+	
+	$(addBtnID).on('click',function() {//非submit按钮点击后进行验证，如果是submit则无需此句直接验证
+		/*手动验证表单，当是普通按钮时。*/
+		$(formID).data('bootstrapValidator').validate(); 
+		if($(formID).data('bootstrapValidator').isValid()){ 
+			addInit(url,formID,modelID,vartables);
+		}
+	});
+};
+/*校验公共选项*/
+var feedbacklcons ={
+		valid : 'glyphicon glyphicon-ok',
+		invalid : 'glyphicon glyphicon-remove',
+		validating : 'glyphicon glyphicon-refresh'
+};
+/*work表字段校验*/
+
+/*opction表字段校验*/
+var opctionFields = {
+		opctionCode : {
+			message : '验证失败',
+			validators : {
+				required: true,
+				notEmpty : {
+					message : '不能为空'
+				}
+			}
+		},
+		opction : {
+			validators : {
+				notEmpty : {
+					message : '不能为空'
+				}
+			}
+		}
+};
+
+/* ================= 校验 . -. -.. =================*/
+
 /*boot弹出框添加封装*/
-function addInit(btnID,url,formName,modelID,vartables){
-	$(btnID).on("click",function(){
+function addInit(url,formName,modelID,vartables){
 		$.ajax({
 			type: "post",
 			url: url,
@@ -174,7 +225,6 @@ function addInit(btnID,url,formName,modelID,vartables){
 				alert("异常！");
 			}
 		});
-	});
 };
 
 
@@ -201,7 +251,7 @@ function tables_init(tablesid,language,columns,columnDefs,ajax){
 		 ajax: ajax
 	 });
  };
-/* 公用语言设置 */
+/*tables公用语言设置 */
 var language = {
 	decimal : "",
 	emptyTable : "No data available in table",
@@ -242,7 +292,7 @@ function del(urls,data,tabName){
 		 }
 	 })
  }
-/*----------------------------userlist页面参数-------------------------*/
+3/*----------------------------userlist页面参数-------------------------*/
 var list_ajax = function (data, callback, settings) {
 	// 封装请求参数
 	var param = {};
@@ -294,14 +344,14 @@ var list_columns = [{
 }, {
 	data : 'email'
 }, {
-	data : 'regTime',
+	data : 'regTime'
 	// title: "注册时间",
-	render:function(data, type, row, meta){
+	//render:function(data, type, row, meta){
 		// console.log(data)
 		// console.log(new
 		// Date(parseInt(Date.parse(data))).toLocaleString())
-		return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
-	} 
+		//return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
+	//} 
 }, {
 	data : 'srcImg',
 	// title: "头像",
@@ -339,10 +389,9 @@ var work_columns = [{
 	data : 'description',
 	defaultContent:"",
 	// title: "Ticket描述"
-	/*
-	 * render:function(data, type, row, meta){ return "<div
-	 * class='text-center'>"+data+"</div>"; }
-	 */
+	 render:function(data, type, row, meta){
+		 return "<div class='text-left' style='width:265px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data+"</div>"
+	 }
 },{
 	data : 'isCreate',
 	defaultContent:"",
@@ -399,16 +448,25 @@ var work_columns = [{
 	}
 },{
 	data : 'dateTime',
-	defaultContent:"",
+	defaultContent:""
 	// title: "时间",
-	render:function(data, type, row, meta){
-		return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
-	}
+//	render:function(data, type, row, meta){
+//		return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
+//	}
+},{
+	data : 'updateTime',
+	defaultContent:""
+	// title: "时间",
+//	render:function(data, type, row, meta){
+//		return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
+//	}
 },{
 	data : null,
 	// title: "操作",
 	render:function(data, type, row, meta){
-		return '<a class="_eidt btn btn-info" type="button" href="#" > <span class="glyphicon glyphicon-edit"></span></a> <a class="_del btn btn-danger" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span></a>';
+		var html ='<a class="_eidt btn btn-info" type="button" href="#" > <span class="glyphicon glyphicon-edit"></span></a>'
+		html +='<a class="_del btn btn-danger" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span></a>'
+		return html;
 	}
 }];
 var work_ajax = function (data, callback, settings) {

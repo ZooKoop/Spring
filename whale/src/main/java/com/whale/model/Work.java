@@ -9,9 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.format.annotation.DateTimeFormat;
-
+import org.hibernate.annotations.UpdateTimestamp;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.whale.security.model.SecurityUser;
 
 @Entity
@@ -54,11 +55,20 @@ public class Work implements Serializable {
 	@Column(name = "VERSION")
 	private String version;
 	/*
-	 * 时间
+	 * 创建时间
 	 */
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	//@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	@CreationTimestamp
 	@Column(name = "DATE_TIME")
 	private Date dateTime;
+	/*
+	 * 修改时间
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	@UpdateTimestamp
+	@Column(name = "UPDATE_TIME")
+	private Date updateTime;
 
 	@ManyToOne(targetEntity = SecurityUser.class)
 	@JoinColumn(name = "securityUserId")
@@ -142,6 +152,14 @@ public class Work implements Serializable {
 
 	public void setIsCreate316(Integer isCreate316) {
 		this.isCreate316 = isCreate316;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 
 }
