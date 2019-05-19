@@ -162,6 +162,10 @@ function validatorInit(formID,opctionFields,addBtnID,url,modelID,vartables){
 			addInit(url,formID,modelID,vartables);
 		}
 	});
+	$(modelID).on('hide.bs.modal', function () {//模态框关闭触发
+		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
+		$(formID).data('bootstrapValidator').resetForm();//清除当前验证的关键之处
+	});
 };
 /*校验公共选项*/
 var feedbacklcons ={
