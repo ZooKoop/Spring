@@ -458,17 +458,23 @@ var work_columns = [{
 //		return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
 //	}
 },{
-	data : 'updateTime',
-	defaultContent:""
+	data : 'isClose',
+	defaultContent:"",
 	// title: "时间",
-//	render:function(data, type, row, meta){
-//		return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
-//	}
+	render:function(data, type, row, meta){
+	 var html= '';
+	 if(data == 1){
+		html += '<div style="color:green">关闭</div>'
+	 }else{
+		html += '<div style="color:red">未关闭</div>'
+	 }
+		return html;
+	}
 },{
 	data : null,
 	// title: "操作",
 	render:function(data, type, row, meta){
-		var html ='<a class="_eidt btn btn-info" type="button" href="#" > <span class="glyphicon glyphicon-edit"></span></a>'
+		var html ='<a title="编辑" class="_eidt btn btn-info" type="button" href="#" > <span class="glyphicon glyphicon-edit"></span></a>'
 		html +='<a class="_del btn btn-danger" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span></a>'
 		return html;
 	}

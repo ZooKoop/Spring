@@ -48,6 +48,11 @@ public class Work implements Serializable {
 	 */
 	@Column(name = "ISEXAMPLE")
 	private Integer isExample;
+	/*
+	 * 是否关闭0/1
+	 */
+	@Column(name = "ISCLOSE")
+	private Integer isClose = 0;
 
 	/*
 	 * 包含哪些版本
@@ -160,6 +165,14 @@ public class Work implements Serializable {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public Integer getIsClose() {
+		return isClose;
+	}
+
+	public void setIsClose(Integer isClose) {
+		this.isClose = isClose;
 	}
 
 }
