@@ -52,7 +52,7 @@ public class Work implements Serializable {
 	 * 是否关闭0/1
 	 */
 	@Column(name = "ISCLOSE")
-	private Integer isClose = 0;
+	private Integer isClose;
 
 	/*
 	 * 包含哪些版本

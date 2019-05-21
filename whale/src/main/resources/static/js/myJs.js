@@ -126,7 +126,7 @@ $(function(){
 	/* ---------------------------work页面参数------------------- */
 	var work_tables = tables_init('#my_work',language,work_columns,hideone_columnDefs,work_ajax);
 	/*添加初始化、校验*/
-	validatorInit('#add_form',null,'#add_submit','/back/work/add','#add',work_tables);
+	validatorInit('#add_form',workFields,'#add_submit','/back/work/add','#add',work_tables);
 	/*删除*/
 	$('#my_work').on('click','._del', function () {//._del是数组中删除按钮的类
 		var data = work_tables.row( $(this).parents('tr')).data().id;
@@ -154,7 +154,6 @@ function validatorInit(formID,opctionFields,addBtnID,url,modelID,vartables){
 		feedbacklcons : feedbacklcons,
 		fields : opctionFields
 	});
-	
 	$(addBtnID).on('click',function() {//非submit按钮点击后进行验证，如果是submit则无需此句直接验证
 		/*手动验证表单，当是普通按钮时。*/
 		$(formID).data('bootstrapValidator').validate(); 
@@ -164,7 +163,9 @@ function validatorInit(formID,opctionFields,addBtnID,url,modelID,vartables){
 	});
 	$(modelID).on('hide.bs.modal', function () {//模态框关闭触发
 		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
-		$(formID).data('bootstrapValidator').resetForm();//清除当前验证的关键之处
+		$('.selectpicker').selectpicker('val',['noneSelectedText']);//清空
+		$('.selectpicker').selectpicker('refresh');//刷新
+		$(formID).data('bootstrapValidator').resetForm(true);//清除当前验证的关键之处加，true清空值不太好使文字域的清除不了
 	});
 };
 /*校验公共选项*/
@@ -175,6 +176,43 @@ var feedbacklcons ={
 };
 /*work表字段校验*/
 
+var workFields = {
+		ticketNumber : {
+			message : '格式错误',
+			validators : {
+				notEmpty : {
+					message : '不能为空'
+				},
+				regexp: {
+				    regexp: /^[a-zA-Z0-9_]+$/,
+				    message: '正则验证，这里验证只能输入大小写字母数字和下划线'
+				},
+				stringLength : {
+                    min : 5,
+                    max : 5,
+                    message : '长度5位字符'
+                }
+			}
+		},
+		isClose:{
+			validators : {
+				notEmpty : {
+					message : '必须选择'
+				}
+//				callback: {
+//					message: '必须选择',
+//                    callback: function(value, validator) {
+//                             if (value == -1) {
+//                                return false;
+//                             } else {
+//                               return true;
+//                             }
+//
+//                    }
+//                 }
+			}
+		}
+};
 /*opction表字段校验*/
 var opctionFields = {
 		opctionCode : {
@@ -210,13 +248,14 @@ function addInit(url,formName,modelID,vartables){
 					layer.alert("添加成功！");
 					// 这俩需要一起用hide
 					$(modelID).modal('hide');
-					/*$(modelID).on('hide.bs.modal','.modal', function () {
-						$(this).removeData("bs.modal");
-					});*/
-					$(formName)[0].reset();
+//					$('.selectpicker').selectpicker('refresh');
+//					$(modelID).on('hiden.bs.modal','.modal',function(){ $(this).removeData('bs.modal'); });
+//					$(formName).on('hide.bs.modal','.modal', function () {
+//						$(this).removeData("bs.modal");
+//					});
 					// 下边至清空input，不清空下拉框
-					/* document.getElementById("add_form").reset(); */
-					vartables.ajax.reload();
+					//$(formName)[0].reset();
+					vartables.ajax.reload();//刷新添加完的数据
 				}
 				if(result.fail=="400"){
 					layer.alert("添加失败！");

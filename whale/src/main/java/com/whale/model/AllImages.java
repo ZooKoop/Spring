@@ -41,7 +41,6 @@ public class AllImages implements Serializable{
 	@Column(name = "DESCRIPTION")
 	private String description;
 	
-	//@CollectionTable(name = "SECURITY_USER", joinColumns = @JoinColumn(name = "securityUserId"))
 	@ManyToOne(targetEntity=SecurityUser.class)
 	@JoinColumn(name="securityUserId")
 	private SecurityUser securityUser;
