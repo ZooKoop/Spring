@@ -1,15 +1,21 @@
 package com.whale.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.whale.model.Work;
+import com.whale.param.UserParam;
+import com.whale.security.model.SecurityUser;
 import com.whale.security.repository.SecurityUserRepository;
 import com.whale.services.WorkServices;
 @Controller
@@ -30,17 +38,25 @@ public class WorkController {
 	public String toWork(HttpServletRequest httpServletRequest,Model model) {
 		String queryUrl = httpServletRequest.getRequestURI();
 		model.addAttribute("queryUrl",queryUrl);
-		return "back/work/sj/work";
+		return "back/work/work";
 	}
 	
 	@GetMapping("/queryAll")
 	@ResponseBody
 	public Page<Work> queryAll(@RequestParam(value = "page") Integer page,
 			@RequestParam(value = "size", defaultValue = "5") Integer size,
-			@RequestParam(value = "order") String order
+			@RequestParam(value = "order") String order,
+			Authentication authentication,
+			Work work
 			) {
-		Page<Work> queryAll = workServices.queryAll(page,size,order);
-		return queryAll;
+		String userName = authentication.getName();
+		SecurityUser byuserName = securityUserRepository.findByuserName(userName);
+		work.setSecurityUser(byuserName);
+		if (null != byuserName) {
+			Page<Work> queryAll = workServices.queryAll(page,size,order,work);
+			return queryAll;
+		}
+		return null;
 	}
 	@PostMapping("/add")
 	@ResponseBody
@@ -72,5 +88,31 @@ public class WorkController {
 			return "400";
 		}
 		return "200";
+	}
+	
+	@RequestMapping("/toUpdate")
+//	@ResponseBody
+	public String toUpdate() {
+		return "/back/work/work_edit";
+	}
+
+	@Transactional
+	@RequestMapping("/Update")
+	public String update(@Valid UserParam userParam, BindingResult result, Model model) {
+		String errorMsg = "";
+		boolean hasErrors = result.hasErrors();
+		if (hasErrors) {
+			List<ObjectError> list = result.getAllErrors();
+			for (ObjectError e : list) {
+				errorMsg = errorMsg + e.getCode() + ":" + e.getDefaultMessage();
+			}
+			model.addAttribute("errorMsg", errorMsg);
+			return "back/user/userInforAdd";
+		}
+
+		SecurityUser userInfor = new SecurityUser();
+		BeanUtils.copyProperties(userParam, userInfor);
+//		entityManager.merge(userInfor);
+		return "redirect:back//user/list";
 	}
 };

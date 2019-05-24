@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<head th:replace="common/common_pub :: common_header('')">
+</head>
+<body>
+	
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="add" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">添加TICKET</h4>
+				</div>
+				<div class="modal-body">
+					<form id="add_form" class="form-horizontal" role="form">
+						<div class="form-group">
+							<label for="ticketNumber" class="col-sm-2 control-label">Ticket</label>
+							<div class="col-sm-10">
+								<input type="number" class="form-control" id="ticketNumber"
+									name="ticketNumber" placeholder="请输入Ticket号">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="description" class="col-sm-2 control-label">描述</label>
+							<div class="col-sm-10">
+								<textarea id="description" class="form-control"
+									name="description" placeholder="Ticket描述。。。"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="isCreate" class="col-sm-2 control-label">发包</label>
+							<div class="col-sm-3">
+								<select id="isCreate" name="isCreate"
+									class="selectpicker form-control" title="Trunk">
+									<option value="0">未发包</option>
+									<option value="1">已发包</option>
+									<option value="2">无</option>
+								</select>
+							</div>
+							<div class="col-sm-3">
+								<select id="isCreate" name="isCreate317"
+									class="selectpicker form-control" title="317">
+									<option value="0">未发包</option>
+									<option value="1">已发包</option>
+									<option value="2">无</option>
+								</select>
+							</div>
+							<div class="col-sm-3">
+								<select id="isCreate" name="isCreate316"
+									class="selectpicker form-control" title="316">
+									<option value="0">未发包</option>
+									<option value="1">已发包</option>
+									<option value="2">无</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="isExample" class="col-sm-2 control-label">测试用例</label>
+							<div class="col-sm-10">
+								<select id="isExample" name="isExample"
+									class="selectpicker form-control" title="是否有测试用例">
+									<option value="0">无</option>
+									<option value="1">有</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="isExample" class="col-sm-2 control-label">选择版本</label>
+							<div class="col-sm-10">
+								<select id="isExample" name="version"
+									class="selectpicker form-control" multiple title="选择版本(可多选)"
+									data-live-search="true">
+									<option value="Trunk">Trunk</option>
+									<option value="317">317</option>
+									<option value="316">316</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="isClose" class="col-sm-2 control-label">是否关闭</label>
+							<div class="col-sm-10">
+								<select id="isClose" name="isClose"
+									class="selectpicker form-control" title="请选择..." >
+									<!-- <option value="-1" class="hidden"></option> -->
+									<option value="0">未关闭</option>
+									<option value="1">关闭</option>
+								</select>
+							</div>
+						</div>
+						<!-- <div class="form-group">
+							<label for="dateTime" class="col-sm-2 control-label">日期</label>
+							<div class="col-sm-10">
+								<input type="date" id="dateTime" name="dateTime"
+									class="form-control">
+							</div>
+						</div> -->
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+					</button>
+					<button id="add_submit" type="button" class="btn btn-primary">
+						提交</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
+	<!-- 修改模态框 -->
+		<div class="modal fade" role="dialog" id="work_edit_model">
+		    <div class="modal-dialog" role="document">
+              <div class="modal-content">
+		      </div>
+		    </div>
+		</div>
+	<div th:replace="common/common_pub :: navbar_"></div>
+	<div class="row" style="width:100%;">
+		<div th:replace="common/common_pub :: left_nav"></div>
+		<div class="panel-body col-md-10">
+				<!-- 按钮触发模态框 -->
+				<button class="btn" data-toggle="modal" data-target="#add"
+					style="margin: 10px 0;">添加TICKET</button>
+				<div class="panel">
+				<table id="my_work" class="table table-hover table-striped">
+					<thead>
+						<tr class="my_tables_tr">
+							<th colspan="3"></th>
+							<th class="text-center my_tables_tr_group" colspan="3" style="width: 25%;">发包</th>
+							<th colspan="5"></th>
+						</tr>
+						<tr class="my_tables_tr">
+							<th class="text-center">id</th>
+							<th class="text-center">TicketNumber</th>
+							<th class="text-center" >TicketDescription</th>
+							<th class="text-center my_tables_tr_group" >Trunk</th>
+							<th class="text-center my_tables_tr_group" >316</th>
+							<th class="text-center my_tables_tr_group" >317</th>
+							<th class="text-center" >Example</th>
+							<th class="text-center">Version</th>
+							<th class="text-center">CreateTime</th>
+							<th class="text-center">IsClosed</th>
+							<th class="text-center">Edit</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr class="my_tables_tr">
+							<th class="text-center" colspan="2">TicketNumber</th>
+							<th class="text-center" >TicketDescription</th>
+							<th class="text-center" >Trunk</th>
+							<th class="text-center" >316</th>
+							<th class="text-center" >317</th>
+							<th class="text-center">Example</th>
+							<th class="text-center">Version</th>
+							<th class="text-center">CreateTime</th>
+							<th class="text-center">IsClosed</th>
+							<th class="text-center">Edit</th>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

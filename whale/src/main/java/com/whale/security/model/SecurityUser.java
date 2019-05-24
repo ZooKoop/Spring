@@ -17,6 +17,7 @@ import javax.validation.constraints.Email;
 import org.hibernate.annotations.GenericGenerator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.whale.model.AllImages;
+import com.whale.model.Work;
 
 @Entity
 @Table(name = "SECURITY_USER")
@@ -52,6 +53,10 @@ public class SecurityUser implements Serializable {
 	@OneToMany(targetEntity=AllImages.class,mappedBy="securityUser")
 	@JsonIgnore
 	private Set<AllImages> imgList = new HashSet<>();
+	//@OneToMany (mappedBy = "Articles"),mappedBy指向的是要关联的属性，而不是要关联的类
+	@OneToMany(targetEntity=Work.class,mappedBy="securityUser")
+	@JsonIgnore
+	private Set<Work> workList = new HashSet<>();
 
 	public Set<AllImages> getImgList() {
 		return imgList;
@@ -107,6 +112,14 @@ public class SecurityUser implements Serializable {
 
 	public void setSrcImg(String srcImg) {
 		this.srcImg = srcImg;
+	}
+
+	public Set<Work> getWorkList() {
+		return workList;
+	}
+
+	public void setWorkList(Set<Work> workList) {
+		this.workList = workList;
 	}
 
 	@Override

@@ -127,6 +127,31 @@ $(function(){
 	var work_tables = tables_init('#my_work',language,work_columns,hideone_columnDefs,work_ajax);
 	/*添加初始化、校验*/
 	validatorInit('#add_form',workFields,'#add_submit','/back/work/add','#add',work_tables);
+	$('my_work').one('shown.bs.modal', function (e) { 
+	    $(this).find('div.modal-content select').selectpicker(); 
+	})
+	/*编辑*/
+	$('#my_work').on('click','._edit', function () {
+		var data = work_tables.row( $(this).parents('tr')).data().id;
+		$('#work_edit_model').modal({
+			 	backdrop: 'static',     // 点击空白不关闭
+			    keyboard: false,        // 按键盘esc也不会关闭
+	            remote: '/back/work/toUpdate'
+	        });
+//		$.ajax({
+//			type: "post",
+//			url: "/back/work/toUpdate",
+//			dataType: "json",// 预期服务器返回的数据类型
+//			data: data,
+//			success: function (result) {
+//				console.log("----------"+result);//打印服务端返回的数据(调试用)
+//				layer.alert("1");
+//			},
+//			error : function() {
+//				alert("异常！");
+//			}
+//		});
+	});
 	/*删除*/
 	$('#my_work').on('click','._del', function () {//._del是数组中删除按钮的类
 		var data = work_tables.row( $(this).parents('tr')).data().id;
@@ -513,7 +538,7 @@ var work_columns = [{
 	data : null,
 	// title: "操作",
 	render:function(data, type, row, meta){
-		var html ='<a title="编辑" class="_eidt btn btn-info" type="button" href="#" > <span class="glyphicon glyphicon-edit"></span></a>'
+		var html ='<a title="编辑" class="_edit btn btn-info" type="button" href="#" > <span class="glyphicon glyphicon-edit"></span></a>'
 		html +='<a class="_del btn btn-danger" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span></a>'
 		return html;
 	}

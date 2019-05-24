@@ -43,7 +43,14 @@ public class AllImagesController {
 		model.addAttribute("imgTypes",imgTypes);
 		return "upload";
 	}
-
+	/**
+	 * 上传功能
+	 * @param uploadFile
+	 * @param authentication
+	 * @param allImages
+	 * @param imgTypeId
+	 * @return
+	 */
 	@PostMapping(value = "/userUpLoad")
 	@ResponseBody
 	public Map<String, Object> upLoad(MultipartFile uploadFile, Authentication authentication,AllImages allImages,String imgTypeId) {
@@ -56,7 +63,7 @@ public class AllImagesController {
 			File file = new File(fileSrc + "/all_Img/" + username);
 			if (!file.exists()) {
 				file.mkdirs();
-			}
+			};
 			if (!uploadFile.isEmpty()) {
 				try {
 					//AllImages allImages = new AllImages();
