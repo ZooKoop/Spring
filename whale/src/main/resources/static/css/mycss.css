@@ -15,12 +15,12 @@ li{
     left: 50%;
     top: 50%;
 }
-/*按钮样式*/
+/*鎸夐挳鏍峰紡*/
 .my_btn{
 	background-color: #55575f;
 	color: #fff;
 }
-/*tables样式*/
+/*tables鏍峰紡*/
 .my_tables_tr{
 	color: #ddd;
 	background: #55575f;
@@ -30,7 +30,7 @@ li{
 	color: #55575f;
 }
 
-/* 登陆样式*/
+/* 鐧婚檰鏍峰紡*/
 .my_login{
 	box-sizing: border-box;
 }
@@ -40,7 +40,7 @@ li{
     padding: 10px;
     box-shadow: 1px 1px 5px #888888;
 }
-/* 图片排版 */
+/* 鍥剧墖鎺掔増 */
 #table_images>tbody .my_td_img{
 	display: block;
 	color: #fff;
@@ -74,7 +74,7 @@ li{
 .panel-body {
     padding: 0;
 }
-/* 导航样式 */
+/* 瀵艰埅鏍峰紡 */
 #my_nav{
 	background: #222;
 	margin: 0;
@@ -101,8 +101,8 @@ li{
 /* #my_nav > li.active,
 #my_nav > li.active > a:hover,
 #my_nav > li > a:hover,
-.nav > li > a:hover,二级目录下a划过样式
-.nav-pills > li.active > a:focus,一级目录下a添加active以后样式
+.nav > li > a:hover,浜岀骇鐩綍涓媋鍒掕繃鏍峰紡
+.nav-pills > li.active > a:focus,涓�绾х洰褰曚笅a娣诲姞active浠ュ悗鏍峰紡
 .nav > li.active > a:focus{ */
 
 #my_nav > li.active,

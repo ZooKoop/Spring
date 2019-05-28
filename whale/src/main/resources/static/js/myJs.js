@@ -133,6 +133,10 @@ $(function(){
 	/*编辑*/
 	$('#my_work').on('click','._edit', function () {
 		var data = work_tables.row( $(this).parents('tr')).data().id;
+		$('#work_edit_model').on('shown.bs.modal', function () {
+			$(this).find('div.modal-content select').selectpicker(); 
+		})
+		
 		$('#work_edit_model').modal({
 			 	backdrop: 'static',     // 点击空白不关闭
 			    keyboard: false,        // 按键盘esc也不会关闭
