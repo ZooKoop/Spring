@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -89,11 +90,25 @@ public class WorkController {
 		}
 		return "200";
 	}
-	
+	/**
+	 * 模态框跳转用
+	 * @return
+	 */
 	@RequestMapping("/toUpdate")
-//	@ResponseBody
 	public String toUpdate() {
 		return "/back/work/work_edit";
+	}
+	/**
+	 * 获取要编辑的信息回显用
+	 * @param id
+	 * @return
+	 */
+	@PostMapping("/toUpdateInfo")
+	@ResponseBody
+	public Work toUpdateInfo(String id) {
+		Work work = workServices.findById(id);
+		System.out.println(work);
+		return work;
 	}
 
 	@Transactional

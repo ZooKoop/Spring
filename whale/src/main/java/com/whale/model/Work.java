@@ -175,4 +175,12 @@ public class Work implements Serializable {
 		this.isClose = isClose;
 	}
 
+	@Override
+	public String toString() {
+		return "Work [id=" + id + ", ticketNumber=" + ticketNumber + ", description=" + description + ", isCreate="
+				+ isCreate + ", isCreate317=" + isCreate317 + ", isCreate316=" + isCreate316 + ", isExample="
+				+ isExample + ", isClose=" + isClose + ", version=" + version + ", dateTime=" + dateTime
+				+ ", updateTime=" + updateTime + ", securityUser=" + securityUser + "]";
+	}
+
 }

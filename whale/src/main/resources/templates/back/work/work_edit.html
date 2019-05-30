@@ -12,25 +12,25 @@
 					<h4 class="modal-title" id="myModalLabel">编辑TICKET</h4>
 				</div>
 				<div class="modal-body">
-					<form id="add_form" class="form-horizontal" role="form">
+					<form id="edit_workForm" class="form-horizontal" role="form">
 						<div class="form-group">
-							<label for="ticketNumber" class="col-sm-2 control-label">Ticket</label>
+							<label for="ticketNumber_edit" class="col-sm-2 control-label">Ticket</label>
 							<div class="col-sm-10">
-								<input type="number" class="form-control" id="ticketNumber"
-									name="ticketNumber" placeholder="请输入Ticket号">
+								<input type="number" class="form-control" id="ticketNumber_edit"
+									 name="ticketNumber" placeholder="请输入Ticket号">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="description" class="col-sm-2 control-label">描述</label>
+							<label for="description_edit" class="col-sm-2 control-label">描述</label>
 							<div class="col-sm-10">
-								<textarea id="description" class="form-control"
+								<textarea id="description_edit" class="form-control"
 									name="description" placeholder="Ticket描述。。。"></textarea>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="isCreate" class="col-sm-2 control-label">发包</label>
+							<label for="isCreate_T" class="col-sm-2 control-label">发包</label>
 							<div class="col-sm-3">
-								<select id="isCreate" name="isCreate"
+								<select id="isCreate_T" name="isCreate"
 									class="selectpicker form-control" title="Trunk">
 									<option value="0">未发包</option>
 									<option value="1">已发包</option>
@@ -38,7 +38,7 @@
 								</select>
 							</div>
 							<div class="col-sm-3">
-								<select id="isCreate" name="isCreate317"
+								<select id="isCreate_317" name="isCreate317"
 									class="selectpicker form-control" title="317">
 									<option value="0">未发包</option>
 									<option value="1">已发包</option>
@@ -46,7 +46,7 @@
 								</select>
 							</div>
 							<div class="col-sm-3">
-								<select id="isCreate" name="isCreate316"
+								<select id="isCreate_316" name="isCreate316"
 									class="selectpicker form-control" title="316">
 									<option value="0">未发包</option>
 									<option value="1">已发包</option>
@@ -55,9 +55,9 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="isExample" class="col-sm-2 control-label">测试用例</label>
+							<label for="isExample_edit" class="col-sm-2 control-label">测试用例</label>
 							<div class="col-sm-10">
-								<select id="isExample" name="isExample"
+								<select id="isExample_edit" name="isExample"
 									class="selectpicker form-control" title="是否有测试用例">
 									<option value="0">无</option>
 									<option value="1">有</option>
@@ -65,9 +65,9 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="isExample" class="col-sm-2 control-label">选择版本</label>
+							<label for="isExample_edit" class="col-sm-2 control-label">选择版本</label>
 							<div class="col-sm-10">
-								<select id="isExample" name="version"
+								<select id="isExample_edit" name="version"
 									class="selectpicker form-control" multiple title="选择版本(可多选)"
 									data-live-search="true">
 									<option value="Trunk">Trunk</option>
@@ -77,9 +77,9 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="isClose" class="col-sm-2 control-label">是否关闭</label>
+							<label for="isClose_edit" class="col-sm-2 control-label">是否关闭</label>
 							<div class="col-sm-10">
-								<select id="isClose" name="isClose"
+								<select id="isClose_edit" name="isClose"
 									class="selectpicker form-control" title="请选择..." >
 									<!-- <option value="-1" class="hidden"></option> -->
 									<option value="0">未关闭</option>

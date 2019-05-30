@@ -134,27 +134,30 @@ $(function(){
 	$('#my_work').on('click','._edit', function () {
 		var data = work_tables.row( $(this).parents('tr')).data().id;
 		$('#work_edit_model').on('shown.bs.modal', function () {
-			$(this).find('div.modal-content select').selectpicker(); 
-		})
-		
+			$(this).find('div.modal-content select').selectpicker();//初始化组件
+			$.ajax({
+				type: "POST",
+				url: "/back/work/toUpdateInfo",
+				dataType: "json",// 预期服务器返回的数据类型
+				data: {"id": data},
+				success: function (result) {
+					console.log("----------"+result.isCreate);//打印服务端返回的数据(调试用)
+//					layer.alert("1");
+					$("#ticketNumber_edit").val(result.ticketNumber);
+					$("#description_edit").val(result.description);
+//					$("#isCreate_T").attr("value",result.isCreate);
+//					$("#isCreate_317").val(result.isCreate317);
+				},
+				error : function() {
+					alert("异常！");
+				}
+			});
+		});
 		$('#work_edit_model').modal({
 			 	backdrop: 'static',     // 点击空白不关闭
 			    keyboard: false,        // 按键盘esc也不会关闭
 	            remote: '/back/work/toUpdate'
-	        });
-//		$.ajax({
-//			type: "post",
-//			url: "/back/work/toUpdate",
-//			dataType: "json",// 预期服务器返回的数据类型
-//			data: data,
-//			success: function (result) {
-//				console.log("----------"+result);//打印服务端返回的数据(调试用)
-//				layer.alert("1");
-//			},
-//			error : function() {
-//				alert("异常！");
-//			}
-//		});
+	    });
 	});
 	/*删除*/
 	$('#my_work').on('click','._del', function () {//._del是数组中删除按钮的类
