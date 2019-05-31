@@ -145,8 +145,11 @@ $(function(){
 //					layer.alert("1");
 					$("#ticketNumber_edit").val(result.ticketNumber);
 					$("#description_edit").val(result.description);
-//					$("#isCreate_T").attr("value",result.isCreate);
-//					$("#isCreate_317").val(result.isCreate317);
+					$('#isCreate_T').selectpicker('val', result.isCreate);//设置选中 
+					$('#isCreate_317').selectpicker('val', result.isCreate317);//设置选中 
+					$('#isCreate_316').selectpicker('val', result.isCreate316);//设置选中 
+					$('#isExample_edit').selectpicker('val', result.isExample);//设置选中 
+					$('#isCreate_T #isCreate_317 #isCreate_316 #isExample_edit').selectpicker('refresh');
 				},
 				error : function() {
 					alert("异常！");
