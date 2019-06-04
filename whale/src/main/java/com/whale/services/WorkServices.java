@@ -44,4 +44,7 @@ public class WorkServices {
 	public Work findById(String id) {
 		return workRepostitory.findById(id).get();
 	}
+	public boolean update(Work work) {
+		return workRepostitory.save(work)!=null ? true:false;
+	}
 }

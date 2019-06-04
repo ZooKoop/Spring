@@ -103,31 +103,21 @@ public class WorkController {
 	 * @param id
 	 * @return
 	 */
-	@PostMapping("/toUpdateInfo")
+	@GetMapping("/toUpdateInfo")
 	@ResponseBody
 	public Work toUpdateInfo(String id) {
 		Work work = workServices.findById(id);
-		System.out.println(work);
+//		System.out.println(work);
 		return work;
 	}
 
-	@Transactional
 	@RequestMapping("/Update")
-	public String update(@Valid UserParam userParam, BindingResult result, Model model) {
-		String errorMsg = "";
-		boolean hasErrors = result.hasErrors();
-		if (hasErrors) {
-			List<ObjectError> list = result.getAllErrors();
-			for (ObjectError e : list) {
-				errorMsg = errorMsg + e.getCode() + ":" + e.getDefaultMessage();
-			}
-			model.addAttribute("errorMsg", errorMsg);
-			return "back/user/userInforAdd";
+	@ResponseBody
+	public String update(Work work,Authentication authentication) {
+		work.setSecurityUser(securityUserRepository.findByuserName(authentication.getName()));
+		if (workServices.update(work)) {
+			return "200";
 		}
-
-		SecurityUser userInfor = new SecurityUser();
-		BeanUtils.copyProperties(userParam, userInfor);
-//		entityManager.merge(userInfor);
-		return "redirect:back//user/list";
+		return "400";
 	}
 };

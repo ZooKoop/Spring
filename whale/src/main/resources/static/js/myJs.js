@@ -131,30 +131,56 @@ $(function(){
 	    $(this).find('div.modal-content select').selectpicker(); 
 	})
 	/*编辑*/
-	$('#my_work').on('click','._edit', function () {
+	$('#my_work').unbind('click').on('click','._edit', function () {
 		var data = work_tables.row( $(this).parents('tr')).data().id;
 		$('#work_edit_model').on('shown.bs.modal', function () {
 			$(this).find('div.modal-content select').selectpicker();//初始化组件
 			$.ajax({
-				type: "POST",
+				type: "GET",
 				url: "/back/work/toUpdateInfo",
 				dataType: "json",// 预期服务器返回的数据类型
 				data: {"id": data},
 				success: function (result) {
-					console.log("----------"+result.isCreate);//打印服务端返回的数据(调试用)
+					console.log("----------"+result.securityUser.id);//打印服务端返回的数据(调试用)，object转键值对字符串
+//					console.log("----------"+JSON.stringify(result));//打印服务端返回的数据(调试用)，object转键值对字符串
 //					layer.alert("1");
+					$("#work_id").val(result.id);
+					$("#work_security_user_id").val(result.securityUser.id);
 					$("#ticketNumber_edit").val(result.ticketNumber);
 					$("#description_edit").val(result.description);
 					$('#isCreate_T').selectpicker('val', result.isCreate);//设置选中 
 					$('#isCreate_317').selectpicker('val', result.isCreate317);//设置选中 
 					$('#isCreate_316').selectpicker('val', result.isCreate316);//设置选中 
 					$('#isExample_edit').selectpicker('val', result.isExample);//设置选中 
-					$('#isCreate_T #isCreate_317 #isCreate_316 #isExample_edit').selectpicker('refresh');
+					if(result.version!=null){
+						$('#version_edit').selectpicker('val',result.version.split(','));//split分割转为数组
+					}
+					$('#isClose_edit').selectpicker('val',result.isClose);
+					$('#isCreate_T #isCreate_317 #isCreate_316 #isExample_edit #version_edit #isClose_edit').selectpicker('refresh');
+					$('.work_edit_btn').unbind('click').bind('click',function (event) {
+						event.stopPropagation();
+//						$.ajax({
+//							type: "post",
+//							url: "/back/work/Update",
+//							dataType: "json",// 预期服务器返回的数据类型
+//							data: $("#edit_workForm").serialize(),
+//							success: function (result) {
+//								if(result=200){
+//									$('#work_edit_model').modal('hide');
+//									layer.alert('修改成功', {icon: 1});
+//									work_tables.ajax.reload();//刷新添加完的数据
+//								}else{
+//									layer.alert('修改失败', {icon: 2});
+//								}
+//							}
+//						})
+					});
 				},
 				error : function() {
 					alert("异常！");
 				}
 			});
+			return false;
 		});
 		$('#work_edit_model').modal({
 			 	backdrop: 'static',     // 点击空白不关闭
@@ -203,6 +229,21 @@ function validatorInit(formID,opctionFields,addBtnID,url,modelID,vartables){
 		$(formID).data('bootstrapValidator').resetForm(true);//清除当前验证的关键之处加，true清空值不太好使文字域的清除不了
 	});
 };
+/*修改校验*/
+function updateValid(formID,opctionFields,addBtnID,url,modelID,vartables){
+	$(formID).bootstrapValidator({
+		message : '通用的验证失败消息',//好像从来没出现过
+		feedbacklcons : feedbacklcons,
+		fields : opctionFields
+	});
+	$(addBtnID).on('click',function() {//非submit按钮点击后进行验证，如果是submit则无需此句直接验证
+		/*手动验证表单，当是普通按钮时。*/
+		$(formID).data('bootstrapValidator').validate(); 
+		if($(formID).data('bootstrapValidator').isValid()){ 
+			addInit(url,formID,modelID,vartables);
+		}
+	});
+}
 /*校验公共选项*/
 var feedbacklcons ={
 		valid : 'glyphicon glyphicon-ok',
@@ -316,7 +357,8 @@ function tables_init(tablesid,language,columns,columnDefs,ajax){
 		 paging : true,// paging属性必须为true才能实现默认初始值得功能
 		 bSort: true,
 		 bAutoWidth : false,// 自动宽度
-		 ordering : true, // 排序
+//		 ordering : true, // 排序
+//		 "order": [[ 1, "desc" ]],
 		 // bPaginate : true, //翻页功能
 		 bProcessing : true, // DataTables载入数据时，是否显示‘进度’提示
 		 serverSide : true, // 是否启动服务器端数据导入
@@ -563,9 +605,10 @@ var work_ajax = function (data, callback, settings) {
 	// param.search = data.search.value;//搜索条件
 	if (data.order.length > 0) {
 		// param.order = data.columns[data.order[3].column].data;
-		param.order = data.columns[7].data;
+		param.order = data.columns[8].data;
 		param.dir = data.order[0].dir;
 		console.log(param.order+"----------"+param.dir);
+		console.log(JSON.stringify(data)+"----------");
 	} 
 	
 	// ajax请求数据
@@ -640,7 +683,7 @@ var opction_ajax = function (data, callback, settings) {
 				returnData.recordsTotal = result.totalElements;// 返回数据全部记录
 				returnData.recordsFiltered = result.totalElements;// 后台不实现过滤功能，每次查询均视作全部结果
 				returnData.data = result.content;// 返回的数据列表
-				console.log(returnData);
+//				console.log(returnData);
 				// $("tr").css("display","inline-block");
 				// 调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
 				// 此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
