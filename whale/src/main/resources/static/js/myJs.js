@@ -123,16 +123,7 @@ $(function(){
 //			}
 //		});
 //	});
-	/* ---------------------------opction页面参数------------------- */
-//	var opction_tables = tables_init('#opction_table',language,opction_columns,hideone_columnDefs,opction_ajax);
-//	/*添加初始化、校验*/
-//	validatorInit('#opction_form',opctionFields,'#btnOpction','/back/workopction/add','#opctionModel',opction_tables);
-//	/*删除*/
-//	$('#opction_table').on('click','._del', function () {//._del是数组中删除按钮的类
-//		var data = opction_tables.row( $(this).parents('tr')).data().id;
-//		del('/back/workopction/delete',data,opction_tables)
-//	});
-	/* ---------------------------opction页面参数------------------- */
+	
 });
 /*初始化 . -. -..--------------------------------------------------------------------*/
 
@@ -157,24 +148,7 @@ $(function(){
 /*校验公共选项*/
 /*work表字段校验*/
 /*opction表字段校验*/
-//var opctionFields = {
-//		opctionCode : {
-//			message : '验证失败',
-//			validators : {
-//				required: true,
-//				notEmpty : {
-//					message : '不能为空'
-//				}
-//			}
-//		},
-//		opction : {
-//			validators : {
-//				notEmpty : {
-//					message : '不能为空'
-//				}
-//			}
-//		}
-//};
+
 
 /* ================= 校验 . -. -.. =================*/
 
@@ -298,60 +272,8 @@ $(function(){
 	
 
 /*------------------opction页面参数---------------------- */
-//var opction_columns = [{
-//	data : 'id'
-//},{
-//	data : 'opctionCode'
-//},{
-//	data : 'opction'
-//},{
-//	data : null,
-//	title: "操作",
-//	render:function(data, type, row, meta){
-//		return '<a class="_eidt btn btn-info" type="button" href="#" > <span class="glyphicon glyphicon-edit"></span></a> <a class="_del btn btn-danger" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span></a>';
-//	}
-//}];
-//var opction_ajax = function (data, callback, settings) {
-//	// 封装请求参数
-//	var param = {};
-//	param.size = data.length;// 页面显示记录条数，在页面显示每页显示多少项的时候
-//	// console.log(data.length)
-//	// param.start = data.start;//开始的记录序号
-//	param.page = (data.start / data.length);// 当前页码
-//	// param.search = data.search.value;//搜索条件
-////	if (data.order.length > 0) {
-////		 param.order = data.columns[data.order[3].column].data;
-////		param.order = data.columns[7].data;
-////		param.dir = data.order[0].dir;
-////		console.log(param.order+"----------"+param.dir);
-////	} 
-//	
-//	// ajax请求数据
-//	$.ajax({
-//		type: "GET",
-//		url: "/back/workopction/queryAll",
-//		cache: false, // 禁用缓存
-//		data: param, // 传入组装的参数
-//		dataType: "json",
-//		success: function (result) {
-//			// console.log(result);
-//			// setTimeout仅为测试延迟效果
-//			setTimeout(function () {
-//				// 封装返回数据
-//				var returnData = {};
-//				returnData.draw = result.draw;// 这里直接自行返回了draw计数器,应该由后台返回
-//				returnData.recordsTotal = result.totalElements;// 返回数据全部记录
-//				returnData.recordsFiltered = result.totalElements;// 后台不实现过滤功能，每次查询均视作全部结果
-//				returnData.data = result.content;// 返回的数据列表
-////				console.log(returnData);
-//				// $("tr").css("display","inline-block");
-//				// 调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
-//				// 此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
-//				callback(returnData);
-//			}, 10);
-//		}
-//	});
-//};
+
+
 /*笔记
 (function($) {
 	})(jQuery);//闭包格式

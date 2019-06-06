@@ -2,11 +2,13 @@ $(function(){
 	/* ---------------------------查--------------------------- */
 	var work_tables = tables_init('#my_work',language,work_columns,hideone_columnDefs,work_ajax);
 	work_tables.draw( false ); //页面操作保留在当前页
+	var opction_tables = tables_init('#opction_table',language,opction_columns,hideone_columnDefs,opction_ajax);
+	opction_tables.draw( false ); //页面操作保留在当前页
 	
 	/* ---------------------------增--------------------------- */
 	/*添加初始化、校验*/
-	validatorInit('#add_form',workFields,'#add_submit','/back/work/add','#add',work_tables);
-	
+	validatorInit('#add_form',workFields,'#add',work_tables);
+	validatorInit('#opction_form',opctionFields,'#opctionModel',opction_tables);
 	/* --------------------------- 删 -> 删除封装 --------------------------- */
 	/*Work删除*/
 	$('#my_work tbody').on('click', 'a._del', function(e) {
@@ -24,6 +26,27 @@ $(function(){
 	                        });
 
 	});
+	/*opction删除*/
+	$('#opction_table tbody').on('click', 'a._del', function(e) {
+		e.preventDefault();
+		var data = opction_tables.row($(this).parents('tr')).data();//需改tables
+		//当没有定义skin时使用的是全局样式
+		layer.confirm('确定删除这个参数吗？', {
+						title:false,
+						btnAlign: 'c',
+						area: ['20rem', '12rem'],
+						btn: ['删除', '关闭'] //按钮
+					}, function(index){
+						del('/back/workopction/delete',data.id,opction_tables);//需改tables
+			//	                            layer.close(index);
+					});
+		
+	});
+//	/*删除*/
+//	$('#opction_table').on('click','._del', function () {//._del是数组中删除按钮的类
+//		var data = opction_tables.row( $(this).parents('tr')).data().id;
+//		del('/back/workopction/delete',data,opction_tables)
+//	});
 	/* ---------------------------改--------------------------- */
 	/*多选初始化*/
 	$('#my_work').one('shown.bs.modal', function (e) { 
@@ -41,12 +64,13 @@ $(function(){
 				data: {"id": data},
 				success: function (result) {
 //					console.log("----------"+result.securityUser.id);//打印服务端返回的数据(调试用)，object转键值对字符串
-//					console.log("----------"+JSON.stringify(result));//打印服务端返回的数据(调试用)，object转键值对字符串
+					console.log("----------"+JSON.stringify(result));//打印服务端返回的数据(调试用)，object转键值对字符串
 //					layer.alert("1");
 					$("#work_id").val(result.id);
 					$("#work_security_user_id").val(result.securityUser.id);
 					$("#ticketNumber_edit").val(result.ticketNumber);
 					$("#description_edit").val(result.description);
+					$("#work_edit_dateTime").val(result.dateTime);
 					$('#isCreate_T').selectpicker('val', result.isCreate);//设置选中 
 					$('#isCreate_317').selectpicker('val', result.isCreate317);//设置选中 
 					$('#isCreate_316').selectpicker('val', result.isCreate316);//设置选中 
@@ -58,21 +82,21 @@ $(function(){
 					$('#isCreate_T #isCreate_317 #isCreate_316 #isExample_edit #version_edit #isClose_edit').selectpicker('refresh');
 					$('.work_edit_btn').unbind('click').bind('click',function (event) {
 						event.stopPropagation();
-//						$.ajax({
-//							type: "post",
-//							url: "/back/work/Update",
-//							dataType: "json",// 预期服务器返回的数据类型
-//							data: $("#edit_workForm").serialize(),
-//							success: function (result) {
-//								if(result=200){
-//									$('#work_edit_model').modal('hide');
-//									layer.alert('修改成功', {icon: 1});
-//									work_tables.ajax.reload();//刷新添加完的数据
-//								}else{
-//									layer.alert('修改失败', {icon: 2});
-//								}
-//							}
-//						})
+						$.ajax({
+							type: "post",
+							url: "/back/work/Update",
+							dataType: "json",// 预期服务器返回的数据类型
+							data: $("#edit_workForm").serialize(),
+							success: function (result) {
+								if(result=200){
+									$('#work_edit_model').modal('hide');
+									layer.alert('修改成功', {icon: 1});
+									work_tables.ajax.reload();//刷新添加完的数据
+								}else{
+									layer.alert('修改失败', {icon: 2});
+								}
+							}
+						})
 					});
 				},
 				error : function() {
@@ -98,12 +122,15 @@ function tables_init(tablesid,language,columns,columnDefs,ajax){
 		 deferRender:true,// 延迟渲染
 		 paging : true,// paging属性必须为true才能实现默认初始值得功能
 		 bSort: true,
+		 bLengthChange: false,   //去掉每页显示多少条数据方法
 //		 stateSave:true,
-		 bAutoWidth : false,// 自动宽度
+		 AutoWidth : false,// 自动宽度
+		 Filter:true,
 //		 ordering : true, // 排序
 //		 "order": [[ 1, "desc" ]],
 		 // bPaginate : true, //翻页功能
-		 bProcessing : true, // DataTables载入数据时，是否显示‘进度’提示
+		 ScrollX:"100%",
+		 Processing : true, // DataTables载入数据时，是否显示‘进度’提示
 		 serverSide : true, // 是否启动服务器端数据导入
 		 searching : true, // 是否禁用原生搜索(false为禁用,true为使用)
 		 // renderer: "Bootstrap", //渲染样式：Bootstrap和jquery-ui
@@ -135,6 +162,20 @@ var language = {
 		"last" : "末页"
 	}
 };
+/*------------------opction页面参数---------------------- */
+var opction_columns = [{
+	data : 'id'
+},{
+	data : 'opctionCode'
+},{
+	data : null,
+	title: "操作",
+	render:function(data, type, row, meta){
+		var html ='<a href="javascript:void(0);" title="编辑" class="_edit btn btn-info" > <span class="glyphicon glyphicon-edit"></span></a>'
+			html +='<a href="javascript:void(0);" class="_del btn btn-danger"><span class="glyphicon glyphicon-trash"></span></a>'
+			return html;
+	}
+}];
 /*------------------work页面参数---------------------- */
 var work_columns = [{
 	data : 'id'
@@ -236,6 +277,48 @@ var work_columns = [{
 		return html;
 	}
 }];
+/*------------------opction_ajax---------------------- */
+var opction_ajax = function (data, callback, settings) {
+	// 封装请求参数
+	var param = {};
+	param.size = data.length;// 页面显示记录条数，在页面显示每页显示多少项的时候
+	// console.log(data.length)
+	// param.start = data.start;//开始的记录序号
+	param.page = (data.start / data.length);// 当前页码
+	// param.search = data.search.value;//搜索条件
+//	if (data.order.length > 0) {
+//		 param.order = data.columns[data.order[3].column].data;
+//		param.order = data.columns[7].data;
+//		param.dir = data.order[0].dir;
+//		console.log(param.order+"----------"+param.dir);
+//	} 
+	// ajax请求数据
+	$.ajax({
+		type: "GET",
+		url: "/back/workopction/queryAll",
+		cache: false, // 禁用缓存
+		data: param, // 传入组装的参数
+		dataType: "json",
+		success: function (result) {
+			// console.log(result);
+			// setTimeout仅为测试延迟效果
+			setTimeout(function () {
+				// 封装返回数据
+				var returnData = {};
+				returnData.draw = result.draw;// 这里直接自行返回了draw计数器,应该由后台返回
+				returnData.recordsTotal = result.totalElements;// 返回数据全部记录
+				returnData.recordsFiltered = result.totalElements;// 后台不实现过滤功能，每次查询均视作全部结果
+				returnData.data = result.content;// 返回的数据列表
+//				console.log(returnData);
+				// $("tr").css("display","inline-block");
+				// 调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+				// 此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+				callback(returnData);
+			}, 10);
+		}
+	});
+};
+/*------------------work页面参数---------------------- */
 var work_ajax = function (data, callback, settings) {
 	// 封装请求参数
 	var param = {};
@@ -281,7 +364,7 @@ var work_ajax = function (data, callback, settings) {
 /* ================= 校验 ... - .- .-. - ================= */
 
 /*公共校验初始化、添加时校验*/
-function validatorInit(formID,fields,addBtnID,url,modelID,vartables){
+function validatorInit(formID,fields,modelID,vartables){
 	$(modelID).on('hide.bs.modal', function () {//模态框关闭触发
 		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
 		$('.selectpicker').selectpicker('val',['noneSelectedText']);//清空
@@ -308,7 +391,7 @@ function validatorInit(formID,fields,addBtnID,url,modelID,vartables){
 			success: function (result) {
 				// console.log("----------"+result.msg);//打印服务端返回的数据(调试用)
 				if(result.success=="200"){
-					layer.alert("添加成功！");
+					layer.msg("添加成功！");
 					vartables.ajax.reload();//刷新添加完的数据
 					$(modelID).modal('hide');//模态框关闭背景隐藏
 				}
@@ -358,6 +441,26 @@ var feedbacklcons ={
 		valid : 'glyphicon glyphicon-ok',
 		invalid : 'glyphicon glyphicon-remove',
 		validating : 'glyphicon glyphicon-refresh'
+};
+/* --------------------------- opction表字段校验 ---------------------------*/
+var opctionFields = {
+		opctionCode : {
+			message : '验证失败',
+			validators : {
+				required: true,
+				notEmpty : {
+					message : '不能为空'
+				}
+			}
+		},
+		opction : {
+			validators : {
+				regexp: {
+				    regexp: /^[a-zA-Z0-9_]+$/,
+				    message: '正则验证，这里验证只能输入大小写字母数字和下划线'
+				}
+			}
+		}
 };
 /* --------------------------- work表字段校验 ---------------------------*/
 var workFields = {
@@ -412,7 +515,8 @@ function del(urls,id,tabName){
 			 console.log(data)
 			 if(data==200){
 				 //如果后台删除成功，则刷新表格，并提示用户删除成功
-				 layer.msg("删除成功！",{icon:1,time:2000});
+//				 layer.msg("删除成功！",{icon:1,time:2000});
+				 layer.msg("删除成功！");
 				 //保留分页信息
 				 tabName.ajax.reload(null,false);//需初始化完毕，加table.draw( false ); 
 				 //不保留分页信息

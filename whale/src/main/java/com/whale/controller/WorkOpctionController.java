@@ -27,7 +27,7 @@ public class WorkOpctionController {
 	public String toWork(HttpServletRequest request , Model model) {
 		model.addAttribute("F_O", "one");
 		model.addAttribute("queryUrl", request.getRequestURI());
-		return "back/work/sj/workopction";
+		return "back/work/workopction";
 	}
 	
 	@GetMapping("/queryAll")
