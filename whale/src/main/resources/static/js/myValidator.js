@@ -1,14 +1,23 @@
 $(function(){
 	/* ---------------------------查--------------------------- */
+	/* work */
 	var work_tables = tables_init('#my_work',language,work_columns,hideone_columnDefs,work_ajax);
 	work_tables.draw( false ); //页面操作保留在当前页
+//	条件查询
+	$("#find_ticketNumber").on("keyup",function(data, callback, settings){
+		tables_init('#my_work',language,work_columns,hideone_columnDefs,work_find_ajax);
+	});
+	$("#find_isClose").on("change",function(data, callback, settings){
+		tables_init('#my_work',language,work_columns,hideone_columnDefs,work_find_ajax);
+	});
+	/* work end */
 	var opction_tables = tables_init('#opction_table',language,opction_columns,hideone_columnDefs,opction_ajax);
 	opction_tables.draw( false ); //页面操作保留在当前页
 	
 	/* ---------------------------增--------------------------- */
 	/*添加初始化、校验*/
-	validatorInit('#add_form',workFields,'#add',work_tables);
-	validatorInit('#opction_form',opctionFields,'#opctionModel',opction_tables);
+	validatorAddInit('#add_form',workFields,'#add',work_tables);
+	validatorAddInit('#opction_form',opctionFields,'#opctionModel',opction_tables);
 	/* --------------------------- 删 -> 删除封装 --------------------------- */
 	/*Work删除*/
 	$('#my_work tbody').on('click', 'a._del', function(e) {
@@ -132,7 +141,7 @@ function tables_init(tablesid,language,columns,columnDefs,ajax){
 		 ScrollX:"100%",
 		 Processing : true, // DataTables载入数据时，是否显示‘进度’提示
 		 serverSide : true, // 是否启动服务器端数据导入
-		 searching : true, // 是否禁用原生搜索(false为禁用,true为使用)
+		 searching : false, // 是否禁用原生搜索(false为禁用,true为使用)
 		 // renderer: "Bootstrap", //渲染样式：Bootstrap和jquery-ui
 		 // "stripeClasses": ["odd", "even"], //为奇偶行加上样式，兼容不支持CSS伪类的场合
 		 lengthMenu : [ 5, 20, 50, 70, 100 ],
@@ -318,6 +327,7 @@ var opction_ajax = function (data, callback, settings) {
 		}
 	});
 };
+
 /*------------------work页面参数---------------------- */
 var work_ajax = function (data, callback, settings) {
 	// 封装请求参数
@@ -326,14 +336,14 @@ var work_ajax = function (data, callback, settings) {
 	// console.log(data.length)
 	// param.start = data.start;//开始的记录序号
 	param.page = (data.start / data.length);// 当前页码
-	// param.search = data.search.value;//搜索条件
+	 param.search = data.search.value;//搜索条件
 	if (data.order.length > 0) {
 		// param.order = data.columns[data.order[3].column].data;
 		param.order = data.columns[8].data;
 		param.dir = data.order[0].dir;
 //		console.log(param.order+"----------"+param.dir);
-//		console.log(JSON.stringify(data)+"----------");
 	} 
+//	console.log(JSON.stringify(data)+"----------");
 	
 	// ajax请求数据
 	$.ajax({
@@ -343,16 +353,16 @@ var work_ajax = function (data, callback, settings) {
 		data: param, // 传入组装的参数
 		dataType: "json",
 		success: function (result) {
-			// console.log(result);
+//			 console.log(JSON.stringify(result));
 			// setTimeout仅为测试延迟效果
 			setTimeout(function () {
 				// 封装返回数据
 				var returnData = {};
-				returnData.draw = result.draw;// 这里直接自行返回了draw计数器,应该由后台返回
+				returnData.draw = data.draw;// 这里直接自行返回了draw计数器,应该由后台返回
 				returnData.recordsTotal = result.totalElements;// 返回数据全部记录
 				returnData.recordsFiltered = result.totalElements;// 后台不实现过滤功能，每次查询均视作全部结果
 				returnData.data = result.content;// 返回的数据列表
-				console.log(returnData);
+//				console.log(returnData);
 				// $("tr").css("display","inline-block");
 				// 调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
 				// 此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
@@ -361,10 +371,53 @@ var work_ajax = function (data, callback, settings) {
 		}
 	});
 };
+
+/*------------------work页面查询---------------------- */
+var work_find_ajax = function (data, callback, settings) {
+	// 封装请求参数
+	var param = {};
+	param.ticketNumber = $("#find_ticketNumber").val();
+	param.isClose = $("#find_isClose").val();
+	param.size = data.length;// 页面显示记录条数，在页面显示每页显示多少项的时候
+	// console.log(data.length)
+	// param.start = data.start;//开始的记录序号
+	param.page = (data.start / data.length);// 当前页码
+	param.search = data.search.value;//搜索条件
+	if (data.order.length > 0) {
+		// param.order = data.columns[data.order[3].column].data;
+		param.order = data.columns[8].data;
+		param.dir = data.order[0].dir;
+//		console.log(param.order+"----------"+param.dir);
+	} 
+//	console.log(JSON.stringify(data)+"----------");
+//	alert(JSON.stringify(param))
+	// ajax请求数据
+	$.ajax({
+		type: "GET",
+		url: "/back/work/queryAll",
+		cache: false, // 禁用缓存
+		data: param, // 传入组装的参数
+		dataType: "json",
+		success: function (result) {
+//			 console.log(JSON.stringify(result));
+			// setTimeout仅为测试延迟效果
+			setTimeout(function () {
+				// 封装返回数据
+				var returnData = {};
+				returnData.draw = data.draw;// 这里直接自行返回了draw计数器,应该由后台返回
+				returnData.recordsTotal = result.totalElements;// 返回数据全部记录
+				returnData.recordsFiltered = result.totalElements;// 后台不实现过滤功能，每次查询均视作全部结果
+				returnData.data = result.content;// 返回的数据列表
+				console.log(returnData);
+				callback(returnData);
+			}, 10);
+		}
+	});
+};
 /* ================= 校验 ... - .- .-. - ================= */
 
 /*公共校验初始化、添加时校验*/
-function validatorInit(formID,fields,modelID,vartables){
+function validatorAddInit(formID,fields,modelID,vartables){
 	$(modelID).on('hide.bs.modal', function () {//模态框关闭触发
 		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
 		$('.selectpicker').selectpicker('val',['noneSelectedText']);//清空

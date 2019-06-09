@@ -25,6 +25,12 @@ public class WorkServices {
 			if (!StringUtils.isEmpty(work.getSecurityUser().getUserName())) {
 				arrayList.add(CriteriaBuilder.equal(root.get("securityUser").get("userName"), work.getSecurityUser().getUserName()));
 			}
+			if (!StringUtils.isEmpty(work.getTicketNumber())) {
+				arrayList.add(CriteriaBuilder.equal(root.get("ticketNumber"), work.getTicketNumber()));
+			}
+			if (!StringUtils.isEmpty(work.getIsClose())) {
+				arrayList.add(CriteriaBuilder.equal(root.get("isClose"), work.getIsClose()));
+			}
 			Predicate[] p = new Predicate[arrayList.size()];
 			return CriteriaBuilder.and(arrayList.toArray(p));
 		},pageable);
