@@ -18,15 +18,14 @@ public class WorkServices {
 	public Page<Work> queryAll(Integer page,Integer size,String order,Work work) {
 		Sort sort = new Sort(Sort.Direction.DESC,order);
 		PageRequest pageable = PageRequest.of(page, size,sort);
-		
 		Page<Work> workList = workRepostitory.findAll((root,query,CriteriaBuilder) -> {
 			ArrayList<Predicate> arrayList = new ArrayList<>();
 			//取其他表需取两次
 			if (!StringUtils.isEmpty(work.getSecurityUser().getUserName())) {
-				arrayList.add(CriteriaBuilder.equal(root.get("securityUser").get("userName"), work.getSecurityUser().getUserName()));
+				arrayList.add(CriteriaBuilder.equal(root.get("securityUser").get("userName").as(String.class), work.getSecurityUser().getUserName()));
 			}
 			if (!StringUtils.isEmpty(work.getTicketNumber())) {
-				arrayList.add(CriteriaBuilder.equal(root.get("ticketNumber"), work.getTicketNumber()));
+				arrayList.add(CriteriaBuilder.like(root.get("ticketNumber").as(String.class), "%"+ work.getTicketNumber()+"%"));
 			}
 			if (!StringUtils.isEmpty(work.getIsClose())) {
 				arrayList.add(CriteriaBuilder.equal(root.get("isClose"), work.getIsClose()));
@@ -37,7 +36,7 @@ public class WorkServices {
 		
 		return workList;
 	}
-	public boolean findByTicketNumber(Integer number) {
+	public boolean findByTicketNumber(String number) {
 		return workRepostitory.findByticketNumber(number)!=null ? true:false;
 	}
 	

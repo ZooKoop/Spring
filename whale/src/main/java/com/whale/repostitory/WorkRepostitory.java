@@ -7,5 +7,5 @@ public interface WorkRepostitory extends JpaRepository<Work, String>,JpaSpecific
 //	@Query(value = "select * from Work a,SECURITY_USER b where a.security_user_id = b.id and b.USER_NAME = :userName",nativeQuery = true)
 //	Page<Work> findAll(Pageable pageable,@Param("userName")String userName);
 
-	Work findByticketNumber(Integer number);
+	Work findByticketNumber(String number);
 }

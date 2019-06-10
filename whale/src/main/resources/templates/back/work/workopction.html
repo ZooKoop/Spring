@@ -43,31 +43,44 @@
 		<!-- /.modal -->
 	</div>
 	<div th:replace="common/common_pub :: navbar_"></div>
-	<div class="row" style="width: 100%;">
+	<div class="row" style="width: 100%;margin: 0;">
 		<div th:replace="common/common_pub :: left_nav"></div>
-		<div class="panel-body col-md-10">
-			<!-- 按钮触发模态框 -->
-			<button class="btn" data-toggle="modal" data-target="#opctionModel"
-				style="margin: 10px 0;">添加参数</button>
-			<div class="panel">
-				<table id="opction_table" class="table table-hover table-striped">
-					<thead>
-						<tr class="my_tables_tr">
-							<th class="text-center">id</th>
-							<th class="text-center">Opction_Code</th>
-							<th class="text-center">操作</th>
-						</tr>
-					</thead>
-					<tfoot>
-						<tr class="my_tables_tr">
-							<th class="text-center">id</th>
-							<th class="text-center">Opction_Code</th>
-							<th class="text-center">操作</th>
-						</tr>
-					</tfoot>
-				</table>
+		<div class="col-md-10" style=" padding: 0;overflow: hidden;">
+				<div style = "margin:0" class="panel panel-default">
+					<!-- 搜索区 -->
+					<div class="panel-body">
+						<!-- <div class="col-xs-12 col-sm-6 col-md-3">
+		                    <div class="form-group">
+		                        <label for="CustomerName">TicketNumber</label>
+		                        <input id="find_ticketNumber" class="form-control" name="ticketNumber" type="number" value="">
+		                    </div>
+				        </div> -->
+					</div>
+					<div class="panel-body">
+						<!-- 按钮触发模态框 -->
+						<button class="btn" data-toggle="modal" data-target="#opctionModel"
+							style="margin: 10px 0;">添加参数</button>
+						<div class="panel">
+							<table style="width: 100%;" id="opction_table" class="table table-hover table-striped">
+								<thead>
+									<tr class="my_tables_tr">
+										<th class="text-center">id</th>
+										<th class="text-center">Opction_Code</th>
+										<th class="text-center">操作</th>
+									</tr>
+								</thead>
+								<tfoot>
+									<tr class="my_tables_tr">
+										<th class="text-center">id</th>
+										<th class="text-center">Opction_Code</th>
+										<th class="text-center">操作</th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
 	</div>
 </body>
 </html>

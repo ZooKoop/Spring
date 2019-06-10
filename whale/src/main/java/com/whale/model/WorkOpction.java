@@ -25,7 +25,6 @@ public class WorkOpction implements Serializable {
 	@Column(name = "OPCTION")
 	private String opction;
 	
-	
 	public String getId() {
 		return id;
 	}

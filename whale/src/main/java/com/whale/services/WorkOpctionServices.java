@@ -1,9 +1,10 @@
 package com.whale.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.whale.model.WorkOpction;
 import com.whale.repostitory.WorkOpctionRepostitory;
@@ -27,5 +28,9 @@ public class WorkOpctionServices {
 
 	public boolean findByOpctionCode(String opctionCode) {
 		return w.findByOpctionCode(opctionCode)!=null ? true:false;
+	}
+
+	public List<WorkOpction> getAll() {
+		return w.findAll();
 	}
 }

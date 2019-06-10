@@ -1,6 +1,7 @@
 package com.whale.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,11 @@ public class WorkOpctionController {
 			@RequestParam(value = "size", defaultValue = "5") Integer size) {
 		Page<WorkOpction> queryAll = w.queryAll(page,size);
 		return queryAll;
+	}
+	@GetMapping("/getAll")
+	@ResponseBody
+	public List<WorkOpction> getAll() {
+		return w.getAll();
 	}
 	@PostMapping("/add")
 	@ResponseBody

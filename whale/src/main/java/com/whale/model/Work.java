@@ -13,7 +13,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.whale.security.model.SecurityUser;
 
@@ -29,7 +28,7 @@ public class Work implements Serializable {
 	private String id;
 
 	@Column(name = "TICKET_NUMBER")
-	private Integer ticketNumber;
+	private String ticketNumber;
 	/*
 	 * 描述
 	 */
@@ -37,14 +36,10 @@ public class Work implements Serializable {
 	private String description;
 
 	/*
-	 * 是否发包 0/1
+	 * 发包E-patch
 	 */
-	@Column(name = "ISCREATE")
-	private Integer isCreate;
-	@Column(name = "ISCREATE317")
-	private Integer isCreate317;
-	@Column(name = "ISCREATE316")
-	private Integer isCreate316;
+	@Column(name = "PATCH")
+	private String patch;
 	/*
 	 * 是否有测试用例0/1
 	 */
@@ -72,11 +67,12 @@ public class Work implements Serializable {
 	/*
 	 * 修改时间
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
 	@UpdateTimestamp
 	@Column(name = "UPDATE_TIME")
 	private Date updateTime;
-
+	
 	@ManyToOne(targetEntity = SecurityUser.class)
 	@JoinColumn(name = "securityUserId")
 	private SecurityUser securityUser;
@@ -89,11 +85,11 @@ public class Work implements Serializable {
 		this.id = id;
 	}
 
-	public Integer getTicketNumber() {
+	public String getTicketNumber() {
 		return ticketNumber;
 	}
 
-	public void setTicketNumber(Integer ticketNumber) {
+	public void setTicketNumber(String ticketNumber) {
 		this.ticketNumber = ticketNumber;
 	}
 
@@ -129,13 +125,6 @@ public class Work implements Serializable {
 		this.dateTime = dateTime;
 	}
 
-	public Integer getIsCreate() {
-		return isCreate;
-	}
-
-	public void setIsCreate(Integer isCreate) {
-		this.isCreate = isCreate;
-	}
 
 	public Integer getIsExample() {
 		return isExample;
@@ -143,22 +132,6 @@ public class Work implements Serializable {
 
 	public void setIsExample(Integer isExample) {
 		this.isExample = isExample;
-	}
-
-	public Integer getIsCreate317() {
-		return isCreate317;
-	}
-
-	public void setIsCreate317(Integer isCreate317) {
-		this.isCreate317 = isCreate317;
-	}
-
-	public Integer getIsCreate316() {
-		return isCreate316;
-	}
-
-	public void setIsCreate316(Integer isCreate316) {
-		this.isCreate316 = isCreate316;
 	}
 
 	public Date getUpdateTime() {
@@ -177,12 +150,12 @@ public class Work implements Serializable {
 		this.isClose = isClose;
 	}
 
-	@Override
-	public String toString() {
-		return "Work [id=" + id + ", ticketNumber=" + ticketNumber + ", description=" + description + ", isCreate="
-				+ isCreate + ", isCreate317=" + isCreate317 + ", isCreate316=" + isCreate316 + ", isExample="
-				+ isExample + ", isClose=" + isClose + ", version=" + version + ", dateTime=" + dateTime
-				+ ", updateTime=" + updateTime + ", securityUser=" + securityUser + "]";
+	public String getPatch() {
+		return patch;
+	}
+
+	public void setPatch(String patch) {
+		this.patch = patch;
 	}
 
 }
