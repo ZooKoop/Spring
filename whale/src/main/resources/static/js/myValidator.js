@@ -1,15 +1,8 @@
 $(function(){
 	/* ---------------------------查--------------------------- */
 	/* work */
-	var work_tables = tables_init('#my_work',language,work_columns,hideone_columnDefs,work_ajax);
+	var work_tables = tables_init('#my_work',language,work_columns,work_columnDefs,work_ajax);
 	work_tables.draw( false ); //页面操作保留在当前页
-//	条件查询
-	$("#find_ticketNumber").on("keyup",function(data, callback, settings){
-		tables_init('#my_work',language,work_columns,hideone_columnDefs,work_find_ajax);
-	});
-//	$("#find_isClose").on("change",function(data, callback, settings){
-//		tables_init('#my_work',language,work_columns,hideone_columnDefs,work_find_ajax);
-//	});
 	/* work end */
 	var opction_tables = tables_init('#opction_table',language,opction_columns,hideone_columnDefs,opction_ajax);
 	opction_tables.draw( false ); //页面操作保留在当前页
@@ -124,32 +117,34 @@ $(function(){
 /*tables初始化封装 */
 function tables_init(tablesid,language,columns,columnDefs,ajax){
 	return $(tablesid).DataTable({
-		 pagingType : "full_numbers",
+		 PagingType : "full_numbers",
 		 language : language,
 		 destroy : true, // 销毁表格对象
 		 deferRender:true,// 延迟渲染
-		 paging : true,// paging属性必须为true才能实现默认初始值得功能
-		 bSort: true,
-		 bLengthChange: false,   //去掉每页显示多少条数据方法
+		 Paging : true,// paging属性必须为true才能实现默认初始值得功能
+//		 Sort: true,
+		 LengthChange: false,   //去掉每页显示多少条数据方法
 //		 stateSave:true,
-		 AutoWidth : false,// 自动宽度
-		 Filter:true,
-//		 ordering : true, // 排序
-//		 "order": [[ 1, "desc" ]],
-		 // bPaginate : true, //翻页功能
-		 "scrollX": true,
-		 "scrollY": true,
-		 Processing : true, // DataTables载入数据时，是否显示‘进度’提示
-		 serverSide : true, // 是否启动服务器端数据导入
-		 searching : false, // 是否禁用原生搜索(false为禁用,true为使用)
+//		 AutoWidth : true,// 自动宽度
+		 bFilter:true,
+		 ordering : true, // 排序
+		 order: [[ 1, "desc" ]],
+		 searching : true, // 是否禁用原生搜索(false为禁用,true为使用)
+//		 bPaginate : true, //翻页功能
+//		 scrollCollapse: true,
+//       scrollX: true,
+//		 Processing : true, // DataTables载入数据时，是否显示‘进度’提示
+//		 serverSide : true, // 是否启动服务器端数据导入
 		 // renderer: "Bootstrap", //渲染样式：Bootstrap和jquery-ui
 		 // "stripeClasses": ["odd", "even"], //为奇偶行加上样式，兼容不支持CSS伪类的场合
-		 lengthMenu : [ 5, 20, 50, 70, 100 ],
+		 lengthMenu : [ 5,10, 20, 50, 70, 100 ],
 		 columns : columns,
 		 columnDefs: columnDefs,
-		 ajax: ajax
+		 sAjaxSource: "/back/work/queryAll"
+//		 ajax: ajax
 	 });
  };
+ 
 /*tables公用语言设置 */
 var language = {
 	decimal : "",
@@ -186,74 +181,132 @@ var opction_columns = [{
 	}
 }];
 /*------------------work页面参数---------------------- */
-var work_columns = [{
-	data : 'id'
-},{
-	data : 'ticketNumber',
-	// title: "Ticket号",
-	name : 'ticketNumber',
-	render:function(data, type, row, meta){
-		return "#"+ data +"";
-	} 
-},{
-	data : 'description',
-	defaultContent:"",
-	// title: "Ticket描述"
-	 render:function(data, type, row, meta){
-		 return "<div class='text-left' style='width:265px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data+"</div>"
-	 }
-},{
-	data : 'patch',
-	defaultContent:"",
-	title: "E-patch",
-},{
-	data : 'isExample',
-	defaultContent:"",
-	// title: "Example",
-	render:function(data, type, row, meta){
-		if(data>0){
-			return "<p style='margin: 0;'>有</p>";
-		}else{
-			return "<p style='margin: 0;color:red'>无</p>";
-		}			
-	}
-},{
-	data : 'version',
-	defaultContent:"",
-	// title: "版本",
-	render:function(data, type, row, meta){
-		return "<div>"+data+"</div>";
-	}
-},{
-	data : 'dateTime',
-	defaultContent:""
-	// title: "时间",
+var work_columns = [
+	{data : 'id'},
+	{data : 'ticketNumber'},
+	{data : 'description'},
+	{data : 'patch'},
+	{data : 'isExample'},
+	{data : 'version'},
+	{data : 'dateTime'},
+	{data : 'isClose'}
+	];
+var work_columnDefs = [
+	{
+		targets: 0,
+	//	visible: false,// 隐藏第一列
+		data:"id",
+		orderable:false,//不执行排序
+		searchable: false,
+		render:function(data,type,full){
+			return '<input type="checkbox" value="'+data+'" name = "id">'
+		}
+	},{
+		targets: 4,
+		//	visible: false,// 隐藏第一列
+		data:"isExample",
+		render:function(data,type,full){
+			if(data>0){
+				return "<span class='label label-success radius'>有</span>";
+			}else{
+				return "<span class='label label-danger radius'>无</span>";
+			}		
+		}
+	},
+	{
+		targets:7,
+		//	visible: false,// 隐藏第一列
+		data:"isClose",
+		render:function(data,type,full){
+			var html= '';
+			if(data == 1){
+				return html += '<span class="label label-success radius">开</span>';
+			}else{
+				return html += '<span class="label label-default radius">关</span>';
+			}		
+		}
+	},
+	{
+		targets: 8,
+		//	visible: false,// 隐藏第一列
+		data:null,
+		orderable:false,//不执行排序
+		searchable: false,
+		render:function(data,type,full){//data为null拿到的是整行数据
+			var html ='<a href="javascript:void(0);" title="编辑" class="_edit" > <span class="glyphicon glyphicon-edit"></span></a>'
+				html +=' <a href="javascript:void(0);" style="color:#d9534f" class="_del"><span class="glyphicon glyphicon-trash"></span></a>'
+			return html;
+		}
+	},
+];
+//var work_columns = [{
+//	data : 'id'
+//},{
+//	data : 'ticketNumber',
+//	// title: "Ticket号",
+//	name : 'ticketNumber',
 //	render:function(data, type, row, meta){
-//		return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
+//		return "#"+ data +"";
+//	} 
+//},{
+//	data : 'description',
+//	defaultContent:"",
+//	// title: "Ticket描述"
+//	render:function(data, type, row, meta){
+//		return "<div class='text-left' style='width:265px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data+"</div>"
 //	}
-},{
-	data : 'isClose',
-	defaultContent:"",
-	// title: "时间",
-	render:function(data, type, row, meta){
-	 var html= '';
-	 if(data == 1){
-		html += '<div style="color:green">关闭</div>'
-	 }else{
-		html += '<div style="color:red">未关闭</div>'
-	 }
-		return html;
-	}
-},{
-	data : null,
-	// title: "操作",
-	render:function(data, type, row, meta){
-		var html ='<a href="javascript:void(0);" title="编辑" class="_edit btn btn-info" > <span class="glyphicon glyphicon-edit"></span></a>'
-//		html +='<a class="btn btn-danger" onclick="del(&quot;'+ row.id +'&quot;)" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span></a>'
-			html +='<a href="javascript:void(0);" class="_del btn btn-danger"><span class="glyphicon glyphicon-trash"></span></a>'
-		return html;
-	}
-}];
+//},{
+//	data : 'patch',
+//	defaultContent:"",
+//	title: "E-patch",
+//},{
+//	data : 'isExample',
+//	defaultContent:"",
+//	// title: "Example",
+//	render:function(data, type, row, meta){
+//		if(data>0){
+//			return "<p style='margin: 0;'>有</p>";
+//		}else{
+//			return "<p style='margin: 0;color:red'>无</p>";
+//		}			
+//	}
+//},{
+//	data : 'version',
+//	defaultContent:"",
+//	// title: "版本",
+//	render:function(data, type, row, meta){
+//		return "<div>"+data+"</div>";
+//	}
+//},{
+//	data : 'dateTime',
+//	defaultContent:""
+//		// title: "时间",
+////	render:function(data, type, row, meta){
+////		return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
+////	}
+//},{
+//	data : 'isClose',
+//	defaultContent:"",
+//	// title: "时间",
+//	render:function(data, type, row, meta){
+//		var html= '';
+//		if(data == 1){
+//			html += '<div style="color:green">关闭</div>'
+//		}else{
+//			html += '<div style="color:red">未关闭</div>'
+//		}
+//		return html;
+//	}
+//},{
+//	data : null,
+//	// title: "操作",
+//	render:function(data, type, row, meta){
+//		var html ='<a href="javascript:void(0);" title="编辑" class="_edit btn btn-info" > <span class="glyphicon glyphicon-edit"></span></a>'
+////		html +='<a class="btn btn-danger" onclick="del(&quot;'+ row.id +'&quot;)" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span></a>'
+//			html +='<a href="javascript:void(0);" class="_del btn btn-danger"><span class="glyphicon glyphicon-trash"></span></a>'
+//				return html;
+//	}
+//}];
 /*------------------opction_ajax---------------------- */
 var opction_ajax = function (data, callback, settings) {
 	// 封装请求参数
@@ -298,43 +351,29 @@ var opction_ajax = function (data, callback, settings) {
 
 /*------------------work页面参数---------------------- */
 var work_ajax = function (data, callback, settings) {
-	// 封装请求参数
-	var param = {};
-	param.size = data.length;// 页面显示记录条数，在页面显示每页显示多少项的时候
-	// console.log(data.length)
-	// param.start = data.start;//开始的记录序号
-	param.page = (data.start / data.length);// 当前页码
-//	 param.search = data.search.value;//搜索条件
-	if (data.order.length > 0) {
-		// param.order = data.columns[data.order[3].column].data;
-		param.order = data.columns[6].data;
-		param.dir = data.order[0].dir;
-//		console.log(param.order+"----------"+param.dir);
-	} 
-//	console.log(JSON.stringify(data)+"----------");
-	
 	// ajax请求数据
 	$.ajax({
 		type: "GET",
 		url: "/back/work/queryAll",
 		cache: false, // 禁用缓存
-		data: param, // 传入组装的参数
+		data: null, // 传入组装的参数
 		dataType: "json",
 		success: function (result) {
-//			 console.log(JSON.stringify(result));
+			 
 			// setTimeout仅为测试延迟效果
 			setTimeout(function () {
 				// 封装返回数据
-				var returnData = {};
-				returnData.draw = data.draw;// 这里直接自行返回了draw计数器,应该由后台返回
-				returnData.recordsTotal = result.totalElements;// 返回数据全部记录
-				returnData.recordsFiltered = result.totalElements;// 后台不实现过滤功能，每次查询均视作全部结果
-				returnData.data = result.content;// 返回的数据列表
+//				var returnData = {};
+//				returnData.draw = data.draw;// 这里直接自行返回了draw计数器,应该由后台返回
+//				returnData.recordsTotal = result.totalElements;// 返回数据全部记录
+//				returnData.recordsFiltered = result.totalElements;// 后台不实现过滤功能，每次查询均视作全部结果
+//				returnData.data = result.content;// 返回的数据列表
 //				console.log(returnData);
 				// $("tr").css("display","inline-block");
 				// 调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
 				// 此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
-				callback(returnData);
+//				callback(result);
+				console.log(JSON.stringify(result)+"返回的数据");
 			}, 10);
 		}
 	});

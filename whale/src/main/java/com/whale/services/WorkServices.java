@@ -1,11 +1,12 @@
 package com.whale.services;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import com.whale.model.Work;
@@ -15,9 +16,8 @@ public class WorkServices {
 	@Autowired
 	private WorkRepostitory workRepostitory;
 	
-	public Page<Work> queryAll(Integer page,Integer size,String order,Work work) {
-		Sort sort = new Sort(Sort.Direction.DESC,order);
-		PageRequest pageable = PageRequest.of(page, size,sort);
+	public Page<Work> queryAll(Integer page,Integer size,Work work) {
+		PageRequest pageable = PageRequest.of(page, size);
 		Page<Work> workList = workRepostitory.findAll((root,query,CriteriaBuilder) -> {
 			ArrayList<Predicate> arrayList = new ArrayList<>();
 			//取其他表需取两次
@@ -51,5 +51,8 @@ public class WorkServices {
 	}
 	public boolean update(Work work) {
 		return workRepostitory.save(work)!=null ? true:false;
+	}
+	public List<Work> findAll(Work work) {
+		return workRepostitory.findAll();
 	}
 }

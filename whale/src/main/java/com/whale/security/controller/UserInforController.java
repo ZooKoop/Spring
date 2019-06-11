@@ -50,7 +50,6 @@ public class UserInforController {
 	@RequestMapping("/listInfo")
 	@ResponseBody
 	public Page<SecurityUser> listInfo(
-			// @RequestParam(value = "start", defaultValue = "1") Integer start,
 			@RequestParam(value = "page") Integer page,
 			@RequestParam(value = "size", defaultValue = "5") Integer size) {
 		PageRequest pageable = PageRequest.of(page, size);

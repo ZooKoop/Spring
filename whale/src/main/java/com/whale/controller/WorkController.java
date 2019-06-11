@@ -1,22 +1,22 @@
 package com.whale.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.whale.model.Work;
 import com.whale.security.model.SecurityUser;
 import com.whale.security.repository.SecurityUserRepository;
 import com.whale.services.WorkServices;
+
 @Controller
 @RequestMapping("/back/work")
 public class WorkController {
@@ -33,9 +33,12 @@ public class WorkController {
 	
 	@GetMapping("/queryAll")
 	@ResponseBody
-	public Page<Work> queryAll(@RequestParam(value = "page") Integer page,
-			@RequestParam(value = "size", defaultValue = "5") Integer size,
-			@RequestParam(value = "order") String order,
+//	public Page<Work> queryAll(@RequestParam(value = "page") Integer page,
+//			@RequestParam(value = "size", defaultValue = "5") Integer size,
+//			Authentication authentication,
+//			Work work
+//			) {
+	public Map<String, Object> queryAll(
 			Authentication authentication,
 			Work work
 			) {
@@ -43,8 +46,11 @@ public class WorkController {
 		SecurityUser byuserName = securityUserRepository.findByuserName(userName);
 		work.setSecurityUser(byuserName);
 		if (null != byuserName) {
-			Page<Work> queryAll = workServices.queryAll(page,size,order,work);
-			return queryAll;
+//			Page<Work> queryAll = workServices.queryAll(page,size,work);
+			List<Work> queryAll = workServices.findAll(work);
+			HashMap<String, Object> m = new HashMap<>();
+			m.put("data", queryAll);
+			return m;
 		}
 		return null;
 	}

@@ -68,8 +68,8 @@
 								<select id="isClose" name="isClose"
 									class="selectpicker form-control" title="请选择...">
 									<!-- <option value="-1" class="hidden"></option> -->
-									<option value="0">未关闭</option>
-									<option value="1">关闭</option>
+									<option value="0">关</option>
+									<option value="1">开</option>
 								</select>
 							</div>
 						</div>
@@ -105,34 +105,13 @@
 		<div class="col-md-10" style=" padding: 0;overflow: hidden;">
 			<div style = "margin:0" class="panel panel-default">
 				<div class="panel-body">
-					<div class="col-xs-12 col-sm-6 col-md-3">
-	                    <div class="form-group">
-	                        <label for="CustomerName">TicketNumber</label>
-	                        <input id="find_ticketNumber" class="form-control" name="ticketNumber" type="number" value="">
-	                    </div>
-			        </div>
-					<div class="col-xs-12 col-sm-6 col-md-3">
-	                     <div class="form-group">
-							<label for="find_isClose" class="col-sm-2 control-label">IsClose</label>
-							<div class="form-group">
-								<select id="find_isClose" name="isClose"
-									class="selectpicker form-control" title="请选择...">
-									<option value="0">未关闭</option>
-									<option value="1">关闭</option>
-								</select>
-							</div>
-						</div>
-			        </div>
-				</div>
-				<div class="panel-body">
 					<!-- 按钮触发模态框 -->
-					<button class="btn" data-toggle="modal" data-target="#add"
-						style="margin: 3px 0 0 15px;">添加TICKET</button>
+					<a data-toggle="modal" data-target="#add" style="margin:10px;"><span class="glyphicon glyphicon-plus"></span></a>
 					<div class="panel">
 						<table style="width: 100%;" id="my_work" class="table table-hover table-striped">
 							<thead>
 								<tr class="my_tables_tr">
-									<th class="text-center">id</th>
+									<th class="text-center"><input type="checkbox"></th>
 									<th class="text-center">TicketNumber</th>
 									<th class="text-center">TicketDescription</th>
 									<th class="text-center my_tables_tr_group">E-patch</th>
@@ -143,9 +122,11 @@
 									<th class="text-center">Edit</th>
 								</tr>
 							</thead>
+							<tbody></tbody>
 							<tfoot>
 								<tr class="my_tables_tr">
-									<th class="text-center" colspan="2">TicketNumber</th>
+									<th class="text-center"><input type="checkbox"></th>
+									<th class="text-center">TicketNumber</th>
 									<th class="text-center">TicketDescription</th>
 									<th class="text-center my_tables_tr_group">E-patch</th>
 									<th class="text-center">Example</th>
