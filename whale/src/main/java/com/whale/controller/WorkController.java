@@ -89,9 +89,9 @@ public class WorkController {
 	 * 模态框跳转用
 	 * @return
 	 */
-	@RequestMapping("/toUpdate")
+	@RequestMapping("/toAdd")
 	public String toUpdate() {
-		return "/back/work/work_edit";
+		return "/back/work/work_add";
 	}
 	/**
 	 * 获取要编辑的信息回显用

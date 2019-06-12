@@ -1,16 +1,8 @@
 $(function(){
-	//页面上点击此属性，将当前页的列表数据全部选中
-    $('#select_all').on('click', function () {
-        if (this.checked) {
-            $('.checkbox_select').each(function () {
-                this.checked = true;
-            });
-        } else {
-            $('.checkbox_select').each(function () {
-                this.checked = false;
-            });
-        }
-    });
+	/*多选初始化*/
+	$('body').one('shown.bs.modal', function (e) { 
+	    $(this).find('div.modal-content select').selectpicker(); 
+	})
 	/* ---------------------------查--------------------------- */
 	/* work */ 
 	var work_tables = tables_init('#my_work',language,work_columns,work_columnDefs,"/back/work/queryAll");
@@ -21,7 +13,17 @@ $(function(){
 	
 	/* ---------------------------增--------------------------- */
 	/*添加初始化、校验*/
-	validatorAddInit('#add_form',workFields,'#add',work_tables);
+	
+	$('#btn_work_add').on('click',function(){
+//		$('#add').modal({
+//			backdrop: 'static',     // 点击空白不关闭
+//			keyboard: false,        // 按键盘esc也不会关闭
+//			remote: '/back/work/toAdd'
+//		});
+		work_select_ajax('#version,#patch');
+		$('#add').modal('show');
+		validatorAddInit('#add_form',workFields,'#add',work_tables);
+	})
 	validatorAddInit('#opction_form',opctionFields,'#opctionModel',opction_tables);
 	/* --------------------------- 删 -> 删除封装 --------------------------- */
 	/*Work删除\批量*/
@@ -72,27 +74,19 @@ $(function(){
 		
 	});
 	/* ---------------------------改--------------------------- */
-	/*多选初始化*/
-	$('#my_work').one('shown.bs.modal', function (e) { 
-	    $(this).find('div.modal-content select').selectpicker(); 
-	})
 	/*编辑*/
 	$('#my_work tbody').on('click', 'a._edit', function(e) {
 		e.preventDefault();
 		var data = work_tables.row( $(this).parents('tr')).data();
-		$('#work_edit_model').on('shown.bs.modal', function (e) {
-			e.preventDefault();
-			work_select_ajax('#version_edit');
-			work_select_ajax('#patch_edit');
-			work_updateInfo(data.id);
-			work_update(work_tables);
-//			return false;
-		});
-		$('#work_edit_model').modal({
-			 	backdrop: 'static',     // 点击空白不关闭
-			    keyboard: false,        // 按键盘esc也不会关闭
-	            remote: '/back/work/toUpdate'
-	    });
+		work_select_ajax('#version_edit,#patch_edit');
+		work_updateInfo(data.id);
+		work_update(work_tables);
+//		$('#work_edit_model').modal('toggle')
+//		$('#work_edit_model').modal({
+//			 	backdrop: 'static',     // 点击空白不关闭
+//			    keyboard: false,        // 按键盘esc也不会关闭
+//	            remote: '/back/work/toUpdate'
+//	    });
 	});
 });
 /*初始化 . -. -..--------------------------------------------------------------------*/
@@ -125,6 +119,18 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 		 sAjaxSource:ajaxUrl
 //		 ajax: ajax
 	 });
+	//页面上点击此属性，将当前页的列表数据全部选中
+    $('#select_all').on('click', function () {
+        if (this.checked) {
+            $('.checkbox_select').each(function () {
+                this.checked = true;
+            });
+        } else {
+            $('.checkbox_select').each(function () {
+                this.checked = false;
+            });
+        }
+    });
  };
  
 /*tables公用语言设置 */
@@ -231,7 +237,7 @@ var work_updateInfo = function(dataId){
 		dataType: "json",// 预期服务器返回的数据类型
 		data: {"id": dataId},
 		success: function (result) {
-			console.log("----------"+JSON.stringify(result));//打印服务端返回的数据(调试用)，object转键值对字符串
+//			console.log("----------"+JSON.stringify(result));//打印服务端返回的数据(调试用)，object转键值对字符串
 //			layer.alert("1");
             //清空多选（多选为selectpicker插件）
 			$("#work_id").val(result.id);
@@ -240,13 +246,18 @@ var work_updateInfo = function(dataId){
 			$("#description_edit").val(result.description);
 			$("#work_edit_dateTime").val(result.dateTime);
 			$('#isExample_edit').selectpicker('val', result.isExample);//设置选中 
-			$('#patch_edit').selectpicker('val', result.patch.split(','));//设置选中 
-			$('#version_edit').selectpicker('val',result.version.split(','));//split分割转为数组
+			if(result.patch != null && result.patch != ""){
+				$('#patch_edit').selectpicker('val', result.patch.split(','));//设置选中 
+			}
+			if(result.version != null && result.version != ""){
+				$('#version_edit').selectpicker('val',result.version.split(','));//split分割转为数组
+			}
 			$('#isClose_edit').selectpicker('val',result.isClose);
-			$('#patch_edit,#isExample_edit,#version_edit,#isClose_edit').selectpicker('refresh');
+//			$('#patch_edit,#isExample_edit,#version_edit,#isClose_edit').selectpicker('refresh');
+			$('#work_edit_model').modal('show');
 		},
 		error : function() {
-			alert("异常！");
+			alert("请求失败！");
 		}
 	});
 }
@@ -278,21 +289,21 @@ var work_select_ajax = function(selectId){
 		type: "get",
 		url: "/back/workopction/getAll",
 		dataType: "json",// 预期服务器返回的数据类型
-		async:false,
-		data:null,
+//		async:false,
+//		data:null,
 		success: function (data) {
 			var $ID = $(selectId);
 			var oldnumber = new Array();
 			$ID.find("option").remove();//先删除在添加
 			data.forEach(function(e){
-				$('<option  value="'+e.opctionCode + '" >' + e.opctionCode + '</option>').appendTo($ID);
-//				$ID.append('<option  value="'+e.opctionCode + '" >' + e.opctionCode + '</option>');
+//				$('<option value="'+e.opctionCode + '" >' + e.opctionCode + '</option>').appendTo($ID);
+				$ID.append('<option value="'+e.opctionCode + '" >' + e.opctionCode + '</option>');
 		    	oldnumber.push(e.opctionCode);
 		    });
-//			console.log(JSON.stringify(data) +"---------------");
+			console.log(JSON.stringify(data) +"---------------");
 //			$ID.selectpicker('val', oldnumber);//默认选中第二个参数需是数组
-//			$ID.selectpicker('refresh');
-//	       　　	$ID.selectpicker('render'); 
+			$ID.selectpicker('refresh');
+//	       $ID.selectpicker('render'); 
 		}
 	})
 }
@@ -355,8 +366,6 @@ var opction_columns = [{
 
 /*公共校验初始化、添加时校验*/
 function validatorAddInit(formID,fields,modelID,vartables){
-	work_select_ajax('#version');
-	work_select_ajax('#patch');
 	$(modelID).on('hide.bs.modal', function () {//模态框关闭触发
 		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
 		$('.selectpicker').selectpicker('val',['noneSelectedText']);//清空

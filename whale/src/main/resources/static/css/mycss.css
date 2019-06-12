@@ -122,3 +122,6 @@ li{
 .rotate_{
 	transform:rotate(90deg);
 }
+.bootstrap-select .dropdown-menu{
+	min-width: 100% !important;
+}
