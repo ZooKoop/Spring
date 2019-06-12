@@ -106,12 +106,16 @@
 			<div style = "margin:0" class="panel panel-default">
 				<div class="panel-body">
 					<!-- 按钮触发模态框 -->
-					<a data-toggle="modal" data-target="#add" style="margin:10px;"><span class="glyphicon glyphicon-plus"></span></a>
-					<div class="panel">
+					<div class="btn-group" style="margin:5px;">
+						<a class="btn btn-default" data-toggle="modal" data-target="#add"><span class="glyphicon glyphicon-plus"></span></a>
+						<a class="btn btn-default" id="delete_all"><span class="glyphicon glyphicon-trash"></span></a>
+						<a class="btn btn-default" id="delete_all"><span class="glyphicon glyphicon-edit"></span></a>
+					</div>
+					<div class="panel"style="margin:0px;">
 						<table style="width: 100%;" id="my_work" class="table table-hover table-striped">
 							<thead>
 								<tr class="my_tables_tr">
-									<th class="text-center"><input type="checkbox"></th>
+									<th class="text-center"><input name="select_all" id="select_all" type="checkbox"></th>
 									<th class="text-center">TicketNumber</th>
 									<th class="text-center">TicketDescription</th>
 									<th class="text-center my_tables_tr_group">E-patch</th>
@@ -125,7 +129,7 @@
 							<tbody></tbody>
 							<tfoot>
 								<tr class="my_tables_tr">
-									<th class="text-center"><input type="checkbox"></th>
+									<th class="text-center"></th>
 									<th class="text-center">TicketNumber</th>
 									<th class="text-center">TicketDescription</th>
 									<th class="text-center my_tables_tr_group">E-patch</th>

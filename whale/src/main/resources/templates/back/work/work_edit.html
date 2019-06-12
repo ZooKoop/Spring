@@ -32,7 +32,7 @@
 						<div class="form-group">
 							<label for="version_edit" class="col-sm-2 control-label">Ticket版本</label>
 							<div class="col-sm-10">
-								<select id="version_edit" name="version"
+								<select id="version_edit" name="version" data-style="btn-info"
 									class="selectpicker form-control" multiple title="选择版本(可多选)"
 									data-live-search="true">
 								</select>
@@ -41,8 +41,8 @@
 						<div class="form-group">
 							<label for="patch_edit" class="col-sm-2 control-label">发包</label>
 							<div class="col-sm-10">
-								<select id="patch_edit" name="patch"
-									class="selectpicker form-control" multiple title="选择版本(可多选)"
+								<select id="patch_edit" name="patch" multiple 
+									class="selectpicker form-control" title="选择版本(可多选)" data-style="btn-info"
 									data-live-search="true">
 								</select>
 							</div>
@@ -63,8 +63,8 @@
 								<select id="isClose_edit" name="isClose"
 									class="selectpicker form-control" title="请选择..." >
 									<!-- <option value="-1" class="hidden"></option> -->
-									<option value="0">未关闭</option>
-									<option value="1">关闭</option>
+									<option value="0">关</option>
+									<option value="1">开</option>
 								</select>
 							</div>
 						</div>

@@ -47,7 +47,7 @@ public class WorkController {
 		work.setSecurityUser(byuserName);
 		if (null != byuserName) {
 //			Page<Work> queryAll = workServices.queryAll(page,size,work);
-			List<Work> queryAll = workServices.findAll(work);
+			List<Work> queryAll = workServices.quAll(work);
 			HashMap<String, Object> m = new HashMap<>();
 			m.put("data", queryAll);
 			return m;

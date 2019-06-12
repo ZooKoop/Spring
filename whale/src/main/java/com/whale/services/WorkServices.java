@@ -55,4 +55,8 @@ public class WorkServices {
 	public List<Work> findAll(Work work) {
 		return workRepostitory.findAll();
 	}
+	public List<Work> quAll(Work work) {
+		// TODO Auto-generated method stub
+		return workRepostitory.quAll(work.getSecurityUser().getUserName());
+	}
 }
