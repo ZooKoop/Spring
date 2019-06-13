@@ -4,6 +4,9 @@ $(function(){
 	$('body').one('shown.bs.modal', function (e) { 
 	    $(this).find('div.modal-content select').selectpicker(); 
 	})
+	$("#work_down").click(function(){
+	    $(".buttons-excel").trigger('click');
+	})
 	/*全选、反选选初始化*/
 	select_all('#select_all','.checkbox_select');
 	/* ---------------------------查--------------------------- */
@@ -106,6 +109,18 @@ $(function(){
 /*tables初始化封装 */
 function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 	return $(tablesid).DataTable({
+//		 dom: 'Bfrtip',
+		 buttons: [
+		        {
+		            extend: 'excel',//使用 excel扩展
+		            text: '导出本页',// 显示文字
+		            exportOptions: {
+		                //自定义导出选项
+		                //如：可自定义导出那些列，那些行
+		                //TODO...
+		            }
+		        }
+		    ],
 		 PagingType : "full_numbers",
 		 language : language,
 		 destroy : true, // 销毁表格对象
@@ -113,13 +128,11 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 		 Paging : true,// paging属性必须为true才能实现默认初始值得功能
 		 LengthChange: false,   //去掉每页显示多少条数据方法
 		 stateSave:true,
-		 bAutoWidth : false,// 自动宽度
+//		 bAutoWidth : false,// 自动宽度
 		 bFilter:true,
 		 order: [[ 6, "desc" ]],
 		 searching : true, // 是否禁用原生搜索(false为禁用,true为使用)
-//		 bPaginate : true, //翻页功能
-		 scrollCollapse: true,
-		 "scrollX": true,
+		 scrollX: true,
 		 Processing : true, // DataTables载入数据时，是否显示‘进度’提示
 		 lengthMenu : [ 5,10, 20, 50, 70, 100 ],
 		 columns : columns,
