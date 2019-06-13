@@ -30,6 +30,11 @@ public class Work implements Serializable {
 	@Column(name = "TICKET_NUMBER")
 	private String ticketNumber;
 	/*
+	 * 标题
+	 */
+	@Column(name = "TICKET_TITEL")
+	private String ticketTitel;
+	/*
 	 * 描述
 	 */
 	@Column(name = "DESCRIPTION")
@@ -44,12 +49,17 @@ public class Work implements Serializable {
 	 * 是否有测试用例0/1
 	 */
 	@Column(name = "ISEXAMPLE")
-	private Integer isExample;
+	private String isExample;
+	/*
+	 * 是否有脚本0/1
+	 */
+	@Column(name = "ISSQL")
+	private String isSql;
 	/*
 	 * 是否关闭0/1
 	 */
 	@Column(name = "ISCLOSE")
-	private Integer isClose;
+	private String isClose;
 
 	/*
 	 * 包含哪些版本
@@ -126,11 +136,11 @@ public class Work implements Serializable {
 	}
 
 
-	public Integer getIsExample() {
+	public String getIsExample() {
 		return isExample;
 	}
 
-	public void setIsExample(Integer isExample) {
+	public void setIsExample(String isExample) {
 		this.isExample = isExample;
 	}
 
@@ -142,11 +152,11 @@ public class Work implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public Integer getIsClose() {
+	public String getIsClose() {
 		return isClose;
 	}
 
-	public void setIsClose(Integer isClose) {
+	public void setIsClose(String isClose) {
 		this.isClose = isClose;
 	}
 
@@ -156,6 +166,22 @@ public class Work implements Serializable {
 
 	public void setPatch(String patch) {
 		this.patch = patch;
+	}
+
+	public String getIsSql() {
+		return isSql;
+	}
+
+	public void setIsSql(String isSql) {
+		this.isSql = isSql;
+	}
+
+	public String getTicketTitel() {
+		return ticketTitel;
+	}
+
+	public void setTicketTitel(String ticketTitel) {
+		this.ticketTitel = ticketTitel;
 	}
 
 }

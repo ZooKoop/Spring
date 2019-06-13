@@ -1,5 +1,6 @@
 package com.whale.controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,19 @@ public class WorkController {
 		}
 		return hashMap;
 	}
+	@PostMapping("/delete_All")
+	@ResponseBody
+	public String delete_All(String ids) {
+		try {
+			String[] split = ids.split(",");
+			List<String> asList = Arrays.asList(split);
+			workServices.delete_All(asList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "400";
+		}
+		return "200";
+	}
 	@GetMapping("/delete")
 	@ResponseBody
 	public String del(String id) {
@@ -90,8 +104,12 @@ public class WorkController {
 	 * @return
 	 */
 	@RequestMapping("/toAdd")
-	public String toUpdate() {
+	public String toAdd() {
 		return "/back/work/work_add";
+	}
+	@RequestMapping("/toUpdate")
+	public String toUpdate() {
+		return "/back/work/work_edit";
 	}
 	/**
 	 * 获取要编辑的信息回显用

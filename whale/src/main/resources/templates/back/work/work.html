@@ -5,24 +5,30 @@
 <head th:replace="common/common_pub :: common_header('')">
 </head>
 <body>
-
-	<!-- 添加模态框（Modal） -->
-	<div class="modal fade" id="add" role="dialog">
-		<div class="modal-dialog" role="document">
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="add" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
 			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">添加TICKET</h4>
+				</div>
 				<form id="add_form" th:action="@{/back/work/add}"
 					class="form-horizontal" role="form">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-hidden="true">&times;</button>
-						<h4 class="modal-title" id="myModalLabel">添加TICKET</h4>
-					</div>
 					<div class="modal-body">
 						<div class="form-group">
 							<label for="ticketNumber" class="col-sm-2 control-label">Ticket</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="ticketNumber"
 									name="ticketNumber" placeholder="请输入Ticket号">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="ticketTitel" class="col-sm-2 control-label">标题</label>
+							<div class="col-sm-10">
+								<input id="ticketTitel" class="form-control" name="ticketTitel" placeholder="请输入标题">
 							</div>
 						</div>
 						<div class="form-group">
@@ -61,6 +67,16 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label for="isSql" class="col-sm-2 control-label">脚本</label>
+							<div class="col-sm-10">
+								<select id="isSql" name="isSql"
+									class="selectpicker form-control" title="请选择...">
+									<option value="0">无</option>
+									<option value="1">有</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
 							<label for="isClose" class="col-sm-2 control-label">是否关闭</label>
 							<div class="col-sm-10">
 								<select id="isClose" name="isClose"
@@ -79,91 +95,14 @@
 					</div>
 				</form>
 			</div>
+			<!-- /.modal-content -->
 		</div>
+		<!-- /.modal -->
 	</div>
 	<!-- 修改模态框 -->
 	<div class="modal fade" role="dialog" id="work_edit_model">
 		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">编辑TICKET</h4>
-				</div>
-				<div class="modal-body">
-					<form id="edit_workForm" class="form-horizontal" role="form">
-						<div class="form-group">
-							<label for="ticketNumber_edit" class="col-sm-2 control-label">Ticket</label>
-							<div class="col-sm-10">
-								<input type="hidden" class="form-control" id="work_id" name="id">
-								<input type="hidden" class="form-control"
-									id="work_edit_dateTime" name="dateTime"> <input
-									type="number" class="form-control" id="ticketNumber_edit"
-									name="ticketNumber" placeholder="请输入Ticket号">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="description_edit" class="col-sm-2 control-label">描述</label>
-							<div class="col-sm-10">
-								<textarea id="description_edit" class="form-control"
-									name="description" placeholder="Ticket描述。。。"></textarea>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="version_edit" class="col-sm-2 control-label">Ticket版本</label>
-							<div class="col-sm-10">
-								<select id="version_edit" name="version" data-style="btn-info"
-									class="selectpicker form-control" multiple title="选择版本(可多选)"
-									data-live-search="true">
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="patch_edit" class="col-sm-2 control-label">发包</label>
-							<div class="col-sm-10">
-								<select id="patch_edit" name="patch" multiple
-									class="selectpicker form-control" title="选择版本(可多选)"
-									data-style="btn-info" data-live-search="true">
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="isExample_edit" class="col-sm-2 control-label">测试用例</label>
-							<div class="col-sm-10">
-								<select id="isExample_edit" name="isExample"
-									class="selectpicker form-control" title="是否有测试用例">
-									<option value="0">无</option>
-									<option value="1">有</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="isClose_edit" class="col-sm-2 control-label">是否关闭</label>
-							<div class="col-sm-10">
-								<select id="isClose_edit" name="isClose"
-									class="selectpicker form-control" title="请选择...">
-									<!-- <option value="-1" class="hidden"></option> -->
-									<option value="0">关</option>
-									<option value="1">开</option>
-								</select>
-							</div>
-						</div>
-						<!-- <div class="form-group">
-							<label for="dateTime" class="col-sm-2 control-label">日期</label>
-							<div class="col-sm-10">
-								<input type="date" id="dateTime" name="dateTime"
-									class="form-control">
-							</div>
-						</div> -->
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">关闭
-					</button>
-					<button type="button" class="btn btn-primary work_edit_btn">
-						提交</button>
-				</div>
-			</div>
+			<div class="modal-content"></div>
 		</div>
 	</div>
 	<div th:replace="common/common_pub :: navbar_"></div>
@@ -174,26 +113,34 @@
 				<div class="panel-body">
 					<!-- 按钮触发模态框 -->
 					<div class="btn-group" style="margin: 5px;">
-						<a class="btn btn-default" id="btn_work_add"><span
-							class="glyphicon glyphicon-plus"></span></a> <a
-							class="btn btn-default" id="delete_all"><span
-							class="glyphicon glyphicon-trash"></span></a> <a
-							class="btn btn-default" id="delete_all"><span
-							class="glyphicon glyphicon-edit"></span></a>
+						<button class="btn btn-default" data-toggle="modal"
+							data-target="#add">
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
+						<button class="btn btn-default" id="work_del_m">
+							<span class="glyphicon glyphicon-trash"></span>
+						</button>
+						<button class="btn btn-default" id="work_edit_m">
+							<span class="glyphicon glyphicon-edit"></span>
+						</button>
+						<button class="btn btn-default" id="work_down">
+							<span class="glyphicon glyphicon-download-alt"></span>
+						</button>
 					</div>
 					<div class="panel" style="margin: 0px;">
-						<table style="width: 100%;" id="my_work"
+						<table id="my_work"
 							class="table table-hover table-striped">
 							<thead>
 								<tr class="my_tables_tr">
 									<th class="text-center"><input name="select_all"
 										id="select_all" type="checkbox"></th>
 									<th class="text-center">TicketNumber</th>
-									<th class="text-center">TicketDescription</th>
-									<th class="text-center my_tables_tr_group">E-patch</th>
+									<th class="text-center">TickeTitle</th>
+									<th class="text-center">E-patch</th>
 									<th class="text-center">Example</th>
 									<th class="text-center">Version</th>
 									<th class="text-center">CreateTime</th>
+									<th class="text-center">IsSql</th>
 									<th class="text-center">IsClosed</th>
 									<th class="text-center">Edit</th>
 								</tr>
@@ -203,11 +150,12 @@
 								<tr class="my_tables_tr">
 									<th class="text-center"></th>
 									<th class="text-center">TicketNumber</th>
-									<th class="text-center">TicketDescription</th>
-									<th class="text-center my_tables_tr_group">E-patch</th>
+									<th class="text-center">TickeTitle</th>
+									<th class="text-center">E-patch</th>
 									<th class="text-center">Example</th>
 									<th class="text-center">Version</th>
 									<th class="text-center">CreateTime</th>
+									<th class="text-center">IsSql</th>
 									<th class="text-center">IsClosed</th>
 									<th class="text-center">Edit</th>
 								</tr>

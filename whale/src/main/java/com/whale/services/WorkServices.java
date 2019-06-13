@@ -59,4 +59,11 @@ public class WorkServices {
 		// TODO Auto-generated method stub
 		return workRepostitory.quAll(work.getSecurityUser().getUserName());
 	}
+	public void delete_All( List<String> ids) {
+		for (String string : ids) {
+			System.out.println(string);
+		}
+		List<Work> wList = workRepostitory.findAllById(ids);
+		workRepostitory.deleteInBatch(wList);
+	}
 }

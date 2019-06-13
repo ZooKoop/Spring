@@ -1,8 +1,11 @@
 $(function(){
+	/* ---------------------------插件初始化--------------------------- */
 	/*多选初始化*/
 	$('body').one('shown.bs.modal', function (e) { 
 	    $(this).find('div.modal-content select').selectpicker(); 
 	})
+	/*全选、反选选初始化*/
+	select_all('#select_all','.checkbox_select');
 	/* ---------------------------查--------------------------- */
 	/* work */ 
 	var work_tables = tables_init('#my_work',language,work_columns,work_columnDefs,"/back/work/queryAll");
@@ -14,32 +17,43 @@ $(function(){
 	/* ---------------------------增--------------------------- */
 	/*添加初始化、校验*/
 	
-	$('#btn_work_add').on('click',function(){
+//	$('#btn_work_add').on('click',function(){
 //		$('#add').modal({
 //			backdrop: 'static',     // 点击空白不关闭
 //			keyboard: false,        // 按键盘esc也不会关闭
 //			remote: '/back/work/toAdd'
 //		});
 		work_select_ajax('#version,#patch');
-		$('#add').modal('show');
 		validatorAddInit('#add_form',workFields,'#add',work_tables);
-	})
+//	})
 	validatorAddInit('#opction_form',opctionFields,'#opctionModel',opction_tables);
 	/* --------------------------- 删 -> 删除封装 --------------------------- */
 	/*Work删除\批量*/
-	$('#delete_all').on('click', function(e) {
+	$('#work_del_m').on('click', function(e) {
 		e.preventDefault();
-		var data = work_tables.row( $(this).parents('tr')).data();
-		//当没有定义skin时使用的是全局样式
-		layer.confirm('确定删除  ['+data.ticketNumber+'] Ticket吗？', {
-			title:false,
-			btnAlign: 'c',
-			area: ['20rem', '12rem'],
-			btn: ['删除', '关闭'] //按钮
-		}, function(index){
-			del('/back/work/delete',data.id,work_tables)
-//	                            layer.close(index);
+//		var idList = [];
+		var idList = "";
+		$(".checkbox_select").each(function(){
+			if($(this).is(':checked')){
+//				idList.push($(this).val());// 选中的值
+				idList+=$(this).val()+",";// 选中的值
+			}//获得值
 		});
+		if(idList!=null && idList.length>0){
+			layer.confirm('确定删除 吗？', {
+				title:false,
+				btnAlign: 'c',
+				area: ['20rem', '12rem'],
+				btn: ['删除', '关闭'] //按钮
+			}, function(index){
+				console.log(idList)
+				del_all('/back/work/delete_All',idList,work_tables);
+			});
+		}else{
+			layer.alert("请选择至少一条数据！")
+		}
+		//当没有定义skin时使用的是全局样式
+
 		
 	});
 	$('#my_work tbody').on('click', 'a._del', function(e) {
@@ -78,15 +92,14 @@ $(function(){
 	$('#my_work tbody').on('click', 'a._edit', function(e) {
 		e.preventDefault();
 		var data = work_tables.row( $(this).parents('tr')).data();
-		work_select_ajax('#version_edit,#patch_edit');
-		work_updateInfo(data.id);
+		$('#work_edit_model').modal({
+			 	backdrop: 'static',     // 点击空白不关闭
+			    keyboard: false,        // 按键盘esc也不会关闭
+	            remote: '/back/work/toUpdate'
+	    });
+		//查完值，直接在ajax里赋值
+		work_select_ajax('#version_edit,#patch_edit',data.id);
 		work_update(work_tables);
-//		$('#work_edit_model').modal('toggle')
-//		$('#work_edit_model').modal({
-//			 	backdrop: 'static',     // 点击空白不关闭
-//			    keyboard: false,        // 按键盘esc也不会关闭
-//	            remote: '/back/work/toUpdate'
-//	    });
 	});
 });
 /*初始化 . -. -..--------------------------------------------------------------------*/
@@ -98,25 +111,21 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 		 destroy : true, // 销毁表格对象
 		 deferRender:true,// 延迟渲染
 		 Paging : true,// paging属性必须为true才能实现默认初始值得功能
-//		 Sort: true,
 		 LengthChange: false,   //去掉每页显示多少条数据方法
-//		 stateSave:true,
-//		 AutoWidth : true,// 自动宽度
+		 stateSave:true,
+		 bAutoWidth : false,// 自动宽度
 		 bFilter:true,
-//		 ordering : true, // 排序
 		 order: [[ 6, "desc" ]],
 		 searching : true, // 是否禁用原生搜索(false为禁用,true为使用)
 //		 bPaginate : true, //翻页功能
 		 scrollCollapse: true,
-		 scrollX: true,
+		 "scrollX": true,
 		 Processing : true, // DataTables载入数据时，是否显示‘进度’提示
-//		 serverSide : true, // 是否启动服务器端数据导入
-		 // renderer: "Bootstrap", //渲染样式：Bootstrap和jquery-ui
-		 // "stripeClasses": ["odd", "even"], //为奇偶行加上样式，兼容不支持CSS伪类的场合
 		 lengthMenu : [ 5,10, 20, 50, 70, 100 ],
 		 columns : columns,
 		 columnDefs: columnDefs,
 		 sAjaxSource:ajaxUrl
+//		 serverSide : true, // 是否启动服务器端数据导入
 //		 ajax: ajax
 	 });
 	//页面上点击此属性，将当前页的列表数据全部选中
@@ -158,11 +167,12 @@ var language = {
 var work_columns = [
 	{data : 'id'},
 	{data : 'ticketNumber'},
-	{data : 'description'},
+	{data : 'ticketTitel'},
 	{data : 'patch'},
 	{data : 'isExample'},
 	{data : 'version'},
 	{data : 'dateTime'},
+	{data : 'isSql'},
 	{data : 'isClose'}
 	];
 var work_columnDefs = [
@@ -173,13 +183,13 @@ var work_columnDefs = [
 		orderable:false,//不执行排序
 		searchable: false,
 		render:function(data,type,full){
-			return '<input type="checkbox" class="checkbox_select" value="'+data+'" name = "id">'
+			return '<input type="checkbox" class="checkbox_select" value="'+data+'">'
 		}
 	},
 	{
 		targets: 2,
 		//	visible: false,// 隐藏第一列
-		data:"description",
+		data:"ticketTitel",
 		orderable:false,//不执行排序
 		searchable: false,
 		render:function(data,type,full){
@@ -194,12 +204,25 @@ var work_columnDefs = [
 			if(data>0){
 				return "<span class='label label-success radius'>有</span>";
 			}else{
-				return "<span class='label label-danger radius'>无</span>";
+				return "<span class='label label-default radius'>无</span>";
 			}		
 		}
 	},
 	{
 		targets:7,
+		//	visible: false,// 隐藏第一列
+		data:"isSql",
+		render:function(data,type,full){
+			var html= '';
+			if(data == 1){
+				return html += '<span class="label label-success radius">有</span>';
+			}else{
+				return html += '<span class="label label-default radius">无</span>';
+			}		
+		}
+	},
+	{
+		targets:8,
 		//	visible: false,// 隐藏第一列
 		data:"isClose",
 		render:function(data,type,full){
@@ -212,86 +235,51 @@ var work_columnDefs = [
 		}
 	},
 	{
-		targets: 8,
+		targets: 9,
 		//	visible: false,// 隐藏第一列
 		data:null,
 		orderable:false,//不执行排序<button type="button" class="btn btn-default">
 		searchable: false,
 		render:function(data,type,full){//data为null拿到的是整行数据
 			var html ='<div class="btn-group"><a class="_edit btn btn-default" href="javascript:void(0);" title="编辑" class="_edit" > <span class="glyphicon glyphicon-edit"></span></a>'
-				html +=' <a class=" _del btn btn-default" href="javascript:void(0);" style="color:#d9534f" class="_del"><span class="glyphicon glyphicon-trash"></span></a></div>'
+				html +=' <a class=" _del btn btn-default" href="javascript:void(0);"><span class="glyphicon glyphicon-trash"></span></a></div>'
 			return html;
 		}
 	},
 ];
-
-
-
-
-/*------------------work页面查询---------------------- */
-/*获取当前信息*/
-var work_updateInfo = function(dataId){
-	$.ajax({
-		type: "GET",
-		url: "/back/work/toUpdateInfo",
-		dataType: "json",// 预期服务器返回的数据类型
-		data: {"id": dataId},
-		success: function (result) {
-//			console.log("----------"+JSON.stringify(result));//打印服务端返回的数据(调试用)，object转键值对字符串
-//			layer.alert("1");
-            //清空多选（多选为selectpicker插件）
-			$("#work_id").val(result.id);
-			$("#work_security_user_id").val(result.securityUser.id);
-			$("#ticketNumber_edit").val(result.ticketNumber);
-			$("#description_edit").val(result.description);
-			$("#work_edit_dateTime").val(result.dateTime);
-			$('#isExample_edit').selectpicker('val', result.isExample);//设置选中 
-			if(result.patch != null && result.patch != ""){
-				$('#patch_edit').selectpicker('val', result.patch.split(','));//设置选中 
-			}
-			if(result.version != null && result.version != ""){
-				$('#version_edit').selectpicker('val',result.version.split(','));//split分割转为数组
-			}
-			$('#isClose_edit').selectpicker('val',result.isClose);
-//			$('#patch_edit,#isExample_edit,#version_edit,#isClose_edit').selectpicker('refresh');
-			$('#work_edit_model').modal('show');
-		},
-		error : function() {
-			alert("请求失败！");
-		}
-	});
-}
-
 /*修改方法*/
 var work_update = function(datables){
-	$('.work_edit_btn').unbind('click').bind('click',function (event) {
-		event.stopPropagation();
-		$.ajax({
-			type: "post",
-			url: "/back/work/Update",
-			dataType: "json",// 预期服务器返回的数据类型
-			data: $("#edit_workForm").serialize(),
-			success: function (result) {
-				if(result=200){
-					$('#work_edit_model').modal('hide');
-					layer.alert('修改成功', {icon: 1});
-					datables.ajax.reload(null,false);//刷新添加完的数据
-				}else{
-					layer.alert('修改失败', {icon: 2});
+	$('#work_edit_model').on('shown.bs.modal', function () {
+		$('.work_edit_btn').off().on('click',function () {
+			$.ajax({
+				type: "post",
+				url: "/back/work/Update",
+				dataType: "json",// 预期服务器返回的数据类型
+				data: $("#edit_workForm").serialize(),
+				success: function (result) {
+					if(result=200){
+						$('#work_edit_model').modal('hide');
+						layer.msg('修改成功', {icon: 1});
+						datables.ajax.reload(null,false);//刷新添加完的数据
+					}else{
+						layer.alert('修改失败', {icon: 2});
+					}
 				}
-			}
-		})
-	});
+			})
+		});
+	})
 }
 /* --------------------------- work2个多选框回显  --------------------------- */
-var work_select_ajax = function(selectId){
+var work_select_ajax = function(selectId,infoID){
 	$.ajax({
 		type: "get",
+//		cache:false,
 		url: "/back/workopction/getAll",
 		dataType: "json",// 预期服务器返回的数据类型
-//		async:false,
-//		data:null,
 		success: function (data) {
+			if(infoID!=null && infoID!= ""){
+				work_updateInfo(infoID);//回显
+			}
 			var $ID = $(selectId);
 			var oldnumber = new Array();
 			$ID.find("option").remove();//先删除在添加
@@ -304,8 +292,44 @@ var work_select_ajax = function(selectId){
 //			$ID.selectpicker('val', oldnumber);//默认选中第二个参数需是数组
 			$ID.selectpicker('refresh');
 //	       $ID.selectpicker('render'); 
+			
 		}
 	})
+}
+/*获取当前信息*/
+var work_updateInfo = function(dataId){
+	$.ajax({
+		type: "GET",
+//		cache:false,
+		url: "/back/work/toUpdateInfo",
+		dataType: "json",// 预期服务器返回的数据类型
+		data: {"id": dataId},
+		success: function (result) {
+//			console.log("----------"+JSON.stringify(result));//打印服务端返回的数据(调试用)，object转键值对字符串
+//			layer.alert("1");
+            //清空多选（多选为selectpicker插件）
+			$("#work_id").val(result.id);
+			$("#work_security_user_id").val(result.securityUser.id);
+			$("#ticketNumber_edit").val(result.ticketNumber);
+			$("#ticketTitel_edit").val(result.ticketTitel);
+			$("#description_edit").val(result.description);
+			$("#work_edit_dateTime").val(result.dateTime);
+			$('#isExample_edit').selectpicker('val', result.isExample);//设置选中 
+			if(result.patch != null && result.patch != ""){
+				$('#patch_edit').selectpicker('val', result.patch.split(','));//设置选中 
+			}
+			if(result.version != null && result.version != ""){
+				$('#version_edit').selectpicker('val',result.version.split(','));//split分割转为数组
+			}
+			$('#isSql_edit').selectpicker('val',result.isSql);
+			$('#isClose_edit').selectpicker('val',result.isClose);
+			$('#patch_edit,#isExample_edit,#version_edit,#isClose_edit,#isSql_edit').selectpicker('refresh');
+			$('#work_edit_model').modal('show');
+		},
+		error : function() {
+			alert("请求失败！");
+		}
+	});
 }
 /*------------------opction_ajax---------------------- */
 var opction_ajax = function (data, callback, settings) {
@@ -366,12 +390,7 @@ var opction_columns = [{
 
 /*公共校验初始化、添加时校验*/
 function validatorAddInit(formID,fields,modelID,vartables){
-	$(modelID).on('hide.bs.modal', function () {//模态框关闭触发
-		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
-		$('.selectpicker').selectpicker('val',['noneSelectedText']);//清空
-		$('.selectpicker').selectpicker('refresh');//刷新
-		$(formID).data('bootstrapValidator').resetForm(true);//清除当前验证的关键之处加，true清空值不太好使文字域的清除不了
-	});
+
 	$(formID).bootstrapValidator({
 		message : '验证失败',//好像从来没出现过
 		feedbacklcons : feedbacklcons,
@@ -384,44 +403,50 @@ function validatorAddInit(formID,fields,modelID,vartables){
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
         // Use Ajax to submit form data
-        $.ajax({
-			type: "post",
-			url: $form.attr('action'),
-			dataType: "json",// 预期服务器返回的数据类型
-			data:$form.serialize(),
-			success: function (result) {
-				// console.log("----------"+result.msg);//打印服务端返回的数据(调试用)
-				if(result.success=="200"){
-					layer.msg("添加成功！");
-					vartables.ajax.reload(null,false);//刷新添加完的数据
-					$(modelID).modal('hide');//模态框关闭背景隐藏
-				}
-				if(result.fail=="400"){
-					layer.alert("添加失败！");
-				}
-				if(result.repeat =="222"){
-					layer.alert("已存在，重新添加！");
-				}
-			},
-			error : function() {
-				alert("异常！");
+//        $.ajax({
+//			type: "post",
+//			url: $form.attr('action'),
+//			dataType: "json",// 预期服务器返回的数据类型
+//			data:$form.serialize(),
+//			success: function (result) {
+//				// console.log("----------"+result.msg);//打印服务端返回的数据(调试用)
+//				if(result.success=="200"){
+//					layer.msg("添加成功！");
+//					vartables.ajax.reload(null,false);//刷新添加完的数据
+//					$(modelID).modal('hide');//模态框关闭背景隐藏
+//				}
+//				if(result.fail=="400"){
+//					layer.alert("添加失败！");
+//				}
+//				if(result.repeat =="222"){
+//					layer.alert("已存在，重新添加！");
+//				}
+//			},
+//			error : function() {
+//				alert("异常！");
+//			}
+//		});
+        $.post($form.attr('action'), $form.serialize(), function(result) {
+        	if(result.success=="200"){
+				layer.msg("添加成功！");
+				vartables.ajax.reload(null,false);//刷新添加完的数据
+				$(modelID).modal('hide');//模态框关闭背景隐藏
 			}
-		});
-
-/*        $.post($form.attr('action'), $form.serialize(), function(result) {
-        	if(result.success=='200'){
-        		layer.alert("添加成功！");
-        	}
-        	vartables.ajax.reload();//刷新添加完的数据
-        	$(modelID).on('hide.bs.modal', function () {//模态框关闭触发
-        		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
-        		$('.selectpicker').selectpicker('val',['noneSelectedText']);//清空
-        		$('.selectpicker').selectpicker('refresh');//刷新
-        		$(formID).data('bootstrapValidator').resetForm(true);//清除当前验证的关键之处加，true清空值不太好使文字域的清除不了
-        	});
-//         console.log(JSON.stringify(result));
-        }, 'json');*/
+			if(result.fail=="400"){
+				layer.alert("添加失败！");
+			}
+			if(result.repeat =="222"){
+				layer.alert("已存在，重新添加！");
+			}
+        }, 'json');
+        
     });
+	$(modelID).on('hide.bs.modal', function () {//模态框关闭触发
+		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
+		$('.selectpicker').selectpicker('val',['noneSelectedText']);//清空
+		$('.selectpicker').selectpicker('refresh');//刷新
+		$(formID).data('bootstrapValidator').resetForm(true);//清除当前验证的关键之处加，true清空值不太好使文字域的清除不了
+	});
 };
 /*修改校验*/
 /*function updateValid(formID,opctionFields,addBtnID,url,modelID,vartables){
@@ -532,7 +557,42 @@ function del(urls,id,tabName){
 		 }
 	 })
  }
+function del_all(urls,id,tabName){
+	$.ajax({
+		url: urls,
+		type: 'post',
+		dataType: 'json',
+		data: {"ids": id},
+//		data: {"ids": JSON.stringify(id)},
+		success: function(data) {
+			console.log(data)
+			if(data==200){
+				//如果后台删除成功，则刷新表格，并提示用户删除成功
+//				 layer.msg("删除成功！",{icon:1,time:2000});
+				layer.msg("删除成功！");
+				//保留分页信息
+				tabName.ajax.reload(null,false);//需初始化完毕，加table.draw( false ); 
+				//不保留分页信息
+//				 tabName.ajax.reload();
+			}
+		}
+	})
+}
 
+/* --------------------------- 全选、反选封装 --------------------------- */
+var select_all = function(headId,bodyClass){
+	$(headId).on('click', function () {
+		if(this.checked){
+			$(bodyClass).each(function(){
+				this.checked = true;	
+			})
+		}else{
+			$(bodyClass).each(function(){
+				this.checked = false;	
+			})
+		}
+	})
+}
 /* --------------------------- 默认隐藏第一段 --------------------------- */
 var hideone_columnDefs = [{
 	// 隐藏第一列
