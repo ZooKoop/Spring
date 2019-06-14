@@ -15,17 +15,17 @@ li{
     left: 50%;
     top: 50%;
 }
-/*鎸夐挳鏍峰紡*/
+/*閹稿鎸抽弽宄扮础*/
 .my_btn{
 	background-color: #55575f;
 	color: #fff;
 }
-/*tables鏍峰紡*/
+/*tables閺嶅嘲绱�*/
 .my_tables_tr{
 	color: #ddd;
 	background: #55575f;
 }
-/* 鐧婚檰鏍峰紡*/
+/* 閻у妾伴弽宄扮础*/
 .my_login{
 	box-sizing: border-box;
 }
@@ -35,7 +35,7 @@ li{
     padding: 10px;
     box-shadow: 1px 1px 5px #888888;
 }
-/* 鍥剧墖鎺掔増 */
+/* 閸ュ墽澧栭幒鎺斿 */
 #table_images>tbody .my_td_img{
 	display: block;
 	color: #fff;
@@ -69,7 +69,7 @@ li{
 .panel-body {
     padding: 0;
 }
-/* 瀵艰埅鏍峰紡 */
+/* 鐎佃壈鍩呴弽宄扮础 */
 #my_nav{
 	background: #222;
 	margin: 0;
@@ -96,8 +96,8 @@ li{
 /* #my_nav > li.active,
 #my_nav > li.active > a:hover,
 #my_nav > li > a:hover,
-.nav > li > a:hover,浜岀骇鐩綍涓媋鍒掕繃鏍峰紡
-.nav-pills > li.active > a:focus,涓�绾х洰褰曚笅a娣诲姞active浠ュ悗鏍峰紡
+.nav > li > a:hover,娴滃瞼楠囬惄顔肩秿娑撳獘閸掓帟绻冮弽宄扮础
+.nav-pills > li.active > a:focus,娑擄拷缁狙呮窗瑜版洑绗卆濞ｈ濮瀉ctive娴犮儱鎮楅弽宄扮础
 .nav > li.active > a:focus{ */
 
 #my_nav > li.active,
@@ -125,3 +125,8 @@ li{
 .bootstrap-select .dropdown-menu{
 	min-width: 100% !important;
 }
+tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }

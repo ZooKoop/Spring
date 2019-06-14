@@ -5,7 +5,7 @@
 </head>
 <body>
 	<!-- 模态框（Modal） -->
-	<div class="modal fade" id="add" tabindex="-1" role="dialog"
+	<div class="modal fade" id="add" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"
 		aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -33,7 +33,7 @@
 						<div class="form-group">
 							<label for="description" class="col-sm-2 control-label">描述</label>
 							<div class="col-sm-10">
-								<textarea id="description" class="form-control"
+								<textarea style="height:100px" id="description" class="form-control"
 									name="description" placeholder="Ticket描述。。。"></textarea>
 							</div>
 						</div>
@@ -127,36 +127,36 @@
 						</button>
 					</div>
 					<div class="panel" style="margin: 0px;">
-						<table id="my_work"
-							class="table table-hover table-striped">
+						<table id="my_work" cellspacing="0" width="100%"
+							class="table table-hover table-striped display">
 							<thead>
 								<tr class="my_tables_tr">
 									<th class="text-center"><input name="select_all"
 										id="select_all" type="checkbox"></th>
-									<th class="text-center">TicketNumber</th>
-									<th class="text-center">TickeTitle</th>
-									<th class="text-center">E-patch</th>
-									<th class="text-center">Example</th>
-									<th class="text-center">Version</th>
-									<th class="text-center">CreateTime</th>
-									<th class="text-center">IsSql</th>
-									<th class="text-center">IsClosed</th>
-									<th class="text-center">Edit</th>
+									<th class="text-center">Ticket</th>
+									<th class="text-center">标题</th>
+									<th class="text-center">发包版本</th>
+									<th class="text-center">Ticket版本</th>
+									<th class="text-center">创建时间</th>
+									<th class="text-center">用例</th>
+									<th class="text-center">脚本</th>
+									<th class="text-center">关闭</th>
+									<th class="text-center">编辑</th>
 								</tr>
 							</thead>
 							<tbody></tbody>
 							<tfoot>
 								<tr class="my_tables_tr">
 									<th class="text-center"></th>
-									<th class="text-center">TicketNumber</th>
-									<th class="text-center">TickeTitle</th>
-									<th class="text-center">E-patch</th>
-									<th class="text-center">Example</th>
-									<th class="text-center">Version</th>
-									<th class="text-center">CreateTime</th>
-									<th class="text-center">IsSql</th>
-									<th class="text-center">IsClosed</th>
-									<th class="text-center">Edit</th>
+									<th class="text-center">Ticket</th>
+									<th class="text-center">标题</th>
+									<th class="text-center">发包版本</th>
+									<th class="text-center">Ticket版本</th>
+									<th class="text-center">创建时间</th>
+									<th class="text-center">用例</th>
+									<th class="text-center">脚本</th>
+									<th class="text-center">关闭</th>
+									<th class="text-center">编辑</th>
 								</tr>
 							</tfoot>
 						</table>

@@ -9,25 +9,35 @@ $(function(){
 	})
 	/*全选、反选选初始化*/
 	select_all('#select_all','.checkbox_select');
+	
+	
+	
 	/* ---------------------------查--------------------------- */
+	// Setup - add a text input to each footer cell
+//	$('#my_work thead th').each( function () {
+//		var title = $('#my_work thead th').eq( $(this).index() ).text();
+//		$(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+//	} );
 	/* work */ 
 	var work_tables = tables_init('#my_work',language,work_columns,work_columnDefs,"/back/work/queryAll");
 	work_tables.draw( false ); //页面操作保留在当前页
+	 // Apply the search
+	work_tables.columns().eq( 0 ).each( function ( colIdx ) {
+        $( 'input', work_tables.column( colIdx ).footer() ).on( 'keyup change', function () {
+        	work_tables
+                .column( colIdx )
+                .search( this.value )
+                .draw();
+        } );
+    } );
 	/* work end */
 	var opction_tables = tables_init('#opction_table',language,opction_columns,hideone_columnDefs,opction_ajax);
 	opction_tables.draw( false ); //页面操作保留在当前页
 	
 	/* ---------------------------增--------------------------- */
 	/*添加初始化、校验*/
-	
-//	$('#btn_work_add').on('click',function(){
-//		$('#add').modal({
-//			backdrop: 'static',     // 点击空白不关闭
-//			keyboard: false,        // 按键盘esc也不会关闭
-//			remote: '/back/work/toAdd'
-//		});
-		work_select_ajax('#version,#patch');
-		validatorAddInit('#add_form',workFields,'#add',work_tables);
+	work_select_ajax('#version,#patch');
+	validatorAddInit('#add_form',workFields,'#add',work_tables);
 //	})
 	validatorAddInit('#opction_form',opctionFields,'#opctionModel',opction_tables);
 	/* --------------------------- 删 -> 删除封装 --------------------------- */
@@ -127,10 +137,8 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 		 deferRender:true,// 延迟渲染
 		 Paging : true,// paging属性必须为true才能实现默认初始值得功能
 		 LengthChange: false,   //去掉每页显示多少条数据方法
-		 stateSave:true,
-//		 bAutoWidth : false,// 自动宽度
-		 bFilter:true,
-		 order: [[ 6, "desc" ]],
+		 ordering:true,//是否允许Datatables开启排序
+		 order: [[ 5, "desc" ],[ 8, "desc" ]],//表格在初始化的时候的排序
 		 searching : true, // 是否禁用原生搜索(false为禁用,true为使用)
 		 scrollX: true,
 		 Processing : true, // DataTables载入数据时，是否显示‘进度’提示
@@ -138,6 +146,8 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 		 columns : columns,
 		 columnDefs: columnDefs,
 		 sAjaxSource:ajaxUrl
+//		 stateSave:true,
+//		 bAutoWidth : true,// 自动宽度
 //		 serverSide : true, // 是否启动服务器端数据导入
 //		 ajax: ajax
 	 });
@@ -182,9 +192,9 @@ var work_columns = [
 	{data : 'ticketNumber'},
 	{data : 'ticketTitel'},
 	{data : 'patch'},
-	{data : 'isExample'},
 	{data : 'version'},
-	{data : 'dateTime'},
+	{data : 'dateTime',sWidth:"118px"},
+	{data : 'isExample'},
 	{data : 'isSql'},
 	{data : 'isClose'}
 	];
@@ -210,7 +220,20 @@ var work_columnDefs = [
 		}
 	},
 	{
-		targets: 4,
+		targets: 3,
+		//	visible: false,// 隐藏第一列
+		data:"patch",
+//		orderable:false,//不执行排序
+//		searchable: false,
+		render:function(data,type,full){
+			if(data == null || data == ""){
+				return "<span class='label label-default radius'>无</span>"
+			}
+			return "<span class='label label-info radius'>"+data+"</span>"
+		}
+	},
+	{
+		targets: 6,
 		//	visible: false,// 隐藏第一列
 		data:"isExample",
 		render:function(data,type,full){
@@ -251,6 +274,7 @@ var work_columnDefs = [
 		targets: 9,
 		//	visible: false,// 隐藏第一列
 		data:null,
+		sWidth:"90px",
 		orderable:false,//不执行排序<button type="button" class="btn btn-default">
 		searchable: false,
 		render:function(data,type,full){//data为null拿到的是整行数据

@@ -2,11 +2,15 @@ package com.whale.model;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
@@ -32,11 +36,17 @@ public class Work implements Serializable {
 	/*
 	 * 标题
 	 */
+	@org.hibernate.annotations.Type(type = "org.hibernate.type.TextType")
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "TICKET_TITEL")
 	private String ticketTitel;
 	/*
 	 * 描述
 	 */
+	@org.hibernate.annotations.Type(type = "org.hibernate.type.TextType")
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "DESCRIPTION")
 	private String description;
 
