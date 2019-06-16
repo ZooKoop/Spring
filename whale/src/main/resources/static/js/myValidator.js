@@ -9,9 +9,6 @@ $(function(){
 	})
 	/*全选、反选选初始化*/
 	select_all('#select_all','.checkbox_select');
-	
-	
-	
 	/* ---------------------------查--------------------------- */
 	// Setup - add a text input to each footer cell
 //	$('#my_work thead th').each( function () {
@@ -37,7 +34,9 @@ $(function(){
 	/* ---------------------------增--------------------------- */
 	/*添加初始化、校验*/
 	work_select_ajax('#version,#patch');
+	sqlUpload("#sqlurl");
 	validatorAddInit('#add_form',workFields,'#add',work_tables);
+	
 //	})
 	validatorAddInit('#opction_form',opctionFields,'#opctionModel',opction_tables);
 	/* --------------------------- 删 -> 删除封装 --------------------------- */
@@ -463,19 +462,20 @@ function validatorAddInit(formID,fields,modelID,vartables){
 //				alert("异常！");
 //			}
 //		});
-        $.post($form.attr('action'), $form.serialize(), function(result) {
-        	if(result.success=="200"){
-				layer.msg("添加成功！");
-				vartables.ajax.reload(null,false);//刷新添加完的数据
-				$(modelID).modal('hide');//模态框关闭背景隐藏
-			}
-			if(result.fail=="400"){
-				layer.alert("添加失败！");
-			}
-			if(result.repeat =="222"){
-				layer.alert("已存在，重新添加！");
-			}
-        }, 'json');
+        sqlUpload("#sqlurl");
+//        $.post($form.attr('action'), $form.serialize(), function(result) {
+//        	if(result.success=="200"){
+//				layer.msg("添加成功！");
+//				vartables.ajax.reload(null,false);//刷新添加完的数据
+//				$(modelID).modal('hide');//模态框关闭背景隐藏
+//			}
+//			if(result.fail=="400"){
+//				layer.alert("添加失败！");
+//			}
+//			if(result.repeat =="222"){
+//				layer.alert("已存在，重新添加！");
+//			}
+//        }, 'json');
         
     });
 	$(modelID).on('hide.bs.modal', function () {//模态框关闭触发
@@ -630,6 +630,50 @@ var select_all = function(headId,bodyClass){
 		}
 	})
 }
+/* --------------------------- 上传 --------------------------- */
+var sqlUpload =function(inputId){
+	$(inputId).fileinput({
+		uploadUrl : '/back/work/sqlUpload', // you must set a valid URL here else you will get an error
+		allowedFileExtensions : ['jpg'],
+		overwriteInitial : false,//是否显示预览
+		dropZoneEnabled:false,//是否显示拖拽
+		//showCaption: true,//是否显示标题
+		showUpload: false, //是否显示上传按钮
+		//showClose:true,//是否显示关闭按钮
+		//autoReplace:false,//是否自动替换当前图片，设置为true时，再次选择文件，
+		showPreview : true, //展前预览
+		language : 'zh',
+		maxFileSize : 1024 * 10,
+		browseClass : "btn btn-primary",//按钮样式
+		maxFileCount : 5,//允许同时上传的最大文件数
+		previewFileIcon : "<i class='glyphicon glyphicon-king'></i>",
+		msgFilesTooMany : "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+		enctype : 'multipart/form-data',
+		//allowedFileTypes: ['image', 'video', 'flash'],
+		slugCallback : function(filename) {
+			return filename.replace('(', '_').replace(']', '_');
+		},
+		uploadExtraData: function(){//报length错误时，看报错是否为这个方法。返回值一个空的json
+            return {};
+        }
+	}).on("filebatchselected", function(event, files) {//自动提交
+		$(this).fileinput("upload");
+		//alert(0)
+	}).on("fileuploaded", function(event, data) {
+		//alert(data.response.status)
+		console.log(data.response.status)
+		if (data.response.status) {
+			layer.msg(data.response.msg + " - 上传成功！", {
+				time : 3000
+			});
+		} else {
+			layer.msg(data.response.error + "上传失败！", {
+				icon : 2,
+				time : 2000
+			});
+		}
+	});
+} 
 /* --------------------------- 默认隐藏第一段 --------------------------- */
 var hideone_columnDefs = [{
 	// 隐藏第一列

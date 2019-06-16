@@ -66,6 +66,11 @@ public class Work implements Serializable {
 	@Column(name = "ISSQL")
 	private String isSql;
 	/*
+	 * 脚本上传地址
+	 */
+	@Column(name = "SQL_URLS")
+	private String sqlUrls;
+	/*
 	 * 是否关闭0/1
 	 */
 	@Column(name = "ISCLOSE")
@@ -192,6 +197,14 @@ public class Work implements Serializable {
 
 	public void setTicketTitel(String ticketTitel) {
 		this.ticketTitel = ticketTitel;
+	}
+
+	public String getSqlUrls() {
+		return sqlUrls;
+	}
+
+	public void setSqlUrls(String sqlUrls) {
+		this.sqlUrls = sqlUrls;
 	}
 
 }
