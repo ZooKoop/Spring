@@ -10,23 +10,9 @@ $(function(){
 	/*全选、反选选初始化*/
 	select_all('#select_all','.checkbox_select');
 	/* ---------------------------查--------------------------- */
-	// Setup - add a text input to each footer cell
-//	$('#my_work thead th').each( function () {
-//		var title = $('#my_work thead th').eq( $(this).index() ).text();
-//		$(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-//	} );
 	/* work */ 
 	var work_tables = tables_init('#my_work',language,work_columns,work_columnDefs,"/back/work/queryAll");
 	work_tables.draw( false ); //页面操作保留在当前页
-	 // Apply the search
-	work_tables.columns().eq( 0 ).each( function ( colIdx ) {
-        $( 'input', work_tables.column( colIdx ).footer() ).on( 'keyup change', function () {
-        	work_tables
-                .column( colIdx )
-                .search( this.value )
-                .draw();
-        } );
-    } );
 	/* work end */
 	var opction_tables = tables_init('#opction_table',language,opction_columns,hideone_columnDefs,opction_ajax);
 	opction_tables.draw( false ); //页面操作保留在当前页
@@ -34,8 +20,8 @@ $(function(){
 	/* ---------------------------增--------------------------- */
 	/*添加初始化、校验*/
 	work_select_ajax('#version,#patch');
-	sqlUpload("#sqlurl");
-	validatorAddInit('#add_form',workFields,'#add',work_tables);
+	fileUpload("#sqlurl","/back/work/sqlUpload",['jpg','png']);//初始化不提交
+	validatorAddInit('#add_form',workFields,'#add',work_tables,"#sqlurl");
 	
 //	})
 	validatorAddInit('#opction_form',opctionFields,'#opctionModel',opction_tables);
@@ -118,7 +104,7 @@ $(function(){
 /*tables初始化封装 */
 function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 	return $(tablesid).DataTable({
-//		 dom: 'Bfrtip',
+		 dom: 'Bfrtip',
 		 buttons: [
 		        {
 		            extend: 'excel',//使用 excel扩展
@@ -135,12 +121,12 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 		 destroy : true, // 销毁表格对象
 		 deferRender:true,// 延迟渲染
 		 Paging : true,// paging属性必须为true才能实现默认初始值得功能
-		 LengthChange: false,   //去掉每页显示多少条数据方法
 		 ordering:true,//是否允许Datatables开启排序
 		 order: [[ 5, "desc" ],[ 8, "desc" ]],//表格在初始化的时候的排序
 		 searching : true, // 是否禁用原生搜索(false为禁用,true为使用)
 		 scrollX: true,
 		 Processing : true, // DataTables载入数据时，是否显示‘进度’提示
+//		 bLengthChange: false,   //去掉每页显示多少条数据方法
 		 lengthMenu : [ 5,10, 20, 50, 70, 100 ],
 		 columns : columns,
 		 columnDefs: columnDefs,
@@ -194,7 +180,7 @@ var work_columns = [
 	{data : 'version'},
 	{data : 'dateTime',sWidth:"118px"},
 	{data : 'isExample'},
-	{data : 'isSql'},
+	{data : 'sqlUrls'},
 	{data : 'isClose'}
 	];
 var work_columnDefs = [
@@ -213,17 +199,14 @@ var work_columnDefs = [
 		//	visible: false,// 隐藏第一列
 		data:"ticketTitel",
 		orderable:false,//不执行排序
-		searchable: false,
+//		searchable: false,
 		render:function(data,type,full){
 			return "<div class='text-left' style='width:265px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data+"</div>"
 		}
 	},
 	{
 		targets: 3,
-		//	visible: false,// 隐藏第一列
 		data:"patch",
-//		orderable:false,//不执行排序
-//		searchable: false,
 		render:function(data,type,full){
 			if(data == null || data == ""){
 				return "<span class='label label-default radius'>无</span>"
@@ -246,10 +229,10 @@ var work_columnDefs = [
 	{
 		targets:7,
 		//	visible: false,// 隐藏第一列
-		data:"isSql",
+		data:"sqlUrls",
 		render:function(data,type,full){
 			var html= '';
-			if(data == 1){
+			if(data !=null && data.length != 0){
 				return html += '<span class="label label-success radius">有</span>';
 			}else{
 				return html += '<span class="label label-default radius">无</span>';
@@ -425,7 +408,7 @@ var opction_columns = [{
 /* ================= 校验 ... - .- .-. - ================= */
 
 /*公共校验初始化、添加时校验*/
-function validatorAddInit(formID,fields,modelID,vartables){
+function validatorAddInit(formID,fields,modelID,vartables,inputId){
 
 	$(formID).bootstrapValidator({
 		message : '验证失败',//好像从来没出现过
@@ -462,21 +445,22 @@ function validatorAddInit(formID,fields,modelID,vartables){
 //				alert("异常！");
 //			}
 //		});
-        sqlUpload("#sqlurl");
-//        $.post($form.attr('action'), $form.serialize(), function(result) {
-//        	if(result.success=="200"){
-//				layer.msg("添加成功！");
-//				vartables.ajax.reload(null,false);//刷新添加完的数据
-//				$(modelID).modal('hide');//模态框关闭背景隐藏
-//			}
-//			if(result.fail=="400"){
-//				layer.alert("添加失败！");
-//			}
-//			if(result.repeat =="222"){
-//				layer.alert("已存在，重新添加！");
-//			}
-//        }, 'json');
-        
+        //提交上传
+        $(inputId).fileinput('upload').fileinput('reset');
+        $.post($form.attr('action'), $form.serialize(), function(result) {
+        	if(result.success=="200"){
+				layer.msg("添加成功！");
+				vartables.ajax.reload(null,false);//刷新添加完的数据
+				$(modelID).modal('hide');//模态框关闭背景隐藏
+			}
+			if(result.fail=="400"){
+				layer.alert("添加失败！");
+			}
+			if(result.repeat =="222"){
+				layer.alert("已存在，重新添加！");
+			}
+        }, 'json');
+
     });
 	$(modelID).on('hide.bs.modal', function () {//模态框关闭触发
 		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
@@ -631,25 +615,27 @@ var select_all = function(headId,bodyClass){
 	})
 }
 /* --------------------------- 上传 --------------------------- */
-var sqlUpload =function(inputId){
+var fileUpload =function(inputId,url,type){
 	$(inputId).fileinput({
-		uploadUrl : '/back/work/sqlUpload', // you must set a valid URL here else you will get an error
-		allowedFileExtensions : ['jpg'],
+		uploadUrl : url, // you must set a valid URL here else you will get an error
+		allowedFileExtensions : type,
+		uploadAsync:false,//是否为异步上传,默认true
 		overwriteInitial : false,//是否显示预览
 		dropZoneEnabled:false,//是否显示拖拽
-		//showCaption: true,//是否显示标题
 		showUpload: false, //是否显示上传按钮
+//		showCaption: true,//是否显示标题
 		//showClose:true,//是否显示关闭按钮
 		//autoReplace:false,//是否自动替换当前图片，设置为true时，再次选择文件，
 		showPreview : true, //展前预览
 		language : 'zh',
-		maxFileSize : 1024 * 10,
+		maxFileSize : 1024 * 100,//1024KB
 		browseClass : "btn btn-primary",//按钮样式
 		maxFileCount : 5,//允许同时上传的最大文件数
 		previewFileIcon : "<i class='glyphicon glyphicon-king'></i>",
 		msgFilesTooMany : "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
 		enctype : 'multipart/form-data',
 		//allowedFileTypes: ['image', 'video', 'flash'],
+		overwriteInitial: false,//不覆盖已存在的图片  
 		slugCallback : function(filename) {
 			return filename.replace('(', '_').replace(']', '_');
 		},
@@ -657,20 +643,29 @@ var sqlUpload =function(inputId){
             return {};
         }
 	}).on("filebatchselected", function(event, files) {//自动提交
-		$(this).fileinput("upload");
-		//alert(0)
-	}).on("fileuploaded", function(event, data) {
-		//alert(data.response.status)
-		console.log(data.response.status)
+//		$(this).fileinput("upload");
+	}).on("filebatchuploadsuccess", function(event, data) {
+		//filebatchuploadsuccess同步上传成功结果处理  filebatchuploaderror
 		if (data.response.status) {
-			layer.msg(data.response.msg + " - 上传成功！", {
-				time : 3000
-			});
+//			layer.msg(data.response.msg + " - 上传成功！", {
+//				time : 3000
+//			});
 		} else {
-			layer.msg(data.response.error + "上传失败！", {
-				icon : 2,
-				time : 2000
-			});
+			if(data.response.namesame!="" && data.response.namesame!=null){
+				layer.alert(data.response.namesame + "文件名称重复，上传失败！", {
+					icon : 2
+//					time : 2000
+				});
+
+				$(inputId).outerHTML;
+				return false;
+			}
+			if(data.response.error!="" && data.response.error!=null){
+				layer.alert(data.response.error + "上传失败！", {
+					icon : 2
+//					time : 2000
+				});
+			}
 		}
 	});
 } 

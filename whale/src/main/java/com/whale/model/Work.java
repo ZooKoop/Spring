@@ -61,11 +61,6 @@ public class Work implements Serializable {
 	@Column(name = "ISEXAMPLE")
 	private String isExample;
 	/*
-	 * 是否有脚本0/1
-	 */
-	@Column(name = "ISSQL")
-	private String isSql;
-	/*
 	 * 脚本上传地址
 	 */
 	@Column(name = "SQL_URLS")
@@ -181,14 +176,6 @@ public class Work implements Serializable {
 
 	public void setPatch(String patch) {
 		this.patch = patch;
-	}
-
-	public String getIsSql() {
-		return isSql;
-	}
-
-	public void setIsSql(String isSql) {
-		this.isSql = isSql;
 	}
 
 	public String getTicketTitel() {
