@@ -9,8 +9,8 @@ $(function(){
 	})
 	/*全选、反选选初始化*/
 	select_all('#select_all','.checkbox_select');
-	/*上传初始化*/
-	fileUpload("#sqlurl","/back/work/sqlUpload",['jpg','png']);//初始化提交
+	/*上传初始化 - 修改方法里的初始化也需要同步*/
+	fileUpload("#sqlurl","/back/work/sqlUpload",['sql','txt','text']);//初始化提交
 	/* ---------------------------查--------------------------- */
 	/* work */ 
 	var work_tables = tables_init('#my_work',language,work_columns,work_columnDefs,"/back/work/queryAll");
@@ -270,7 +270,7 @@ var work_columnDefs = [
 /*修改方法*/
 var work_update = function(datables){
 	$('#work_edit_model').on('shown.bs.modal', function () {
-		fileUpload("#sqlurl_edit","/back/work/sqlUpload",['jpg','png']);//初始化提交
+		fileUpload("#sqlurl_edit","/back/work/sqlUpload",['sql','text','txt']);//初始化提交
 		$('.work_edit_btn').off().on('click',function () {
 			$.ajax({
 				type: "post",
@@ -639,9 +639,9 @@ var fileUpload =function(inputId,url,type){
 		//allowedFileTypes: ['image', 'video', 'flash'],
 		overwriteInitial: false,//不覆盖已存在的图片 
 		// 这个配置就是解决办法了,初始化时限制图片大小
-        previewSettings: {
+//        previewSettings: {
 //            image: {width: "100px", height: "100px"},
-        },
+//        },
 		slugCallback : function(filename) {
 			return filename.replace('(', '_').replace(']', '_');
 		},
@@ -649,10 +649,11 @@ var fileUpload =function(inputId,url,type){
             return {};
         }
 	}).on("filebatchselected", function(event, files) {//自动提交
-		$(this).fileinput("upload").fileinput("clear");
+		$(this).fileinput("upload");
 	}).on("filebatchuploadsuccess", function(event, data) {
 		//filebatchuploadsuccess同步上传成功结果处理  filebatchuploaderror
 		if (data.response.status) {
+			$(inputId).fileinput("clear");
 //			layer.msg(data.response.msg + " - 上传成功！", {
 //				time : 3000
 //			});
@@ -671,6 +672,9 @@ var fileUpload =function(inputId,url,type){
 				layer.alert(data.response.error + "上传失败！", {
 					icon : 2
 //					time : 2000
+				},function(index){
+					layer.close(index);
+					$(inputId).fileinput("clear");
 				});
 			}
 			
