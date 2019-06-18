@@ -9,6 +9,8 @@ $(function(){
 	})
 	/*全选、反选选初始化*/
 	select_all('#select_all','.checkbox_select');
+	/*上传初始化*/
+	fileUpload("#sqlurl","/back/work/sqlUpload",['jpg','png']);//初始化提交
 	/* ---------------------------查--------------------------- */
 	/* work */ 
 	var work_tables = tables_init('#my_work',language,work_columns,work_columnDefs,"/back/work/queryAll");
@@ -20,7 +22,6 @@ $(function(){
 	/* ---------------------------增--------------------------- */
 	/*添加初始化、校验*/
 	work_select_ajax('#version,#patch');
-	fileUpload("#sqlurl","/back/work/sqlUpload",['jpg','png']);//初始化不提交
 	validatorAddInit('#add_form',workFields,'#add',work_tables,"#sqlurl");
 	
 //	})
@@ -269,6 +270,7 @@ var work_columnDefs = [
 /*修改方法*/
 var work_update = function(datables){
 	$('#work_edit_model').on('shown.bs.modal', function () {
+		fileUpload("#sqlurl_edit","/back/work/sqlUpload",['jpg','png']);//初始化提交
 		$('.work_edit_btn').off().on('click',function () {
 			$.ajax({
 				type: "post",
@@ -307,7 +309,7 @@ var work_select_ajax = function(selectId,infoID){
 				$ID.append('<option value="'+e.opctionCode + '" >' + e.opctionCode + '</option>');
 		    	oldnumber.push(e.opctionCode);
 		    });
-			console.log(JSON.stringify(data) +"---------------");
+//			console.log(JSON.stringify(data) +"---------------");
 //			$ID.selectpicker('val', oldnumber);//默认选中第二个参数需是数组
 			$ID.selectpicker('refresh');
 //	       $ID.selectpicker('render'); 
@@ -446,7 +448,7 @@ function validatorAddInit(formID,fields,modelID,vartables,inputId){
 //			}
 //		});
         //提交上传
-        $(inputId).fileinput('upload').fileinput('reset');
+//        $(inputId).fileinput('upload');
         $.post($form.attr('action'), $form.serialize(), function(result) {
         	if(result.success=="200"){
 				layer.msg("添加成功！");
@@ -460,7 +462,7 @@ function validatorAddInit(formID,fields,modelID,vartables,inputId){
 				layer.alert("已存在，重新添加！");
 			}
         }, 'json');
-
+        
     });
 	$(modelID).on('hide.bs.modal', function () {//模态框关闭触发
 		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
@@ -635,7 +637,11 @@ var fileUpload =function(inputId,url,type){
 		msgFilesTooMany : "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
 		enctype : 'multipart/form-data',
 		//allowedFileTypes: ['image', 'video', 'flash'],
-		overwriteInitial: false,//不覆盖已存在的图片  
+		overwriteInitial: false,//不覆盖已存在的图片 
+		// 这个配置就是解决办法了,初始化时限制图片大小
+        previewSettings: {
+//            image: {width: "100px", height: "100px"},
+        },
 		slugCallback : function(filename) {
 			return filename.replace('(', '_').replace(']', '_');
 		},
@@ -643,7 +649,7 @@ var fileUpload =function(inputId,url,type){
             return {};
         }
 	}).on("filebatchselected", function(event, files) {//自动提交
-//		$(this).fileinput("upload");
+		$(this).fileinput("upload").fileinput("clear");
 	}).on("filebatchuploadsuccess", function(event, data) {
 		//filebatchuploadsuccess同步上传成功结果处理  filebatchuploaderror
 		if (data.response.status) {
@@ -655,10 +661,11 @@ var fileUpload =function(inputId,url,type){
 				layer.alert(data.response.namesame + "文件名称重复，上传失败！", {
 					icon : 2
 //					time : 2000
+				},function(index){
+					layer.close(index);
+					$(inputId).fileinput("clear");
 				});
-
-				$(inputId).outerHTML;
-				return false;
+				
 			}
 			if(data.response.error!="" && data.response.error!=null){
 				layer.alert(data.response.error + "上传失败！", {
@@ -666,8 +673,14 @@ var fileUpload =function(inputId,url,type){
 //					time : 2000
 				});
 			}
+			
 		}
-	});
+		
+	}).on('filebatchuploaderror', function(event, data, msg) {
+		console.log(JSON.stringify(data)+"1-------")
+	     
+
+	});;
 } 
 /* --------------------------- 默认隐藏第一段 --------------------------- */
 var hideone_columnDefs = [{

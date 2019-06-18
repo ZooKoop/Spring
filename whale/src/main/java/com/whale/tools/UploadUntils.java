@@ -28,8 +28,6 @@ public class UploadUntils {
 		try {
 			for (MultipartFile m : fileMultipartFiles) {
 				sqlName = m.getOriginalFilename();
-				// 拼出work sqlurl字段值
-				sqlUrl_tem += file+ "/" + sqlName + ",";
 				for (String s : nameList) {
 					if (s.equals(sqlName)) {
 						json.put("status", false);
@@ -37,6 +35,8 @@ public class UploadUntils {
 						return json;
 					}
 				}
+				// 拼出work sqlurl字段值
+				sqlUrl_tem += file+ "/" + sqlName + ",";
 				m.transferTo(new File(file + "/" + sqlName));
 			}
 			json.put("status", true);

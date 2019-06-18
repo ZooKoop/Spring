@@ -67,8 +67,10 @@ public class WorkController {
 	@ResponseBody
 	public Map<String, Object> sqlUpload(MultipartFile[] sqlurl_font) {
 		Map<String, Object> upload = UploadUntils.upload(fileSrc + "/sql", sqlurl_font);
-		sqlUrl_tem = "";
-		sqlUrl_tem = upload.get("sqlUrl_tem").toString();
+		System.out.println(upload.get("namesame"));
+		if(null != upload.get("sqlUrl_tem")) {//判断的时候不能toString，在get的时候就已经报空指针了
+			sqlUrl_tem = upload.get("sqlUrl_tem").toString();
+		}
 		return upload;
 	}
 
@@ -98,14 +100,16 @@ public class WorkController {
 	public String delete_All(String ids) {
 		try {
 			List<String> idList = Arrays.asList(ids.split(","));
-			for (String id : idList) {
+			for (String id : idList) {//放置报空指针异常
 				Work findById = workServices.findById(id);
-				String[] sqlUrlLit = findById.getSqlUrls().split(",");
-				for (String f : sqlUrlLit) {
-					File file = new File(f);
-					if (file.exists() && file.isFile()) {
-						File absoluteFile = file.getAbsoluteFile();
-						absoluteFile.delete();
+				if (!StringUtils.isBlank(findById.getSqlUrls())) {
+					String[] sqlUrlLit = findById.getSqlUrls().split(",");
+					for (String f : sqlUrlLit) {
+						File file = new File(f);
+						if (file.exists() && file.isFile()) {
+							File absoluteFile = file.getAbsoluteFile();
+							absoluteFile.delete();
+						}
 					}
 				}
 				workServices.delete_All(idList);
