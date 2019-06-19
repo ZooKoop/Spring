@@ -61,10 +61,15 @@ public class Work implements Serializable {
 	@Column(name = "ISEXAMPLE")
 	private String isExample;
 	/*
-	 * 脚本上传地址
+	 * 脚本对外展示地址
 	 */
 	@Column(name = "SQL_URLS")
 	private String sqlUrls;
+	/*
+	 * 脚本上传本机地址
+	 */
+	@Column(name = "SQL_URLS_LOCAL")
+	private String sqlUrlsLocal;
 	/*
 	 * 是否关闭0/1
 	 */
@@ -192,6 +197,14 @@ public class Work implements Serializable {
 
 	public void setSqlUrls(String sqlUrls) {
 		this.sqlUrls = sqlUrls;
+	}
+
+	public String getSqlUrlsLocal() {
+		return sqlUrlsLocal;
+	}
+
+	public void setSqlUrlsLocal(String sqlUrlsLocal) {
+		this.sqlUrlsLocal = sqlUrlsLocal;
 	}
 
 }

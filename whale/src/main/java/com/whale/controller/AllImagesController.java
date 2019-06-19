@@ -27,7 +27,7 @@ import com.whale.security.repository.SecurityUserRepository;
 
 @Controller
 public class AllImagesController {
-	@Value("${img.src}")
+	@Value("${whale.rootSrc}")
 	private String fileSrc;
 
 	@Autowired

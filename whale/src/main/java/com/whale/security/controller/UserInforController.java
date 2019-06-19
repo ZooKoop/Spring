@@ -31,7 +31,7 @@ import com.whale.security.repository.SecurityUserRepository;
 
 @RequestMapping("back/user")
 public class UserInforController {
-	@Value("${img.src}")
+	@Value("${whale.rootSrc}")
 	private String fileSrc;
 	@Autowired
 	private SecurityUserRepository userInforRepostitory;

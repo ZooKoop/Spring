@@ -10,7 +10,7 @@ $(function(){
 	/*全选、反选选初始化*/
 	select_all('#select_all','.checkbox_select');
 	/*上传初始化 - 修改方法里的初始化也需要同步*/
-	fileUpload("#sqlurl","/back/work/sqlUpload",['sql','txt','text']);//初始化提交
+	fileUpload("#sqlurl","/back/work/sqlUpload",['sql','txt']);//初始化提交
 	/* ---------------------------查--------------------------- */
 	/* work */ 
 	var work_tables = tables_init('#my_work',language,work_columns,work_columnDefs,"/back/work/queryAll");
@@ -270,7 +270,7 @@ var work_columnDefs = [
 /*修改方法*/
 var work_update = function(datables){
 	$('#work_edit_model').on('shown.bs.modal', function () {
-		fileUpload("#sqlurl_edit","/back/work/sqlUpload",['sql','text','txt']);//初始化提交
+		fileUpload("#sqlurl_edit","/back/work/sqlUpload",['sql','txt']);//初始化提交
 		$('.work_edit_btn').off().on('click',function () {
 			$.ajax({
 				type: "post",
@@ -281,6 +281,7 @@ var work_update = function(datables){
 					if(result=200){
 						$('#work_edit_model').modal('hide');
 						layer.msg('修改成功', {icon: 1});
+						$("#sqlurl_edit").fileinput("clear");
 						datables.ajax.reload(null,false);//刷新添加完的数据
 					}else{
 						layer.alert('修改失败', {icon: 2});
@@ -345,6 +346,16 @@ var work_updateInfo = function(dataId){
 			$('#isSql_edit').selectpicker('val',result.isSql);
 			$('#isClose_edit').selectpicker('val',result.isClose);
 			$('#patch_edit,#isExample_edit,#version_edit,#isClose_edit,#isSql_edit').selectpicker('refresh');
+			//遍历sqlUrls
+			var sqlList = result.sqlUrls.split(',');
+			$('.downList').find("a").remove();//先删除在添加
+			var file_name ="";
+			sqlList.forEach(function(e){
+				if(e!=""&&e!=null){
+					file_name = getCaption(e);
+					$('.downList').append('<a class="btn btn-sm btn-info" style="margin:0 5px 0 0 " href="'+e + '" >'+file_name+'  <span class="glyphicon glyphicon-download"></span></a>');
+				}
+		    });
 			$('#work_edit_model').modal('show');
 		},
 		error : function() {
@@ -653,7 +664,6 @@ var fileUpload =function(inputId,url,type){
 	}).on("filebatchuploadsuccess", function(event, data) {
 		//filebatchuploadsuccess同步上传成功结果处理  filebatchuploaderror
 		if (data.response.status) {
-			$(inputId).fileinput("clear");
 //			layer.msg(data.response.msg + " - 上传成功！", {
 //				time : 3000
 //			});
@@ -722,6 +732,12 @@ var work_ajax = function (data, callback, settings) {
 		}
 	});
 };
+/*------------------截取文件名---------------------- */
+function getCaption(obj){
+	var index=obj.lastIndexOf("/");
+	obj=obj.substring(index+1,obj.length);
+	return obj;
+}
 //var work_columns = [{
 //data : 'id'
 //},{
