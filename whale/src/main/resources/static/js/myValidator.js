@@ -123,7 +123,7 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 		 deferRender:true,// 延迟渲染
 		 Paging : true,// paging属性必须为true才能实现默认初始值得功能
 		 ordering:true,//是否允许Datatables开启排序
-		 order: [[ 5, "desc" ],[ 8, "desc" ]],//表格在初始化的时候的排序
+		 order: [[ 8, "desc" ],[ 5, "desc" ]],//表格在初始化的时候的排序
 		 searching : true, // 是否禁用原生搜索(false为禁用,true为使用)
 		 scrollX: true,
 		 Processing : true, // DataTables载入数据时，是否显示‘进度’提示
@@ -181,7 +181,7 @@ var work_columns = [
 	{data : 'version'},
 	{data : 'dateTime',sWidth:"118px"},
 	{data : 'isExample'},
-	{data : 'sqlUrls'},
+	{data : 'workConcentList'},
 	{data : 'isClose'}
 	];
 var work_columnDefs = [
@@ -200,9 +200,8 @@ var work_columnDefs = [
 		//	visible: false,// 隐藏第一列
 		data:"ticketTitel",
 		orderable:false,//不执行排序
-//		searchable: false,
 		render:function(data,type,full){
-			return "<div class='text-left' style='width:265px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data+"</div>"
+			return "<div title='"+data+"' class='text-left' style='width:265px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data+"</div>"
 		}
 	},
 	{
@@ -230,11 +229,11 @@ var work_columnDefs = [
 	{
 		targets:7,
 		//	visible: false,// 隐藏第一列
-		data:"sqlUrls",
+		data:"workConcentList",
 		render:function(data,type,full){
 			var html= '';
 			if(data !=null && data.length != 0){
-				return html += '<span class="label label-success radius">有</span>';
+				return  html += '<span class="label label-success radius">有</span>';
 			}else{
 				return html += '<span class="label label-default radius">无</span>';
 			}		
@@ -347,15 +346,18 @@ var work_updateInfo = function(dataId){
 			$('#isClose_edit').selectpicker('val',result.isClose);
 			$('#patch_edit,#isExample_edit,#version_edit,#isClose_edit,#isSql_edit').selectpicker('refresh');
 			//遍历sqlUrls
-			var sqlList = result.sqlUrls.split(',');
-			$('.downList').find("a").remove();//先删除在添加
-			var file_name ="";
-			sqlList.forEach(function(e){
-				if(e!=""&&e!=null){
-					file_name = getCaption(e);
-					$('.downList').append('<a class="btn btn-sm btn-info" style="margin:0 5px 0 0 " href="'+e + '" >'+file_name+'  <span class="glyphicon glyphicon-download"></span></a>');
-				}
-		    });
+			console.log(JSON.stringify(result.workConcentList)+"回显用")
+			if(result.workConcentList != null && result.workConcentList.length>0){
+				$('.downList').removeClass("hide");
+				$('.downList').find("a").remove();//先删除在添加
+				result.workConcentList.forEach(function(e){
+					if(e!=""&&e!=null){
+						var file_sqlUrls = e.sqlUrls;
+						var file_name = getCaption(file_sqlUrls);
+						$('.downList').append('<a class="btn btn-sm btn-info" style="margin:0 5px 0 0 " href="'+file_sqlUrls+ '" >'+file_name+'  <span class="glyphicon glyphicon-download"></span></a>');
+					}
+				});
+			}
 			$('#work_edit_model').modal('show');
 		},
 		error : function() {
@@ -459,11 +461,11 @@ function validatorAddInit(formID,fields,modelID,vartables,inputId){
 //			}
 //		});
         //提交上传
-//        $(inputId).fileinput('upload');
         $.post($form.attr('action'), $form.serialize(), function(result) {
         	if(result.success=="200"){
 				layer.msg("添加成功！");
 				vartables.ajax.reload(null,false);//刷新添加完的数据
+				$(inputId).fileinput('upload');
 				$(modelID).modal('hide');//模态框关闭背景隐藏
 			}
 			if(result.fail=="400"){
@@ -473,7 +475,7 @@ function validatorAddInit(formID,fields,modelID,vartables,inputId){
 				layer.alert("已存在，重新添加！");
 			}
         }, 'json');
-        
+//        
     });
 	$(modelID).on('hide.bs.modal', function () {//模态框关闭触发
 		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
@@ -628,11 +630,11 @@ var select_all = function(headId,bodyClass){
 	})
 }
 /* --------------------------- 上传 --------------------------- */
-var fileUpload =function(inputId,url,type){
+var fileUpload =function(inputId,url,type,fromID){
 	$(inputId).fileinput({
 		uploadUrl : url, // you must set a valid URL here else you will get an error
 		allowedFileExtensions : type,
-		uploadAsync:false,//是否为异步上传,默认true
+		uploadAsync:true,//是否为异步上传,默认true
 		overwriteInitial : false,//是否显示预览
 		dropZoneEnabled:false,//是否显示拖拽
 		showUpload: false, //是否显示上传按钮
@@ -657,12 +659,18 @@ var fileUpload =function(inputId,url,type){
 			return filename.replace('(', '_').replace(']', '_');
 		},
 		uploadExtraData: function(){//报length错误时，看报错是否为这个方法。返回值一个空的json
-            return {};
+//			var obj = {}; 
+//			$(fromID).find('input').each(function() { 
+//			var id = $(this).attr('id'), val = $(this).val(); 
+//			obj[id] = val; 
+//			}); 
+			  var data={ticketNumber:$("#ticketNumber").val()};
+			return data; 
         }
 	}).on("filebatchselected", function(event, files) {//自动提交
-		$(this).fileinput("upload");
-	}).on("filebatchuploadsuccess", function(event, data) {
-		//filebatchuploadsuccess同步上传成功结果处理  filebatchuploaderror
+//		$(this).fileinput("upload");
+	}).on("fileuploaded", function(event, data) {
+		//filebatchuploadsuccess同步上传成功结果处理fileuploaded  filebatchuploaderror
 		if (data.response.status) {
 //			layer.msg(data.response.msg + " - 上传成功！", {
 //				time : 3000
@@ -690,11 +698,7 @@ var fileUpload =function(inputId,url,type){
 			
 		}
 		
-	}).on('filebatchuploaderror', function(event, data, msg) {
-		console.log(JSON.stringify(data)+"1-------")
-	     
-
-	});;
+	});
 } 
 /* --------------------------- 默认隐藏第一段 --------------------------- */
 var hideone_columnDefs = [{

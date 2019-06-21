@@ -24,39 +24,28 @@ public class UploadUntils {
 	 * @param fileMultipartFiles
 	 * @return
 	 */
-	public static Map<String, Object> upload(String workSql_D, String workSql_D_TEM, String workSql_L,String workSql_L_TEM, MultipartFile[] fileMultipartFiles) {
+	public static Map<String, Object> upload(String workSql_D,MultipartFile sqlFiles) {
 		HashMap<String, Object> json = new HashMap<String, Object>();
 		File file = new File(workSql_D);//file只用于创建文件，不能用于写入本地文件的路径
 		if (!file.exists()) {
 			file.mkdirs();
-		}
-		;
+		};
 		// 查询文件夹下的所有文件名字
 		String[] nameList = new File(file.toString()).list();
-		String sqlName = "";//查询相同名字返回前端
-		workSql_D_TEM = "";//初始化一下，传过来是null
-		workSql_L_TEM = "";//初始化一下，传过来是null
+		String sqlName ="";
 		try {
-			for (MultipartFile m : fileMultipartFiles) {
-				sqlName = m.getOriginalFilename();
-				for (String s : nameList) {
-					if (s.equals(sqlName)) {
-						json.put("status", false);
-						json.put("namesame", sqlName);
-						return json;
-					}
+			sqlName = sqlFiles.getOriginalFilename();
+			for (String s : nameList) {
+				if (s.equals(sqlName)) {
+					json.put("status", false);
+					json.put("namesame", sqlName);
+					return json;
 				}
-				// 拼出work sqlurl字段值存数据库不能用本地路径
-				workSql_D_TEM += workSql_D + sqlName + ",";
-				workSql_L_TEM += workSql_L + sqlName + ",";
-				m.transferTo(new File(workSql_D + sqlName));
 			}
+			//写入本地路径
+			sqlFiles.transferTo(new File(workSql_D+ sqlName));
 			json.put("status", true);
 			json.put("msg", sqlName);
-			json.put("workSql_D_TEM", workSql_D_TEM);
-			json.put("workSql_L_TEM", workSql_L_TEM);
-			workSql_D_TEM = "";//恢复空，传过来是null
-			workSql_L_TEM = "";//恢复空，传过来是null
 			return json;
 		} catch (IllegalStateException | IOException e) {
 			e.printStackTrace();

@@ -36,8 +36,9 @@ public class WorkServices {
 		
 		return workList;
 	}
-	public boolean findByTicketNumber(String number) {
-		return workRepostitory.findByticketNumber(number)!=null ? true:false;
+	public Work findByTicketNumber(String number) {
+		
+		return workRepostitory.findByticketNumber(number);
 	}
 	
 	public boolean add(Work work) {

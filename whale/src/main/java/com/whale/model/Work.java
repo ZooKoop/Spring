@@ -2,8 +2,11 @@ package com.whale.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,12 +15,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.whale.security.model.SecurityUser;
 
 @Entity
@@ -55,27 +60,12 @@ public class Work implements Serializable {
 	 */
 	@Column(name = "PATCH")
 	private String patch;
-	/*
-	 * 是否有测试用例0/1
-	 */
-	@Column(name = "ISEXAMPLE")
-	private String isExample;
-	/*
-	 * 脚本对外展示地址
-	 */
-	@Column(name = "SQL_URLS")
-	private String sqlUrls;
-	/*
-	 * 脚本上传本机地址
-	 */
-	@Column(name = "SQL_URLS_LOCAL")
-	private String sqlUrlsLocal;
+
 	/*
 	 * 是否关闭0/1
 	 */
 	@Column(name = "ISCLOSE")
 	private String isClose;
-
 	/*
 	 * 包含哪些版本
 	 */
@@ -101,6 +91,12 @@ public class Work implements Serializable {
 	@ManyToOne(targetEntity = SecurityUser.class)
 	@JoinColumn(name = "securityUserId")
 	private SecurityUser securityUser;
+	
+	//@OneToMany (mappedBy = "Articles"),mappedBy指向的是要关联的属性，而不是要关联的类
+	//cascade={CascadeType.REMOVE} 会把主表和从表的数据都删除
+	@OneToMany(targetEntity=WorkConcent.class,cascade=CascadeType.ALL,fetch=FetchType.LAZY,mappedBy="work")
+//	@JsonIgnore
+	private Set<WorkConcent> workConcentList = new HashSet<>();
 	
 	public String getId() {
 		return id;
@@ -150,15 +146,6 @@ public class Work implements Serializable {
 		this.dateTime = dateTime;
 	}
 
-
-	public String getIsExample() {
-		return isExample;
-	}
-
-	public void setIsExample(String isExample) {
-		this.isExample = isExample;
-	}
-
 	public Date getUpdateTime() {
 		return updateTime;
 	}
@@ -191,20 +178,13 @@ public class Work implements Serializable {
 		this.ticketTitel = ticketTitel;
 	}
 
-	public String getSqlUrls() {
-		return sqlUrls;
+	public Set<WorkConcent> getWorkConcentList() {
+		return workConcentList;
 	}
 
-	public void setSqlUrls(String sqlUrls) {
-		this.sqlUrls = sqlUrls;
+	public void setWorkConcentList(Set<WorkConcent> workConcentList) {
+		this.workConcentList = workConcentList;
 	}
 
-	public String getSqlUrlsLocal() {
-		return sqlUrlsLocal;
-	}
-
-	public void setSqlUrlsLocal(String sqlUrlsLocal) {
-		this.sqlUrlsLocal = sqlUrlsLocal;
-	}
-
+	
 }
