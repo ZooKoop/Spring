@@ -23,9 +23,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.whale.model.Work;
 import com.whale.model.WorkConcent;
+import com.whale.model.WorkOpction;
 import com.whale.security.model.SecurityUser;
 import com.whale.security.repository.SecurityUserRepository;
 import com.whale.services.WorkConcentServices;
+import com.whale.services.WorkOpctionServices;
 import com.whale.services.WorkServices;
 import com.whale.tools.UploadUntils;
 
@@ -157,7 +159,9 @@ public class WorkController {
 //	}
 
 	@RequestMapping("/toUpdate")
-	public String toUpdate() {
+	public String toUpdate(String id,Model model) {
+		Work work = workServices.findById(id);
+		model.addAttribute("work", work);
 		return "/back/work/work_edit";
 	}
 
@@ -166,12 +170,12 @@ public class WorkController {
 	 * @param id
 	 * @return
 	 */
-	@GetMapping("/toUpdateInfo")
-	@ResponseBody
-	public Work toUpdateInfo(String id) {
-		Work work = workServices.findById(id);
-		return work;
-	}
+//	@GetMapping("/toUpdateInfo")
+//	@ResponseBody
+//	public Work toUpdateInfo(String id) {
+//		Work work = workServices.findById(id);
+//		return work;
+//	}
 
 	@RequestMapping("/Update")
 	@ResponseBody

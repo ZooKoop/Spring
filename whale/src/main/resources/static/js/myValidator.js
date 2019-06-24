@@ -11,6 +11,7 @@ $(function(){
 	select_all('#select_all','.checkbox_select');
 	/*上传初始化 - 修改方法里的初始化也需要同步*/
 	fileUpload("#sqlurl","/back/work/sqlUpload",['sql','txt']);//初始化提交
+	fileUpload("#sqlurl_edit","/back/work/sqlUpload",['sql','txt']);//初始化提交
 	/* ---------------------------查--------------------------- */
 	/* work */ 
 	var work_tables = tables_init('#my_work',language,work_columns,work_columnDefs,"/back/work/queryAll");
@@ -21,7 +22,7 @@ $(function(){
 	
 	/* ---------------------------增--------------------------- */
 	/*添加初始化、校验*/
-	work_select_ajax('#version,#patch');
+	
 	validatorAddInit('#add_form',workFields,'#add',work_tables,"#sqlurl");
 	
 //	})
@@ -87,19 +88,7 @@ $(function(){
 		
 	});
 	/* ---------------------------改--------------------------- */
-	/*编辑*/
-	$('#my_work tbody').on('click', 'a._edit', function(e) {
-		e.preventDefault();
-		var data = work_tables.row( $(this).parents('tr')).data();
-		$('#work_edit_model').modal({
-			 	backdrop: 'static',     // 点击空白不关闭
-			    keyboard: false,        // 按键盘esc也不会关闭
-	            remote: '/back/work/toUpdate'
-	    });
-		//查完值，直接在ajax里赋值
-		work_select_ajax('#version_edit,#patch_edit',data.id);
-		work_update(work_tables);
-	});
+	
 });
 /*初始化 . -. -..--------------------------------------------------------------------*/
 /*tables初始化封装 */
@@ -215,6 +204,16 @@ var work_columnDefs = [
 		}
 	},
 	{
+		targets: 4,
+		data:"version",
+		render:function(data,type,full){
+			if(data == null || data == ""){
+				return "<span class='label label-default radius'>无</span>"
+			}
+			return "<span class='label label-info radius'>"+data+"</span>"
+		}
+	},
+	{
 		targets: 6,
 		//	visible: false,// 隐藏第一列
 		data:"isExample",
@@ -255,12 +254,13 @@ var work_columnDefs = [
 	{
 		targets: 9,
 		//	visible: false,// 隐藏第一列
-		data:null,
+		data:"id",
 		sWidth:"90px",
 		orderable:false,//不执行排序<button type="button" class="btn btn-default">
 		searchable: false,
 		render:function(data,type,full){//data为null拿到的是整行数据
-			var html ='<div class="btn-group"><a class="_edit btn btn-default" href="javascript:void(0);" title="编辑" class="_edit" > <span class="glyphicon glyphicon-edit"></span></a>'
+//			console.log(data)
+			var html ='<div class="btn-group"><a class="_edit btn btn-default" href="/back/work/toUpdate?id='+data+'" title="编辑" class="_edit" > <span class="glyphicon glyphicon-edit"></span></a>'
 				html +=' <a class=" _del btn btn-default" href="javascript:void(0);"><span class="glyphicon glyphicon-trash"></span></a></div>'
 			return html;
 		}
@@ -291,64 +291,30 @@ var work_update = function(datables){
 	})
 }
 /* --------------------------- work2个多选框回显  --------------------------- */
-var work_select_ajax = function(selectId,infoID){
+var work_select_ajax = function(selectId,work){
 	$.ajax({
 		type: "get",
-//		cache:false,
 		url: "/back/workopction/getAll",
 		dataType: "json",// 预期服务器返回的数据类型
 		success: function (data) {
-			if(infoID!=null && infoID!= ""){
-				work_updateInfo(infoID);//回显
-			}
 			var $ID = $(selectId);
-			var oldnumber = new Array();
+//			var oldnumber = new Array();
 			$ID.find("option").remove();//先删除在添加
 			data.forEach(function(e){
-//				$('<option value="'+e.opctionCode + '" >' + e.opctionCode + '</option>').appendTo($ID);
 				$ID.append('<option value="'+e.opctionCode + '" >' + e.opctionCode + '</option>');
-		    	oldnumber.push(e.opctionCode);
+//		    	oldnumber.push(e.opctionCode);
 		    });
-//			console.log(JSON.stringify(data) +"---------------");
-//			$ID.selectpicker('val', oldnumber);//默认选中第二个参数需是数组
 			$ID.selectpicker('refresh');
-//	       $ID.selectpicker('render'); 
-			
-		}
-	})
-}
-/*获取当前信息*/
-var work_updateInfo = function(dataId){
-	$.ajax({
-		type: "GET",
-//		cache:false,
-		url: "/back/work/toUpdateInfo",
-		dataType: "json",// 预期服务器返回的数据类型
-		data: {"id": dataId},
-		success: function (result) {
-//			console.log("----------"+JSON.stringify(result));//打印服务端返回的数据(调试用)，object转键值对字符串
-//			layer.alert("1");
-            //清空多选（多选为selectpicker插件）
-			$("#work_id").val(result.id);
-			$("#work_security_user_id").val(result.securityUser.id);
-			$("#ticketNumber_edit").val(result.ticketNumber);
-			$("#ticketTitel_edit").val(result.ticketTitel);
-			$("#description_edit").val(result.description);
-			$("#work_edit_dateTime").val(result.dateTime);
-			$('#isExample_edit').selectpicker('val', result.isExample);//设置选中 
-			if(result.patch != null && result.patch != ""){
-				$('#patch_edit').selectpicker('val', result.patch.split(','));//设置选中 
+			console.log(JSON.stringify(data) +"---------------");
+			if(work.version!="" && work.version!=null){
+				$("#version_edit").selectpicker('val', work.version.split(','));//默认选中第二个参数需是数组
 			}
-			if(result.version != null && result.version != ""){
-				$('#version_edit').selectpicker('val',result.version.split(','));//split分割转为数组
+			if(work.patch!="" && work.patch!=null){
+				$("#patch_edit").selectpicker('val', work.patch.split(','));//默认选中第二个参数需是数组
 			}
-			$('#isSql_edit').selectpicker('val',result.isSql);
-			$('#isClose_edit').selectpicker('val',result.isClose);
-			$('#patch_edit,#isExample_edit,#version_edit,#isClose_edit,#isSql_edit').selectpicker('refresh');
-			//遍历sqlUrls
-			console.log(JSON.stringify(result.workConcentList)+"回显用")
-			if(result.workConcentList != null && result.workConcentList.length>0){
-				$('.downList').removeClass("hide");
+			$("#isClose_edit").selectpicker('val', work.isClose);
+//	        $ID.selectpicker('render'); 
+			if(work.workConcentList != null && work.workConcentList.length>0){
 				$('.downList').find("a").remove();//先删除在添加
 				result.workConcentList.forEach(function(e){
 					if(e!=""&&e!=null){
@@ -358,13 +324,31 @@ var work_updateInfo = function(dataId){
 					}
 				});
 			}
-			$('#work_edit_model').modal('show');
-		},
-		error : function() {
-			alert("请求失败！");
 		}
-	});
+	})
 }
+/*编辑多选赋值*/
+//var work_updateInfo = function(work){
+//	console.log("----------"+JSON.stringify(work));//打印服务端返回的数据(调试用)，object转键值对字符串
+//    //清空多选（多选为selectpicker插件）
+//	$('#isClose_edit').selectpicker('val',work.isClose);
+//	console.log(work.version)
+//	var version_arry = [];
+//	$('#version_edit').selectpicker('val',work.version.split(','));
+//	$('#patch_edit,#isExample_edit,#version_edit,#isClose_edit,#isSql_edit').selectpicker('refresh');
+	//遍历sqlUrls
+//	if(work.workConcentList != null && work.workConcentList.length>0){
+//		$('.downList').find("a").remove();//先删除在添加
+//		result.workConcentList.forEach(function(e){
+//			if(e!=""&&e!=null){
+//				var file_sqlUrls = e.sqlUrls;
+//				var file_name = getCaption(file_sqlUrls);
+//				$('.downList').append('<a class="btn btn-sm btn-info" style="margin:0 5px 0 0 " href="'+file_sqlUrls+ '" >'+file_name+'  <span class="glyphicon glyphicon-download"></span></a>');
+//			}
+//		});
+//	}
+//}
+
 /*------------------opction_ajax---------------------- */
 var opction_ajax = function (data, callback, settings) {
 	// 封装请求参数

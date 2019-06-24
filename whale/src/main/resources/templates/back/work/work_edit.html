@@ -2,50 +2,54 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<head th:replace="common/common_pub :: common_header('')">
 </head>
 <body>
+<div th:replace="common/common_pub :: navbar_"></div>
+	<div class="row" style="width: 100%; margin: 0;">
+		<div th:replace="common/common_pub :: left_nav"></div>
+		<div class="col-md-10" style="padding: 0; overflow: hidden;">
+			<div style="margin: 0" class="panel panel-default">
 	<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true">&times;</button>
 					<h4 class="modal-title" id="myModalLabel">编辑TICKET</h4>
 				</div>
-				<div class="modal-body">
-					<form id="edit_workForm" class="form-horizontal" role="form">
+				<form id="edit_workForm" class="form-horizontal" role="form">
+					<div class="modal-body">
 						<div class="form-group">
-							<label for="ticketNumber_edit" class="col-sm-2 control-label">Ticket</label>
-							<div class="col-sm-10">
-								<input type="hidden" class="form-control" id="work_id" name="id">
-								<input type="hidden" class="form-control"
-									id="work_edit_dateTime" name="dateTime"> <input
-									type="number" class="form-control" id="ticketNumber_edit"
-									name="ticketNumber" placeholder="请输入Ticket号">
+							<label for="ticketNumber_edit" class="col-sm-1 control-label">Ticket</label>
+							<div class="col-sm-2">
+								<input type="hidden" th:value="${work.id}" id="work_id"
+									name="id"> <input type="number" class="form-control"
+									id="ticketNumber_edit" name="ticketNumber"
+									placeholder="请输入Ticket号" th:value="${work.ticketNumber}">
+							</div>
+							<label for="ticketTitel_edit" class="col-sm-1 control-label">TK-标题</label>
+							<div class="col-sm-8">
+								<input id="ticketTitel_edit" th:value="${work.ticketTitel}"
+									class="form-control" name="ticketTitel" placeholder="请输入标题">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="ticketTitel_edit" class="col-sm-2 control-label">标题</label>
-							<div class="col-sm-10">
-								<input id="ticketTitel_edit" class="form-control" name="ticketTitel" placeholder="请输入标题">
+
+							<label for="description_edit" class="col-sm-1 control-label">TK-描述</label>
+							<div class="col-sm-11">
+								<textarea style="height: 300px" id="description_edit"
+									class="form-control" name="description"
+									placeholder="Ticket描述。。。" th:text="${work.description}"></textarea>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="description_edit" class="col-sm-2 control-label">描述</label>
-							<div class="col-sm-10">
-								<textarea style="height:100px" id="description_edit" class="form-control"
-									name="description" placeholder="Ticket描述。。。"></textarea>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="version_edit" class="col-sm-2 control-label">Ticket版本</label>
-							<div class="col-sm-10">
+							<label for="version_edit" class="col-sm-1 control-label">TK-版本</label>
+							<div class="col-sm-5">
 								<select id="version_edit" name="version" data-style="btn-info"
 									class="selectpicker form-control" multiple title="选择版本(可多选)"
 									data-live-search="true">
 								</select>
 							</div>
-						</div>
-						<div class="form-group">
-							<label for="patch_edit" class="col-sm-2 control-label">发包</label>
-							<div class="col-sm-10">
+							<label for="patch_edit" class="col-sm-1 control-label">发包版本</label>
+							<div class="col-sm-5">
 								<select id="patch_edit" name="patch" multiple
 									class="selectpicker form-control" title="选择版本(可多选)"
 									data-style="btn-info" data-live-search="true">
@@ -53,41 +57,64 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="isExample_edit" class="col-sm-2 control-label">测试用例</label>
-							<div class="col-sm-10">
+							<label for="isExample_edit" class="col-sm-1 control-label">用例上传</label>
+							<div class="col-sm-5">
 								<select id="isExample_edit" name="isExample"
 									class="selectpicker form-control" title="是否有测试用例">
 									<option value="0">无</option>
 									<option value="1">有</option>
 								</select>
 							</div>
+							<label class="col-sm-1 control-label">用例列表</label>
+							<div class="col-sm-5 downList">无</div>
 						</div>
 						<div class="form-group">
-							<label for="sqlurl_font" class="col-sm-2 control-label">脚本列表</label>
-							<div class="col-sm-10">
-								<div class="col-sm-12 downList hide"></div>
-								<input class="file-loading" id="sqlurl_edit" name="sqlurl_font" type="file" multiple="multiple" >
+							<label for="sqlurl_font" class="col-sm-1 control-label">脚本上传</label>
+							<div class="col-sm-5">
+								<input class="file-loading" id="sqlurl_edit" name="sqlurl_font"
+									type="file" multiple="multiple">
 								<p class="help-block">支持sql、txt格式</p>
+							</div>
+							<label class="col-sm-1 control-label">脚本列表</label>
+							<div class="col-sm-5 downList">无</div>
+						</div>
+						<div class="form-group">
+							<label for="work_edit_dateTime" class="col-sm-1 control-label">创建时间</label>
+							<div class="col-sm-5">
+								<input readonly="readonly" type="text" class="form-control"
+									th:value="${work.dateTime}" id="work_edit_dateTime"
+									name="dateTime">
+							</div>
+							<label for="work_edit_updateTime" class="col-sm-1 control-label">修改时间</label>
+							<div class="col-sm-5">
+								<input readonly="readonly" type="text" class="form-control"
+									th:value="${work.updateTime}" id="work_edit_updateTime"
+									name="dateTime">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="isClose_edit" class="col-sm-2 control-label">是否关闭</label>
-							<div class="col-sm-10">
+							<label for="isClose_edit" class="col-sm-1 control-label">是否关闭</label>
+							<div class="col-sm-5">
 								<select id="isClose_edit" name="isClose"
 									class="selectpicker form-control" title="请选择...">
-									<!-- <option value="-1" class="hidden"></option> -->
 									<option value="0">关</option>
 									<option value="1">开</option>
 								</select>
 							</div>
 						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">关闭
-					</button>
-					<button type="button" class="btn btn-primary work_edit_btn">
-						提交</button>
-				</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default">返回</button>
+						<button type="submit" class="btn btn-primary work_edit_btn">
+							保存</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </body>
+<script th:inline="javascript" type="text/javascript">
+	var work = [[${work}]];
+	work_select_ajax('#version,#patch,#version_edit,#patch_edit',work);
+</script>
 </html>
