@@ -15,18 +15,20 @@
 						aria-hidden="true">&times;</button>
 					<h4 class="modal-title" id="myModalLabel">编辑TICKET</h4>
 				</div>
-				<form id="edit_workForm" class="form-horizontal" role="form">
+				<form id="edit_workForm" th:action="@{/back/work/Update}" class="form-horizontal" role="form">
 					<div class="modal-body">
 						<div class="form-group">
 							<label for="ticketNumber_edit" class="col-sm-1 control-label">Ticket</label>
-							<div class="col-sm-2">
+							<div class="col-sm-11">
 								<input type="hidden" th:value="${work.id}" id="work_id"
 									name="id"> <input type="number" class="form-control"
 									id="ticketNumber_edit" name="ticketNumber"
 									placeholder="请输入Ticket号" th:value="${work.ticketNumber}">
 							</div>
+						</div>
+						<div class="form-group">
 							<label for="ticketTitel_edit" class="col-sm-1 control-label">TK-标题</label>
-							<div class="col-sm-8">
+							<div class="col-sm-11">
 								<input id="ticketTitel_edit" th:value="${work.ticketTitel}"
 									class="form-control" name="ticketTitel" placeholder="请输入标题">
 							</div>
@@ -104,9 +106,8 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default">返回</button>
-						<button type="submit" class="btn btn-primary work_edit_btn">
-							保存</button>
+						<button onclick="javascript:history.back(-1);" class="btn btn-default">返回</button>
+						<button type="submit" class="btn btn-primary work_edit_btn">保存</button>
 					</div>
 				</form>
 			</div>
@@ -115,6 +116,7 @@
 </body>
 <script th:inline="javascript" type="text/javascript">
 	var work = [[${work}]];
-	work_select_ajax('#version,#patch,#version_edit,#patch_edit',work);
+	/* alert(JSON.stringify(work)) */
+	work_select_ajax('#version_edit,#patch_edit',work);
 </script>
 </html>

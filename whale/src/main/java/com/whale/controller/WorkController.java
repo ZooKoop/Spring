@@ -177,14 +177,17 @@ public class WorkController {
 //		return work;
 //	}
 
-	@RequestMapping("/Update")
+	@PostMapping("/Update")
 	@ResponseBody
-	public String update(Work work, Authentication authentication) {
+	public Map<String, Object> update(Work work, Authentication authentication) {
+		HashMap<String, Object> json = new HashMap<String, Object>();
 		work.setSecurityUser(securityUserRepository.findByuserName(authentication.getName()));
 		if (workServices.update(work)) {
-			return "200";
+			json.put("success", "200");
+			return json;
 		}
-		return "400";
+		json.put("fail", "400");
+		return json;
 	}
 
 	@PostMapping("/sqlUpload")

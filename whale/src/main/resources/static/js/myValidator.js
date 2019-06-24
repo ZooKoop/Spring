@@ -12,6 +12,9 @@ $(function(){
 	/*上传初始化 - 修改方法里的初始化也需要同步*/
 	fileUpload("#sqlurl","/back/work/sqlUpload",['sql','txt']);//初始化提交
 	fileUpload("#sqlurl_edit","/back/work/sqlUpload",['sql','txt']);//初始化提交
+//	多选插件初始化
+	work_select_ajax('#version,#patch',null);
+	
 	/* ---------------------------查--------------------------- */
 	/* work */ 
 	var work_tables = tables_init('#my_work',language,work_columns,work_columnDefs,"/back/work/queryAll");
@@ -23,7 +26,7 @@ $(function(){
 	/* ---------------------------增--------------------------- */
 	/*添加初始化、校验*/
 	
-	validatorAddInit('#add_form',workFields,'#add',work_tables,"#sqlurl");
+	validatorAddInit('#add_form',workFields,'#add',work_tables,"#sqlurl_edit");
 	
 //	})
 	validatorAddInit('#opction_form',opctionFields,'#opctionModel',opction_tables);
@@ -88,6 +91,7 @@ $(function(){
 		
 	});
 	/* ---------------------------改--------------------------- */
+	validatorAddInit('#edit_workForm',workFields,null,work_tables,"#sqlurl");
 	
 });
 /*初始化 . -. -..--------------------------------------------------------------------*/
@@ -306,23 +310,25 @@ var work_select_ajax = function(selectId,work){
 		    });
 			$ID.selectpicker('refresh');
 			console.log(JSON.stringify(data) +"---------------");
-			if(work.version!="" && work.version!=null){
-				$("#version_edit").selectpicker('val', work.version.split(','));//默认选中第二个参数需是数组
-			}
-			if(work.patch!="" && work.patch!=null){
-				$("#patch_edit").selectpicker('val', work.patch.split(','));//默认选中第二个参数需是数组
-			}
-			$("#isClose_edit").selectpicker('val', work.isClose);
+			if(work!=null){
+				if(work.version!="" && work.version!=null){
+					$("#version_edit").selectpicker('val', work.version.split(','));//默认选中第二个参数需是数组
+				}
+				if(work.patch!="" && work.patch!=null){
+					$("#patch_edit").selectpicker('val', work.patch.split(','));//默认选中第二个参数需是数组
+				}
+				$("#isClose_edit").selectpicker('val', work.isClose);
 //	        $ID.selectpicker('render'); 
-			if(work.workConcentList != null && work.workConcentList.length>0){
-				$('.downList').find("a").remove();//先删除在添加
-				result.workConcentList.forEach(function(e){
-					if(e!=""&&e!=null){
-						var file_sqlUrls = e.sqlUrls;
-						var file_name = getCaption(file_sqlUrls);
-						$('.downList').append('<a class="btn btn-sm btn-info" style="margin:0 5px 0 0 " href="'+file_sqlUrls+ '" >'+file_name+'  <span class="glyphicon glyphicon-download"></span></a>');
-					}
-				});
+				if(work.workConcentList != null && work.workConcentList.length>0){
+					$('.downList').find("a").remove();//先删除在添加
+					result.workConcentList.forEach(function(e){
+						if(e!=""&&e!=null){
+							var file_sqlUrls = e.sqlUrls;
+							var file_name = getCaption(file_sqlUrls);
+							$('.downList').append('<a class="btn btn-sm btn-info" style="margin:0 5px 0 0 " href="'+file_sqlUrls+ '" >'+file_name+'  <span class="glyphicon glyphicon-download"></span></a>');
+						}
+					});
+				}
 			}
 		}
 	})
@@ -447,13 +453,13 @@ function validatorAddInit(formID,fields,modelID,vartables,inputId){
         //提交上传
         $.post($form.attr('action'), $form.serialize(), function(result) {
         	if(result.success=="200"){
-				layer.msg("添加成功！");
+				layer.msg("操作成功！");
 				vartables.ajax.reload(null,false);//刷新添加完的数据
 				$(inputId).fileinput('upload');
 				$(modelID).modal('hide');//模态框关闭背景隐藏
 			}
 			if(result.fail=="400"){
-				layer.alert("添加失败！");
+				layer.alert("操作失败！");
 			}
 			if(result.repeat =="222"){
 				layer.alert("已存在，重新添加！");
