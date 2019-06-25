@@ -68,7 +68,7 @@
 								</select>
 							</div>
 							<label class="col-sm-1 control-label">用例列表</label>
-							<div class="col-sm-5 downList">无</div>
+							<div class="col-sm-5"></div>
 						</div>
 						<div class="form-group">
 							<label for="sqlurl_font" class="col-sm-1 control-label">脚本上传</label>
@@ -78,7 +78,7 @@
 								<p class="help-block">支持sql、txt格式</p>
 							</div>
 							<label class="col-sm-1 control-label">脚本列表</label>
-							<div class="col-sm-5 downList">无</div>
+							<div class="col-sm-5 downList"></div>
 						</div>
 						<div class="form-group">
 							<label for="work_edit_dateTime" class="col-sm-1 control-label">创建时间</label>
@@ -106,7 +106,8 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button onclick="javascript:history.back(-1);" class="btn btn-default">返回</button>
+						<a th:href="@{/back/work/toWork}" class="btn btn-default">返回</a>
+<!-- 						<button onclick="javascript:history.back(-1);" class="btn btn-default">返回</button> -->
 						<button type="submit" class="btn btn-primary work_edit_btn">保存</button>
 					</div>
 				</form>

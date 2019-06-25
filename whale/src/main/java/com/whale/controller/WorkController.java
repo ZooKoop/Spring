@@ -1,14 +1,11 @@
 package com.whale.controller;
 
+
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.whale.model.Work;
 import com.whale.model.WorkConcent;
-import com.whale.model.WorkOpction;
 import com.whale.security.model.SecurityUser;
 import com.whale.security.repository.SecurityUserRepository;
 import com.whale.services.WorkConcentServices;
-import com.whale.services.WorkOpctionServices;
 import com.whale.services.WorkServices;
 import com.whale.tools.UploadUntils;
 
@@ -159,8 +154,10 @@ public class WorkController {
 //	}
 
 	@RequestMapping("/toUpdate")
-	public String toUpdate(String id,Model model) {
+	public String toUpdate(String id,Model model,HttpServletRequest httpServletRequest) {
+		String queryUrl = httpServletRequest.getRequestURI();
 		Work work = workServices.findById(id);
+		model.addAttribute("queryUrl", queryUrl);
 		model.addAttribute("work", work);
 		return "/back/work/work_edit";
 	}
@@ -194,17 +191,20 @@ public class WorkController {
 	@ResponseBody
 	public Map<String, Object> sqlUpload(String ticketNumber,MultipartFile sqlurl_font) {
 		WorkConcent workConcent = null;
-		if(!StringUtils.isBlank(ticketNumber)) {
-			workConcent = new WorkConcent();
-			Work findByTicketNumber = workServices.findByTicketNumber(ticketNumber);
-			workConcent.setSqlUrls(workSql_L+sqlurl_font.getOriginalFilename());
-			workConcent.setWork(findByTicketNumber);
+		Map<String, Object> upload = new HashMap<String, Object>();
+		if (sqlurl_font!=null) {
+			if(!StringUtils.isBlank(ticketNumber) && !ticketNumber.equals("undefined")) {
+				workConcent = new WorkConcent();
+				Work findByTicketNumber = workServices.findByTicketNumber(ticketNumber);
+				workConcent.setSqlUrls(workSql_L+sqlurl_font.getOriginalFilename());
+				workConcent.setWork(findByTicketNumber);
+				if(workConcentServices.save(workConcent)!=null) {
+					upload = UploadUntils.upload(workSql_D,sqlurl_font);
+					System.out.println(upload.get("namesame") + "查找文件夹下相同的名字的文件");
+					return upload;
+				} ;
+			}
 		}
-		Map<String, Object> upload = UploadUntils.upload(workSql_D,sqlurl_font);
-		System.out.println(upload.get("namesame") + "查找文件夹下相同的名字的文件");
-		if(workConcentServices.save(workConcent)!=null) {
-			return upload;
-		} ;
 		return null;
 	}
 };

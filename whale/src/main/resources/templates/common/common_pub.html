@@ -100,7 +100,8 @@
 
 	<div th:fragment="left_nav" class="col-md-2" style=" padding: 0;">
 		<ul id = "my_nav">
-		  <li th:class="${queryUrl=='/back/work/toWork'}? 'active' : ''" ><a href="/back/work/toWork">WORK</a></li>
+		  <li th:class="${queryUrl.indexOf('/back/work')!=-1}? 'active' : ''" ><a href="/back/work/toWork">WORK</a></li>
+<!-- 		  <li th:class="${queryUrl=='/back/work/toWork'}? 'active' : ''" ><a href="/back/work/toWork">WORK</a></li> -->
 		  <li ><a href="#">A</a></li>
 		  <li ><a href="#">A</a></li>
 		  <li ><a href="#">A</a></li>

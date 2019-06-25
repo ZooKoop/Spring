@@ -26,10 +26,14 @@ $(function(){
 	/* ---------------------------增--------------------------- */
 	/*添加初始化、校验*/
 	
-	validatorAddInit('#add_form',workFields,'#add',work_tables,"#sqlurl_edit");
-	
-//	})
+	validatorAddInit('#add_form',workFields,'#add',work_tables,"#sqlurl");
+//	.ajax.reload(null,false);//刷新添加完的数据
 	validatorAddInit('#opction_form',opctionFields,'#opctionModel',opction_tables);
+	
+	/* ---------------------------改--------------------------- */
+	
+	validatorAddInit('#edit_workForm',workFields,null,work_tables,"#sqlurl_edit");
+	
 	/* --------------------------- 删 -> 删除封装 --------------------------- */
 	/*Work删除\批量*/
 	$('#work_del_m').on('click', function(e) {
@@ -90,8 +94,7 @@ $(function(){
 					});
 		
 	});
-	/* ---------------------------改--------------------------- */
-	validatorAddInit('#edit_workForm',workFields,null,work_tables,"#sqlurl");
+
 	
 });
 /*初始化 . -. -..--------------------------------------------------------------------*/
@@ -202,7 +205,7 @@ var work_columnDefs = [
 		data:"patch",
 		render:function(data,type,full){
 			if(data == null || data == ""){
-				return "<span class='label label-default radius'>无</span>"
+				return "<span class='label label-default radius'>未发包</span>"
 			}
 			return "<span class='label label-info radius'>"+data+"</span>"
 		}
@@ -271,29 +274,29 @@ var work_columnDefs = [
 	},
 ];
 /*修改方法*/
-var work_update = function(datables){
-	$('#work_edit_model').on('shown.bs.modal', function () {
-		fileUpload("#sqlurl_edit","/back/work/sqlUpload",['sql','txt']);//初始化提交
-		$('.work_edit_btn').off().on('click',function () {
-			$.ajax({
-				type: "post",
-				url: "/back/work/Update",
-				dataType: "json",// 预期服务器返回的数据类型
-				data: $("#edit_workForm").serialize(),
-				success: function (result) {
-					if(result=200){
-						$('#work_edit_model').modal('hide');
-						layer.msg('修改成功', {icon: 1});
-						$("#sqlurl_edit").fileinput("clear");
-						datables.ajax.reload(null,false);//刷新添加完的数据
-					}else{
-						layer.alert('修改失败', {icon: 2});
-					}
-				}
-			})
-		});
-	})
-}
+//var work_update = function(datables){
+//	$('#work_edit_model').on('shown.bs.modal', function () {
+//		fileUpload("#sqlurl_edit","/back/work/sqlUpload",['sql','txt']);//初始化提交
+//		$('.work_edit_btn').off().on('click',function () {
+//			$.ajax({
+//				type: "post",
+//				url: "/back/work/Update",
+//				dataType: "json",// 预期服务器返回的数据类型
+//				data: $("#edit_workForm").serialize(),
+//				success: function (result) {
+//					if(result=200){
+//						$('#work_edit_model').modal('hide');
+//						layer.msg('修改成功', {icon: 1});
+//						$("#sqlurl_edit").fileinput("clear");
+//						datables.ajax.reload(null,false);//刷新添加完的数据
+//					}else{
+//						layer.alert('修改失败', {icon: 2});
+//					}
+//				}
+//			})
+//		});
+//	})
+//}
 /* --------------------------- work2个多选框回显  --------------------------- */
 var work_select_ajax = function(selectId,work){
 	$.ajax({
@@ -308,8 +311,6 @@ var work_select_ajax = function(selectId,work){
 				$ID.append('<option value="'+e.opctionCode + '" >' + e.opctionCode + '</option>');
 //		    	oldnumber.push(e.opctionCode);
 		    });
-			$ID.selectpicker('refresh');
-			console.log(JSON.stringify(data) +"---------------");
 			if(work!=null){
 				if(work.version!="" && work.version!=null){
 					$("#version_edit").selectpicker('val', work.version.split(','));//默认选中第二个参数需是数组
@@ -318,10 +319,11 @@ var work_select_ajax = function(selectId,work){
 					$("#patch_edit").selectpicker('val', work.patch.split(','));//默认选中第二个参数需是数组
 				}
 				$("#isClose_edit").selectpicker('val', work.isClose);
+				console.log(JSON.stringify(work.workConcentList) +"---------------");
 //	        $ID.selectpicker('render'); 
 				if(work.workConcentList != null && work.workConcentList.length>0){
 					$('.downList').find("a").remove();//先删除在添加
-					result.workConcentList.forEach(function(e){
+					work.workConcentList.forEach(function(e){
 						if(e!=""&&e!=null){
 							var file_sqlUrls = e.sqlUrls;
 							var file_name = getCaption(file_sqlUrls);
@@ -330,6 +332,7 @@ var work_select_ajax = function(selectId,work){
 					});
 				}
 			}
+			$ID.selectpicker('refresh');
 		}
 	})
 }
@@ -454,9 +457,11 @@ function validatorAddInit(formID,fields,modelID,vartables,inputId){
         $.post($form.attr('action'), $form.serialize(), function(result) {
         	if(result.success=="200"){
 				layer.msg("操作成功！");
-				vartables.ajax.reload(null,false);//刷新添加完的数据
-				$(inputId).fileinput('upload');
+				if($(inputId).val()!==null && $(inputId).val()!==""){
+					$(inputId).fileinput('upload');
+				}
 				$(modelID).modal('hide');//模态框关闭背景隐藏
+				vartables.ajax.reload(null,false);//刷新添加完的数据
 			}
 			if(result.fail=="400"){
 				layer.alert("操作失败！");
@@ -465,7 +470,7 @@ function validatorAddInit(formID,fields,modelID,vartables,inputId){
 				layer.alert("已存在，重新添加！");
 			}
         }, 'json');
-//        
+        
     });
 	$(modelID).on('hide.bs.modal', function () {//模态框关闭触发
 		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
@@ -654,7 +659,7 @@ var fileUpload =function(inputId,url,type,fromID){
 //			var id = $(this).attr('id'), val = $(this).val(); 
 //			obj[id] = val; 
 //			}); 
-			  var data={ticketNumber:$("#ticketNumber").val()};
+			  var data={ticketNumber:$("#ticketNumber,#ticketNumber_edit").val()};
 			return data; 
         }
 	}).on("filebatchselected", function(event, files) {//自动提交
