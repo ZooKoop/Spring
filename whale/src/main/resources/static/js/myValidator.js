@@ -17,8 +17,29 @@ $(function(){
 	
 	/* ---------------------------查--------------------------- */
 	/* work */ 
+	 $('#my_work tfoot th').each( function () {
+        var title = $('#my_work thead th').eq( $(this).index() ).text();
+        if(title!="" && title!="编辑"){
+        	$(this).html( '<input type="text" placeholder="输入'+title+'" />' );
+        }
+	 });
 	var work_tables = tables_init('#my_work',language,work_columns,work_columnDefs,"/back/work/queryAll");
 	work_tables.draw( false ); //页面操作保留在当前页
+	// Apply the filter
+	work_tables.columns().every( function () {
+	    var column = this;
+	    $( 'input', this.footer() ).on( 'keyup change', function () {
+	        column
+	            .search( this.value )
+	            .draw();
+	    } );
+	});
+//	$('#ticket_seareh').on( 'keyup', function () {
+//		work_tables
+//	        .columns( 1 )
+//	        .search( this.value )
+//	        .draw();
+//	} );
 	/* work end */
 	var opction_tables = tables_init('#opction_table',language,opction_columns,hideone_columnDefs,opction_ajax);
 	opction_tables.draw( false ); //页面操作保留在当前页
@@ -101,7 +122,7 @@ $(function(){
 /*tables初始化封装 */
 function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 	return $(tablesid).DataTable({
-		 dom: 'Bfrtip',
+		 dom: '<"pull-left"f><"pull-right"l>rt<"hide"B><"pull-left"i><"pull-right"p>',
 		 buttons: [
 		        {
 		            extend: 'excel',//使用 excel扩展
@@ -122,14 +143,15 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 		 order: [[ 8, "desc" ],[ 5, "desc" ]],//表格在初始化的时候的排序
 		 searching : true, // 是否禁用原生搜索(false为禁用,true为使用)
 		 scrollX: true,
+//		 scrollCollapse: true,
 		 Processing : true, // DataTables载入数据时，是否显示‘进度’提示
 //		 bLengthChange: false,   //去掉每页显示多少条数据方法
 		 lengthMenu : [ 5,10, 20, 50, 70, 100 ],
 		 columns : columns,
 		 columnDefs: columnDefs,
 		 sAjaxSource:ajaxUrl
+//		 bAutoWidth : false// 自动宽度
 //		 stateSave:true,
-//		 bAutoWidth : true,// 自动宽度
 //		 serverSide : true, // 是否启动服务器端数据导入
 //		 ajax: ajax
 	 });
@@ -205,7 +227,7 @@ var work_columnDefs = [
 		data:"patch",
 		render:function(data,type,full){
 			if(data == null || data == ""){
-				return "<span class='label label-default radius'>未发包</span>"
+				return "<span class='label label-default radius'>未发</span>"
 			}
 			return "<span class='label label-info radius'>"+data+"</span>"
 		}
@@ -262,7 +284,7 @@ var work_columnDefs = [
 		targets: 9,
 		//	visible: false,// 隐藏第一列
 		data:"id",
-		sWidth:"90px",
+		sWidth:"80px",
 		orderable:false,//不执行排序<button type="button" class="btn btn-default">
 		searchable: false,
 		render:function(data,type,full){//data为null拿到的是整行数据

@@ -125,3 +125,10 @@ li{
 .bootstrap-select .dropdown-menu{
 	min-width: 100% !important;
 }
+tfoot input {
+    width: 100%;
+    border-radius: 5px;
+    color: #55575f;
+    padding: 3px;
+    box-sizing: border-box;
+}

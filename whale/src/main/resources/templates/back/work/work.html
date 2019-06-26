@@ -5,7 +5,8 @@
 </head>
 <body>
 	<!-- 模态框（Modal） -->
-	<div class="modal fade" id="add" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"
+	<div class="modal fade" id="add" tabindex="-1" role="dialog"
+		data-backdrop="static" data-keyboard="false"
 		aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -20,21 +21,23 @@
 						<div class="form-group">
 							<label for="ticketNumber" class="col-sm-2 control-label">Ticket</label>
 							<div class="col-sm-10">
-								<input maxlength="5" type="text" class="form-control" id="ticketNumber"
-									name="ticketNumber" placeholder="请输入Ticket号">
+								<input maxlength="5" type="text" class="form-control"
+									id="ticketNumber" name="ticketNumber" placeholder="请输入Ticket号">
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="ticketTitel" class="col-sm-2 control-label">标题</label>
 							<div class="col-sm-10">
-								<input id="ticketTitel" class="form-control" name="ticketTitel" placeholder="请输入标题">
+								<input id="ticketTitel" class="form-control" name="ticketTitel"
+									placeholder="请输入标题">
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="description" class="col-sm-2 control-label">描述</label>
 							<div class="col-sm-10">
-								<textarea style="height:100px" id="description" class="form-control"
-									name="description" placeholder="Ticket描述。。。"></textarea>
+								<textarea style="height: 100px" id="description"
+									class="form-control" name="description"
+									placeholder="Ticket描述。。。"></textarea>
 							</div>
 						</div>
 						<div class="form-group">
@@ -68,7 +71,8 @@
 						<div class="form-group">
 							<label for="sqlurl_font" class="col-sm-2 control-label">上传脚本</label>
 							<div class="col-sm-10">
-								<input class="file-loading" id="sqlurl" name="sqlurl_font" type="file" multiple="multiple" >
+								<input class="file-loading" id="sqlurl" name="sqlurl_font"
+									type="file" multiple="multiple">
 								<p class="help-block">支持sql、txt格式</p>
 							</div>
 						</div>
@@ -113,13 +117,13 @@
 							data-target="#add">
 							<span class="glyphicon glyphicon-plus"></span>
 						</button>
-						<button class="btn btn-default" id="work_del_m">
+						<button class="btn btn-default" id="work_del_m" title="批量删除">
 							<span class="glyphicon glyphicon-trash"></span>
 						</button>
 						<button class="btn btn-default" id="work_edit_m">
 							<span class="glyphicon glyphicon-edit"></span>
 						</button>
-						<button class="btn btn-default" id="work_down">
+						<button class="btn btn-default" id="work_down" title="下载全部数据">
 							<span class="glyphicon glyphicon-download-alt"></span>
 						</button>
 					</div>
@@ -130,9 +134,9 @@
 								<tr class="my_tables_tr">
 									<th class="text-center"><input name="select_all"
 										id="select_all" type="checkbox"></th>
-									<th class="text-center">Ticket</th>
+									<th class="text-center"  width="10%">Ticket</th>
 									<th class="text-center">标题</th>
-									<th class="text-center">是否发包</th>
+									<th class="text-center">发包版本</th>
 									<th class="text-center">Ticket版本</th>
 									<th class="text-center">创建时间</th>
 									<th class="text-center">用例</th>
@@ -145,9 +149,9 @@
 							<tfoot>
 								<tr class="my_tables_tr">
 									<th class="text-center"></th>
-									<th class="text-center">Ticket</th>
+									<th class="text-center" style="width:50px">Ticket</th>
 									<th class="text-center">标题</th>
-									<th class="text-center">是否发包</th>
+									<th class="text-center">发包版本</th>
 									<th class="text-center">Ticket版本</th>
 									<th class="text-center">创建时间</th>
 									<th class="text-center">用例</th>
