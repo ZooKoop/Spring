@@ -181,7 +181,7 @@ var language = {
 	lengthMenu : "每页 _MENU_ 项",
 	loadingRecords : "载入中...",
 	processing : "处理中...",
-	search : "搜索:",
+	search : "查询:",
 	zeroRecords : "没有匹配结果",
 	paginate : {
 		"first" : "首页",
@@ -211,6 +211,16 @@ var work_columnDefs = [
 		searchable: false,
 		render:function(data,type,full){
 			return '<input type="checkbox" class="checkbox_select" value="'+data+'">'
+		}
+	},
+	{
+		targets: 1,
+		//	visible: false,// 隐藏第一列
+		data:"ticketNumber",
+		orderable:false,//不执行排序
+		searchable: false,
+		render:function(data,type,full){
+			return '<a class="_edit" href="/back/work/toUpdate?id='+full.id+'" title="编辑" class="_edit" >'+data+'</a>'
 		}
 	},
 	{
@@ -479,7 +489,8 @@ function validatorAddInit(formID,fields,modelID,vartables,inputId){
         $.post($form.attr('action'), $form.serialize(), function(result) {
         	if(result.success=="200"){
 				layer.msg("操作成功！");
-				if($(inputId).val()!==null && $(inputId).val()!==""){
+				var i = $(".file-caption-name").eq(0).text();
+				if(i!==null && i!==""){
 					$(inputId).fileinput('upload');
 				}
 				$(modelID).modal('hide');//模态框关闭背景隐藏
@@ -652,8 +663,8 @@ var fileUpload =function(inputId,url,type,fromID){
 		uploadUrl : url, // you must set a valid URL here else you will get an error
 		allowedFileExtensions : type,
 		uploadAsync:true,//是否为异步上传,默认true
-		overwriteInitial : false,//是否显示预览
-		dropZoneEnabled:false,//是否显示拖拽
+		overwriteInitial : true,//是否显示预览
+		dropZoneEnabled:true,//是否显示拖拽
 		showUpload: false, //是否显示上传按钮
 //		showCaption: true,//是否显示标题
 		//showClose:true,//是否显示关闭按钮

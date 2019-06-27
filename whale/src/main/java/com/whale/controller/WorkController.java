@@ -192,18 +192,22 @@ public class WorkController {
 	public Map<String, Object> sqlUpload(String ticketNumber,MultipartFile sqlurl_font) {
 		WorkConcent workConcent = null;
 		Map<String, Object> upload = new HashMap<String, Object>();
-		if (sqlurl_font!=null) {
-			if(!StringUtils.isBlank(ticketNumber) && !ticketNumber.equals("undefined")) {
-				workConcent = new WorkConcent();
-				Work findByTicketNumber = workServices.findByTicketNumber(ticketNumber);
-				workConcent.setSqlUrls(workSql_L+sqlurl_font.getOriginalFilename());
-				workConcent.setWork(findByTicketNumber);
-				if(workConcentServices.save(workConcent)!=null) {
-					upload = UploadUntils.upload(workSql_D,sqlurl_font);
-					System.out.println(upload.get("namesame") + "查找文件夹下相同的名字的文件");
+		if (sqlurl_font!=null && !StringUtils.isBlank(ticketNumber) && !ticketNumber.equals("undefined")) {
+			upload = UploadUntils.upload(workSql_D,sqlurl_font);
+			/**
+			 * 先判断是否上传成功，不成功return
+			 */
+			if(upload.get("status")!=null) {
+				if(upload.get("status").toString()=="false") {
 					return upload;
-				} ;
-			}
+				}
+			};
+			workConcent = new WorkConcent();
+			Work findByTicketNumber = workServices.findByTicketNumber(ticketNumber);
+			workConcent.setSqlUrls(workSql_L+sqlurl_font.getOriginalFilename());
+			workConcent.setWork(findByTicketNumber);
+			workConcentServices.save(workConcent);
+			return upload;
 		}
 		return null;
 	}
