@@ -1,4 +1,8 @@
 $(function(){
+	/**
+	 * 功能未完善区
+	 */
+	$('#my_nav a').attr("disabled",true).css("pointer-events","none");
 	/* ---------------------------插件初始化--------------------------- */
 	/*多选初始化*/
 	$('body').one('shown.bs.modal', function (e) { 
@@ -48,7 +52,6 @@ $(function(){
 	/*添加初始化、校验*/
 	
 	validatorAddInit('#add_form',workFields,'#add',work_tables,"#sqlurl");
-//	.ajax.reload(null,false);//刷新添加完的数据
 	validatorAddInit('#opction_form',opctionFields,'#opctionModel',opction_tables);
 	
 	/* ---------------------------改--------------------------- */
@@ -140,13 +143,13 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 		 deferRender:true,// 延迟渲染
 		 Paging : true,// paging属性必须为true才能实现默认初始值得功能
 		 ordering:true,//是否允许Datatables开启排序
-		 order: [[ 8, "desc" ],[ 5, "desc" ]],//表格在初始化的时候的排序
+		 order: [[ 5, "desc" ]],//表格在初始化的时候的排序
 		 searching : true, // 是否禁用原生搜索(false为禁用,true为使用)
 		 scrollX: true,
 //		 scrollCollapse: true,
 		 Processing : true, // DataTables载入数据时，是否显示‘进度’提示
 //		 bLengthChange: false,   //去掉每页显示多少条数据方法
-		 lengthMenu : [ 5,10, 20, 50, 70, 100 ],
+		 lengthMenu : [ 10, 20, 50, 70, 100 ],
 		 columns : columns,
 		 columnDefs: columnDefs,
 		 sAjaxSource:ajaxUrl
@@ -193,7 +196,7 @@ var language = {
 /*------------------work页面参数---------------------- */
 var work_columns = [
 	{data : 'id'},
-	{data : 'ticketNumber'},
+	{data : 'ticketNumber',sWidth:"30px"},
 	{data : 'ticketTitel'},
 	{data : 'patch'},
 	{data : 'version'},
@@ -283,11 +286,13 @@ var work_columnDefs = [
 		data:"isClose",
 		render:function(data,type,full){
 			var html= '';
-			if(data == 1){
-				return html += '<span class="label label-success radius">开</span>';
-			}else{
+			if(data == 0){
 				return html += '<span class="label label-default radius">关</span>';
-			}		
+			}else if(data == 1){
+				return html += '<span class="label label-success radius">开</span>';
+			}else if(data == 2){
+				return html += '<span class="label label-warning radius">自提</span>';
+			}				
 		}
 	},
 	{
@@ -488,13 +493,22 @@ function validatorAddInit(formID,fields,modelID,vartables,inputId){
         //提交上传
         $.post($form.attr('action'), $form.serialize(), function(result) {
         	if(result.success=="200"){
-				layer.msg("操作成功！");
+				
 				var i = $(".file-caption-name").eq(0).text();
 				if(i!==null && i!==""){
 					$(inputId).fileinput('upload');
 				}
-				$(modelID).modal('hide');//模态框关闭背景隐藏
-				vartables.ajax.reload(null,false);//刷新添加完的数据
+				if(window.location.pathname.indexOf("back/work/toUpdate") >= 0){
+					layer.msg("操作成功！",{time:300},function(){
+						window.location.href = "/back/work/toWork";
+					});
+				}else{
+					$(modelID).modal('hide');//模态框关闭背景隐藏
+					layer.msg("操作成功！",{time:300},function(){
+						vartables.ajax.reload(null,false);//当前页刷新添加完的数据
+//						window.location.reload();
+					});
+				}
 			}
 			if(result.fail=="400"){
 				layer.alert("操作失败！");

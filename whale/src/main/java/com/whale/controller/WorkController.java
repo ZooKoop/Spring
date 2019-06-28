@@ -81,7 +81,7 @@ public class WorkController {
 	 */
 	@RequestMapping("/toAdd")
 	public String toAdd() {
-		return "/back/work/work_add";
+		return "back/work/work_add";
 	}
 
 	@PostMapping("/add")
@@ -89,10 +89,25 @@ public class WorkController {
 	public Map<String, Object> add(Work work,Authentication authentication) {
 		HashMap<String, Object> json = new HashMap<String, Object>();
 		if (work.getTicketNumber() != null) {
-			if (workServices.findByTicketNumber(work.getTicketNumber())!=null) {
+			//判断自提唯一
+			Work noSame = workServices.findByIsCloseAndTicketNumber(work.getIsClose(),work.getTicketNumber());
+			if (noSame!=null) {
 				json.put("repeat", "222");
 			} else {
-				work.setSecurityUser(securityUserRepository.findByuserName(authentication.getName()));
+				//判断开关唯一
+				if(work.getIsClose().equals("1")) {
+					if(workServices.findByIsCloseAndTicketNumber("0",work.getTicketNumber())!=null) {
+						json.put("repeat", "222");
+						return json;
+					}
+				}
+				if(work.getIsClose().equals("0")) {
+					if(workServices.findByIsCloseAndTicketNumber("1",work.getTicketNumber())!=null) {
+						json.put("repeat", "222");
+						return json;
+					}
+				}
+				work.setSecurityUser(userInfo(authentication));
 				if (workServices.add(work)) {
 					json.put("success", "200");
 				}
@@ -105,15 +120,16 @@ public class WorkController {
 
 	@GetMapping("/delete")
 	@ResponseBody
-	public String del(String id) {
+	public String del(String id,Authentication authentication) {
 		Work work = workServices.findById(id);
+		SecurityUser userInfo = userInfo(authentication);
 		Set<WorkConcent> workConcent = work.getWorkConcentList();
 		String fileNmae ="";
 		try {
 			for (WorkConcent w : workConcent) {
 				if (!StringUtils.isBlank(w.getSqlUrls())) {
 				fileNmae = w.getSqlUrls().substring(w.getSqlUrls().lastIndexOf("/")+1, w.getSqlUrls().length());
-				boolean delete = new File(workSql_D+fileNmae).delete();
+				boolean delete = new File(workSql_D+userInfo.getId()+"/"+fileNmae).delete();
 				System.out.println("删除结果：" + delete);
 				}
 			}
@@ -159,7 +175,7 @@ public class WorkController {
 		Work work = workServices.findById(id);
 		model.addAttribute("queryUrl", queryUrl);
 		model.addAttribute("work", work);
-		return "/back/work/work_edit";
+		return "back/work/work_edit";
 	}
 
 	/**
@@ -189,11 +205,13 @@ public class WorkController {
 
 	@PostMapping("/sqlUpload")
 	@ResponseBody
-	public Map<String, Object> sqlUpload(String ticketNumber,MultipartFile sqlurl_font) {
+	public Map<String, Object> sqlUpload(String ticketNumber,MultipartFile sqlurl_font,Authentication authentication) {
 		WorkConcent workConcent = null;
 		Map<String, Object> upload = new HashMap<String, Object>();
+		SecurityUser userInfo = userInfo(authentication);
 		if (sqlurl_font!=null && !StringUtils.isBlank(ticketNumber) && !ticketNumber.equals("undefined")) {
-			upload = UploadUntils.upload(workSql_D,sqlurl_font);
+			
+			upload = UploadUntils.upload(workSql_D+userInfo.getId()+"/",sqlurl_font);
 			/**
 			 * 先判断是否上传成功，不成功return
 			 */
@@ -210,5 +228,9 @@ public class WorkController {
 			return upload;
 		}
 		return null;
+	}
+	public SecurityUser userInfo(Authentication authentication) {
+		String name = authentication.getName();
+		return securityUserRepository.findByuserName(name);
 	}
 };

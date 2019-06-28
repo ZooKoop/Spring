@@ -12,5 +12,6 @@ public interface WorkRepostitory extends JpaRepository<Work, String>,JpaSpecific
 	List<Work> quAll(@Param("userName")String userName);
 	
 	Work findByticketNumber(String number);
+	Work findByIsCloseAndTicketNumber(String close,String number);
 	
 }

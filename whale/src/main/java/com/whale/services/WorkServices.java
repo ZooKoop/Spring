@@ -67,4 +67,8 @@ public class WorkServices {
 		List<Work> wList = workRepostitory.findAllById(ids);
 		workRepostitory.deleteInBatch(wList);
 	}
+	public Work findByIsCloseAndTicketNumber(String close,String number) {
+		return workRepostitory.findByIsCloseAndTicketNumber(close,number);
+	}
+
 }
