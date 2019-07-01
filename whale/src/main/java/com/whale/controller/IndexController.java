@@ -16,10 +16,10 @@ public class IndexController {
 	public String login() {
 		return "login";
 	}
-//	@RequestMapping("/")
-//	public String index() {
-//		return "index";
-//	}
+	@RequestMapping("/index")
+	public String index() {
+		return "index";
+	}
 	@RequestMapping("/back/index")
 	public String backIndex() {
 		return "back/index";
