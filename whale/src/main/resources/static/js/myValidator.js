@@ -143,7 +143,7 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 		 deferRender:true,// 延迟渲染
 		 Paging : true,// paging属性必须为true才能实现默认初始值得功能
 		 ordering:true,//是否允许Datatables开启排序
-		 order: [[ 5, "desc" ]],//表格在初始化的时候的排序
+		 order: [[ 8, "desc" ],[ 5, "desc" ]],//表格在初始化的时候的排序
 		 searching : true, // 是否禁用原生搜索(false为禁用,true为使用)
 		 scrollX: true,
 //		 scrollCollapse: true,
@@ -221,7 +221,7 @@ var work_columnDefs = [
 		//	visible: false,// 隐藏第一列
 		data:"ticketNumber",
 		orderable:false,//不执行排序
-		searchable: false,
+//		searchable: false,
 		render:function(data,type,full){
 			return '<a class="_edit" href="/back/work/toUpdate?id='+full.id+'" title="编辑" class="_edit" >'+data+'</a>'
 		}
@@ -287,11 +287,11 @@ var work_columnDefs = [
 		render:function(data,type,full){
 			var html= '';
 			if(data == 0){
-				return html += '<span class="label label-default radius">关</span>';
+				return html += '<span class="label label-default radius">C-关</span>';
 			}else if(data == 1){
-				return html += '<span class="label label-success radius">开</span>';
+				return html += '<span class="label label-success radius">K-开</span>';
 			}else if(data == 2){
-				return html += '<span class="label label-warning radius">自提</span>';
+				return html += '<span class="label label-warning radius">D-自提</span>';
 			}				
 		}
 	},
@@ -520,10 +520,11 @@ function validatorAddInit(formID,fields,modelID,vartables,inputId){
         
     });
 	$(modelID).on('hide.bs.modal', function () {//模态框关闭触发
-		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
+//		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
 		$('.selectpicker').selectpicker('val',['noneSelectedText']);//清空
 		$('.selectpicker').selectpicker('refresh');//刷新
 		$(formID).data('bootstrapValidator').resetForm(true);//清除当前验证的关键之处加，true清空值不太好使文字域的清除不了
+		$('#isClose').selectpicker('val','0');//清空
 	});
 };
 /*修改校验*/

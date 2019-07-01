@@ -3,6 +3,7 @@ package com.whale.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,27 @@ public class WorkServices {
 			Predicate[] p = new Predicate[arrayList.size()];
 			return CriteriaBuilder.and(arrayList.toArray(p));
 		},pageable);
+		
+		return workList;
+	}
+	public List<Work> findTikcetAndIsColse(Work work) {
+		List<Work> workList = workRepostitory.findAll((root,query,CriteriaBuilder) -> {
+			List<Predicate> arrayList = new ArrayList<>();
+			//0关1开
+			String[] isClose = {"0","1"};
+			if (!StringUtils.isEmpty(work.getTicketNumber())) {
+				arrayList.add(CriteriaBuilder.equal(root.get("ticketNumber"), work.getTicketNumber()));
+			}
+			if (!StringUtils.isEmpty(work.getIsClose())) {
+				In<Object> in = CriteriaBuilder.in(root.get("isClose"));
+				for (String string : isClose) {
+					in.value(string);
+				}
+				arrayList.add(in);
+			}
+			Predicate[] p = new Predicate[arrayList.size()];
+			return CriteriaBuilder.and(arrayList.toArray(p));
+		});
 		
 		return workList;
 	}
@@ -70,5 +92,4 @@ public class WorkServices {
 	public Work findByIsCloseAndTicketNumber(String close,String number) {
 		return workRepostitory.findByIsCloseAndTicketNumber(close,number);
 	}
-
 }

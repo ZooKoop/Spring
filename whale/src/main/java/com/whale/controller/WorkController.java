@@ -89,23 +89,22 @@ public class WorkController {
 	public Map<String, Object> add(Work work,Authentication authentication) {
 		HashMap<String, Object> json = new HashMap<String, Object>();
 		if (work.getTicketNumber() != null) {
-			//判断自提唯一
-			Work noSame = workServices.findByIsCloseAndTicketNumber(work.getIsClose(),work.getTicketNumber());
-			if (noSame!=null) {
-				json.put("repeat", "222");
-			} else {
-				//判断开关唯一
-				if(work.getIsClose().equals("1")) {
-					if(workServices.findByIsCloseAndTicketNumber("0",work.getTicketNumber())!=null) {
-						json.put("repeat", "222");
-						return json;
+			if (work.getIsClose().equals("2")) {
+				//判断自提唯一，分2个情况一个自提一个开关
+				Work noSame = workServices.findByIsCloseAndTicketNumber(work.getIsClose(),work.getTicketNumber());
+				if (noSame!=null) {
+					json.put("repeat", "222");
+				}else {
+					work.setSecurityUser(userInfo(authentication));
+					if (workServices.add(work)) {
+						json.put("success", "200");
 					}
 				}
-				if(work.getIsClose().equals("0")) {
-					if(workServices.findByIsCloseAndTicketNumber("1",work.getTicketNumber())!=null) {
-						json.put("repeat", "222");
-						return json;
-					}
+			}else {
+				//判断开关唯一
+				if(workServices.findTikcetAndIsColse(work).size()>0) {
+					json.put("repeat", "222");
+					return json;
 				}
 				work.setSecurityUser(userInfo(authentication));
 				if (workServices.add(work)) {
