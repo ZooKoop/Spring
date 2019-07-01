@@ -14,8 +14,8 @@ $(function(){
 	/*全选、反选选初始化*/
 	select_all('#select_all','.checkbox_select');
 	/*上传初始化 - 修改方法里的初始化也需要同步*/
-	fileUpload("#sqlurl","/back/work/sqlUpload",['sql','txt']);//初始化提交
-	fileUpload("#sqlurl_edit","/back/work/sqlUpload",['sql','txt']);//初始化提交
+	fileUpload("#sqlurl","/whale/back/work/sqlUpload",['sql','txt']);//初始化提交
+	fileUpload("#sqlurl_edit","/whale/back/work/sqlUpload",['sql','txt']);//初始化提交
 //	多选插件初始化
 	work_select_ajax('#version,#patch',null);
 	
@@ -27,7 +27,7 @@ $(function(){
         	$(this).html( '<input type="text" placeholder="输入'+title+'" />' );
         }
 	 });
-	var work_tables = tables_init('#my_work',language,work_columns,work_columnDefs,"/back/work/queryAll");
+	var work_tables = tables_init('#my_work',language,work_columns,work_columnDefs,"/whale/back/work/queryAll");
 	work_tables.draw( false ); //页面操作保留在当前页
 	// Apply the filter
 	work_tables.columns().every( function () {
@@ -78,7 +78,7 @@ $(function(){
 				btn: ['删除', '关闭'] //按钮
 			}, function(index){
 				console.log(idList)
-				del_all('/back/work/delete_All',idList,work_tables);
+				del_all('/whale/back/work/delete_All',idList,work_tables);
 			});
 		}else{
 			layer.alert("请选择至少一条数据！")
@@ -97,7 +97,7 @@ $(function(){
 	                            area: ['20rem', '12rem'],
 	                            btn: ['删除', '关闭'] //按钮
 	                        }, function(index){
-	                			del('/back/work/delete',data.id,work_tables)
+	                			del('/whale/back/work/delete',data.id,work_tables)
 //	                            layer.close(index);
 	                        });
 
@@ -223,7 +223,7 @@ var work_columnDefs = [
 		orderable:false,//不执行排序
 //		searchable: false,
 		render:function(data,type,full){
-			return '<a class="_edit" href="/back/work/toUpdate?id='+full.id+'" title="编辑" class="_edit" >'+data+'</a>'
+			return '<a class="_edit" href="/whale/back/work/toUpdate?id='+full.id+'" title="编辑" class="_edit" >'+data+'</a>'
 		}
 	},
 	{
@@ -304,7 +304,7 @@ var work_columnDefs = [
 		searchable: false,
 		render:function(data,type,full){//data为null拿到的是整行数据
 //			console.log(data)
-			var html ='<div class="btn-group"><a class="_edit btn btn-default" href="/back/work/toUpdate?id='+data+'" title="编辑" class="_edit" > <span class="glyphicon glyphicon-edit"></span></a>'
+			var html ='<div class="btn-group"><a class="_edit btn btn-default" href="/whale/back/work/toUpdate?id='+data+'" title="编辑" class="_edit" > <span class="glyphicon glyphicon-edit"></span></a>'
 				html +=' <a class=" _del btn btn-default" href="javascript:void(0);"><span class="glyphicon glyphicon-trash"></span></a></div>'
 			return html;
 		}
@@ -338,7 +338,7 @@ var work_columnDefs = [
 var work_select_ajax = function(selectId,work){
 	$.ajax({
 		type: "get",
-		url: "/back/workopction/getAll",
+		url: "/whale/back/workopction/getAll",
 		dataType: "json",// 预期服务器返回的数据类型
 		success: function (data) {
 			var $ID = $(selectId);
@@ -500,7 +500,7 @@ function validatorAddInit(formID,fields,modelID,vartables,inputId){
 				}
 				if(window.location.pathname.indexOf("back/work/toUpdate") >= 0){
 					layer.msg("操作成功！",{time:300},function(){
-						window.location.href = "/back/work/toWork";
+						window.location.href = "/whale/back/work/toWork";
 					});
 				}else{
 					$(modelID).modal('hide');//模态框关闭背景隐藏

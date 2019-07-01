@@ -20,8 +20,18 @@ public class WebConfig implements WebMvcConfigurer {
 	 */
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/whale/**").addResourceLocations("file:D:/whale/");
-		WebMvcConfigurer.super.addResourceHandlers(registry);
+		String os = System.getProperty("os.name");
+
+		   if (os.toLowerCase().startsWith("win")) {  //如果是Windows系统
+		      registry.addResourceHandler("/whale_resoruce/**")
+		            // /apple/**表示在磁盘apple目录下的所有资源会被解析为以下的路径
+		            .addResourceLocations("file:D:/whale_resoruce/"); //媒体资源
+//		            .addResourceLocations("classpath:/META-INF/whale_resoruce/");  //swagger2页面
+		   } else {  //linux 和mac
+		      registry.addResourceHandler("/whale_resoruce/**")
+		            .addResourceLocations("file:/resources/whale_resoruce/");   //媒体资源
+//		            .addResourceLocations("classpath:/META-INF/whale_resoruce/");  //swagger2页面;
+		   }
 
 	}
 

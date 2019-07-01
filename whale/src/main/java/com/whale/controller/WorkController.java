@@ -39,7 +39,7 @@ public class WorkController {
 	 */
 	@Value("${whale.workSql_L}")
 	private String workSql_L;
-
+	
 	@Autowired
 	private WorkServices workServices;
 	@Autowired
@@ -221,7 +221,7 @@ public class WorkController {
 			};
 			workConcent = new WorkConcent();
 			Work findByTicketNumber = workServices.findByTicketNumber(ticketNumber);
-			workConcent.setSqlUrls(workSql_L+sqlurl_font.getOriginalFilename());
+			workConcent.setSqlUrls(workSql_L+userInfo.getId()+"/"+sqlurl_font.getOriginalFilename());
 			workConcent.setWork(findByTicketNumber);
 			workConcentServices.save(workConcent);
 			return upload;
