@@ -136,3 +136,33 @@ tfoot input {
 tfoot input:focus{ 
 	outline:none;
 }
+/* 置灰 */
+.gray_ { 
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+    filter: gray;
+}
+.index_conent{
+   	width: 90%;
+	height: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(3,3,3,.5);
+}
+/* 首页 */
+.whale_bg{
+	background: #201e1f;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+}
+.whale_p{
+	color: #fff;
+    font-size: 90px;
+    text-align: center;
+}

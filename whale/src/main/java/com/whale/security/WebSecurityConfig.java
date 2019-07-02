@@ -33,16 +33,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.successHandler(myAuthenticationSuccessHandler)// 加自己定义的登陆成功hadler
 				.loginPage("/login")
 				.loginProcessingUrl("/lg")// 前端from表单自定义登陆校验路径
-				.defaultSuccessUrl("/index")
+				.defaultSuccessUrl("/")
 				.failureHandler(myAuthenticationFalureHandler)
 				.failureUrl("/login?error=true")
 				.and()
 				.logout()
 				.logoutUrl("/logout")
-				.logoutSuccessUrl("/index")
+				.logoutSuccessUrl("/")
 				.and()
 				.authorizeRequests()// 表示以下都是授权的配置
-				.antMatchers("/login","/index").permitAll()
+				.antMatchers("/login","/").permitAll()
 				.anyRequest()// 任何请求
 				.authenticated()// 都需要身份认证
 				.and()
