@@ -104,69 +104,10 @@ $(function(){
 //			}
 //		});
 //	});
-	
 });
 /*初始化 . -. -..--------------------------------------------------------------------*/
 
-/* ================= 校验 ... - .- .-. - ================= */
 
-/*公共校验初始化、添加时校验*/
-/*修改校验*/
-//function updateValid(formID,opctionFields,addBtnID,url,modelID,vartables){
-//	$(formID).bootstrapValidator({
-//		message : '通用的验证失败消息',//好像从来没出现过
-//		feedbacklcons : feedbacklcons,
-//		fields : opctionFields
-//	});
-//	$(addBtnID).on('click',function() {//非submit按钮点击后进行验证，如果是submit则无需此句直接验证
-//		/*手动验证表单，当是普通按钮时。*/
-//		$(formID).data('bootstrapValidator').validate(); 
-//		if($(formID).data('bootstrapValidator').isValid()){ 
-//			addInit(url,formID,modelID,vartables);
-//		}
-//	});
-//}
-/*校验公共选项*/
-/*work表字段校验*/
-/*opction表字段校验*/
-
-
-/* ================= 校验 . -. -.. =================*/
-
-/*boot弹出框添加封装*/
-//function addInit(url,formName,modelID,vartables){
-//		$.ajax({
-//			type: "post",
-//			url: url,
-//			dataType: "json",// 预期服务器返回的数据类型
-//			data: $(formName).serialize(),
-//			success: function (result) {
-//				// console.log("----------"+result.msg);//打印服务端返回的数据(调试用)
-//				if(result.success=="200"){
-//					layer.alert("添加成功！");
-//					// 这俩需要一起用hide
-//					$(modelID).modal('hide');
-////					$('.selectpicker').selectpicker('refresh');
-////					$(modelID).on('hiden.bs.modal','.modal',function(){ $(this).removeData('bs.modal'); });
-////					$(formName).on('hide.bs.modal','.modal', function () {
-////						$(this).removeData("bs.modal");
-////					});
-//					// 下边至清空input，不清空下拉框
-//					//$(formName)[0].reset();
-//					vartables.ajax.reload();//刷新添加完的数据
-//				}
-//				if(result.fail=="400"){
-//					layer.alert("添加失败！");
-//				}
-//				if(result.repeat =="222"){
-//					layer.alert("已存在，重新添加！");
-//				}
-//			},
-//			error : function() {
-//				alert("异常！");
-//			}
-//		});
-//};
 
 /*----------------------------userlist页面参数-------------------------*/
 //var list_ajax = function (data, callback, settings) {
@@ -250,10 +191,6 @@ $(function(){
 //	visible: false,
 //	searchable: false
 //}];
-	
-
-/*------------------opction页面参数---------------------- */
-
 
 /*笔记
 (function($) {
