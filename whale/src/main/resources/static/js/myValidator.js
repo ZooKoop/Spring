@@ -520,7 +520,7 @@ function validatorAddInit(formID,fields,modelID,vartables,inputId){
         
     });
 	$(modelID).on('hide.bs.modal', function () {//模态框关闭触发
-//		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
+		$(formID)[0].reset();//重置表单，此处用jquery获取Dom节点时一定要加[0]
 		$('.selectpicker').selectpicker('val',['noneSelectedText']);//清空
 		$('.selectpicker').selectpicker('refresh');//刷新
 		$(formID).data('bootstrapValidator').resetForm(true);//清除当前验证的关键之处加，true清空值不太好使文字域的清除不了

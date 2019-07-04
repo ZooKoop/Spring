@@ -109,6 +109,7 @@
 					<div class="modal-footer">
 						<a th:href="@{/back/work/toWork}" class="btn btn-default">返回</a>
 <!-- 						<button onclick="javascript:history.back(-1);" class="btn btn-default">返回</button> -->
+						<button type="button" class="btn btn-primary work_open_edit_btn">编辑</button>
 						<button type="submit" class="btn btn-primary work_edit_btn">保存</button>
 					</div>
 				</form>
@@ -117,8 +118,19 @@
 	</div>
 </body>
 <script th:inline="javascript" type="text/javascript">
-	var work = [[${work}]];
-	/* alert(JSON.stringify(work)) */
-	work_select_ajax('#version_edit,#patch_edit',work);
+	   	var work = [[${work}]];
+	     /* alert(JSON.stringify(work)) */
+	   	work_select_ajax('#version_edit,#patch_edit',work);
+        $("input[type='text'],textarea,work_edit_dateTime").attr("readonly","readonly");
+        $(".work_edit_btn").attr("disabled","disabled");
+   	 	$('.selectpicker').prop('disabled', true);
+   	 	$('.selectpicker').selectpicker('refresh');
+	    $(".work_open_edit_btn").on('click',function(){
+	   		$('.selectpicker').prop('disabled', false);
+	   		$('.selectpicker').selectpicker('refresh');
+	 	    $("input,textarea").removeAttr("readonly","readonly");
+	 	    $("#work_edit_updateTime,#work_edit_dateTime").attr("readonly","readonly");
+	 	    $(".work_edit_btn").removeAttr("disabled","disabled");
+	    }) 
 </script>
 </html>
