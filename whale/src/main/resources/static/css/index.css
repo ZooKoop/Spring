@@ -1,21 +1,30 @@
-/* ��ҳ */
+/* 锟斤拷页 */
 .whale_bg{
-/* 	background: #201e1f; */
+	background: #b6c7d2;
 	width: 100%;
 	height: 100%;
 	z-index: -1;
-	/* background: rgba(131,175,155,1); */
-	background: -webkit-linear-gradient(#323B42, #121317); /* Safari 5.1 - 6.0 */
-    background: -o-linear-gradient(#323B42, #121317); /* Opera 11.1 - 12.0 */
-    background: -moz-linear-gradient(#323B42, #121317); /* Firefox 3.6 - 15 */
-    background: linear-gradient(#323B42, #121317); /* ��׼���﷨������������ */
+	/* background: -webkit-linear-gradient(left top,#323B42, #121317); Safari 5.1 - 6.0
+    background: -o-linear-gradient(left top,#323B42, #121317); Opera 11.1 - 12.0
+    background: -moz-linear-gradient(left top,#323B42, #121317); Firefox 3.6 - 15
+    background: linear-gradient(left top,#323B42, #121317); */ /* 锟斤拷准锟斤拷锟斤法锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷 */
+    -webkit-animation: whale_bg note-anim 5s ease infinite;
+	-webkit-animation-fill-mode: forwards;
+	animation:whale_b 2s ease infinite;
+	animation-fill-mode: forwards;
+}
+ @keyframes whale_bg{
+ 	from,to { background: #121317; }
+	50%{
+		background: #000000;
+ 	}
 }
 .whale_img{
     width: 50%;
 }
 .whale_p{
 	font: bold 5em Brush Script MT ;
-    color:#222;
+    color:#646375;
     text-shadow: 0px 2px 3px #666;
     text-align: center;
 	/* color: #fff;
@@ -34,7 +43,7 @@
     -o-animation: B 4s linear infinite;
 	animation: B 4s linear infinite; */
 }
-/* @keyframes B{
+ @keyframes B{
 	0% {
 	    -webkit-filter: blur(0px);
 	    filter: blur(0px);
@@ -63,7 +72,7 @@
 	    -webkit-filter: blur(0px);
 	    filter: blur(0px);
 	}
-} */
+}
 .index_conent{
    	width: 90%;
 	height: 90%;
@@ -91,18 +100,18 @@
 	position: absolute;
 	width: 20px;
     height: 20px; 
-    background: #3b4248;
+    /* background: #3b4248; */
     border: 1px solid #9fb5c0;
   	margin-left: 100px;
   	top: 22%;
   	left:62%;
   	border-radius: 50px;
   	box-shadow: 0px 0px 5px #a1becf;
-	animation: note-anim 5s ease infinite;
-	animation-fill-mode: forwards;
 	-webkit-animation: note-anim 5s ease infinite;
 /* 	-webkit-animation: note-anim 5s infinite ease; */
 	-webkit-animation-fill-mode: forwards;
+	animation: note-anim 5s ease infinite;
+	animation-fill-mode: forwards;
 }
 .whale_pop_gao{
 	position: absolute;

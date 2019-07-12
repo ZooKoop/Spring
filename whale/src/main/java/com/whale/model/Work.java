@@ -17,12 +17,15 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.whale.security.model.SecurityUser;
 
 @Entity
@@ -87,6 +90,14 @@ public class Work implements Serializable {
 	@UpdateTimestamp
 	@Column(name = "UPDATE_TIME")
 	private Date updateTime;
+	/*
+	 * deadline时间
+	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd")//这是进来string转date
+	@Temporal(TemporalType.DATE)////这是返回前端view的格式
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")//这是返回前端json的格式
+	@Column(name = "DEADLINE")
+	private Date deadline;
 	
 	@ManyToOne(targetEntity = SecurityUser.class)
 	@JoinColumn(name = "securityUserId")
@@ -184,6 +195,14 @@ public class Work implements Serializable {
 
 	public void setWorkConcentList(Set<WorkConcent> workConcentList) {
 		this.workConcentList = workConcentList;
+	}
+
+	public Date getDeadline() {
+		return deadline;
+	}
+
+	public void setDeadline(Date deadline) {
+		this.deadline = deadline;
 	}
 
 	

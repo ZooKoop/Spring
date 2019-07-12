@@ -95,6 +95,13 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label for="ticketNumber_edit" class="col-sm-1 control-label">Dateline</label>
+							<div class="col-sm-11">
+								<input class="layerDate form-control" type="text" th:value="${work.deadline}" id="work_deadline"
+									name="deadline">
+							</div>
+						</div>
+						<div class="form-group">
 							<label for="isClose_edit" class="col-sm-1 control-label">是否关闭</label>
 							<div class="col-sm-5">
 								<select id="isClose_edit" name="isClose"

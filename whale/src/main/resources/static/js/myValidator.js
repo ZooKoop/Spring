@@ -3,6 +3,7 @@ $(function(){
 	 * 功能未完善区
 	 */
 	$('#my_nav a').attr("disabled",true).css("pointer-events","none");
+	
 	/* ---------------------------插件初始化--------------------------- */
 	/*多选初始化*/
 	$('body').one('shown.bs.modal', function (e) { 
@@ -16,9 +17,13 @@ $(function(){
 	/*上传初始化 - 修改方法里的初始化也需要同步*/
 	fileUpload("#sqlurl","/whale/back/work/sqlUpload",['sql','txt']);//初始化提交
 	fileUpload("#sqlurl_edit","/whale/back/work/sqlUpload",['sql','txt']);//初始化提交
-//	多选插件初始化
+	//多选插件初始化
 	work_select_ajax('#version,#patch',null);
-	
+//	时间插件初始化
+	laydate.render({
+		elem: '.layerDate' //指定元素
+		,theme: 'grid'
+	});
 	/* ---------------------------查--------------------------- */
 	/* work */ 
 	 $('#my_work tfoot th').each( function () {
@@ -200,7 +205,7 @@ var work_columns = [
 	{data : 'ticketTitel'},
 	{data : 'patch'},
 	{data : 'version'},
-	{data : 'dateTime',sWidth:"118px"},
+	{data : 'deadline',sWidth:"118px"},
 	{data : 'isExample'},
 	{data : 'workConcentList'},
 	{data : 'isClose'}
