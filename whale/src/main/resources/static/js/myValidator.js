@@ -24,6 +24,7 @@ $(function(){
 		elem: '.layerDate' //指定元素
 		,theme: 'grid'
 	});
+
 	/* ---------------------------查--------------------------- */
 	/* work */ 
 	 $('#my_work tfoot th').each( function () {
@@ -37,6 +38,7 @@ $(function(){
 	// Apply the filter
 	work_tables.columns().every( function () {
 	    var column = this;
+//	    console.log(column.data.ticket)
 	    $( 'input', this.footer() ).on( 'keyup change', function () {
 	        column
 	            .search( this.value )
@@ -49,6 +51,7 @@ $(function(){
 //	        .search( this.value )
 //	        .draw();
 //	} );
+	 
 	/* work end */
 	var opction_tables = tables_init('#opction_table',language,opction_columns,hideone_columnDefs,opction_ajax);
 	opction_tables.draw( false ); //页面操作保留在当前页
@@ -127,6 +130,7 @@ $(function(){
 	
 });
 /*初始化 . -. -..--------------------------------------------------------------------*/
+
 /*tables初始化封装 */
 function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 	return $(tablesid).DataTable({
@@ -148,7 +152,7 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 		 deferRender:true,// 延迟渲染
 		 Paging : true,// paging属性必须为true才能实现默认初始值得功能
 		 ordering:true,//是否允许Datatables开启排序
-		 order: [[ 8, "desc" ],[ 5, "desc" ]],//表格在初始化的时候的排序
+		 order: [[ 8, "desc" ],[ 5, "asc" ]],//表格在初始化的时候的排序
 		 searching : true, // 是否禁用原生搜索(false为禁用,true为使用)
 		 scrollX: true,
 //		 scrollCollapse: true,
@@ -261,6 +265,39 @@ var work_columnDefs = [
 		}
 	},
 	{
+		targets: 5,
+		data:"deadlinw",
+		createdCell: function (td, cellData, rowData, row, col) {
+			if(cellData!=null && cellData!=""){
+				var i = daysBetween(cellData);
+//				console.log(i)
+				if(i<=2 && i>=0){
+					$(td).parent().css({"color":"#d9534f"});
+				}else if(i>=3&&i<=6){
+					$(td).parent().css({"color":"#f0ad4e"});
+				}else if(i>=7){
+					$(td).parent().css({"color":"#5cb85c"});
+				}
+			}
+		},
+		render:function(data,type,full){
+			if(data!=null && data!=""){
+				var i = daysBetween(data);
+//				console.log(i)
+				if(i<=2 && i>=0){
+					return "<span class='label label-danger radius'>("+i+"天)"+data+"</span>"
+				}else if(i>=3&&i<=7){
+					return "<span class='label label-warning radius'>("+i+"天)"+data+"</span>"
+				}else if(i>=8){
+					return "<span class='label label-success radius'>("+i+"天)"+data+"</span>"
+				}
+			}else{
+				return "<span class='label label-default radius'>无</span>"
+			}
+			return "<span class='label label-default radius'>"+data+"</span>"
+		}
+	},
+	{
 		targets: 6,
 		//	visible: false,// 隐藏第一列
 		data:"isExample",
@@ -292,11 +329,11 @@ var work_columnDefs = [
 		render:function(data,type,full){
 			var html= '';
 			if(data == 0){
-				return html += '<span class="label label-default radius">C-关</span>';
+				return html += '<span class="label label-default radius">Y-关</span>';
 			}else if(data == 1){
-				return html += '<span class="label label-success radius">K-开</span>';
+				return html += '<span class="label label-success radius">Z-开</span>';
 			}else if(data == 2){
-				return html += '<span class="label label-warning radius">D-自提</span>';
+				return html += '<span class="label label-warning radius">X-自提</span>';
 			}				
 		}
 	},
@@ -790,74 +827,20 @@ function getCaption(obj){
 	obj=obj.substring(index+1,obj.length);
 	return obj;
 }
-//var work_columns = [{
-//data : 'id'
-//},{
-//data : 'ticketNumber',
-//// title: "Ticket号",
-//name : 'ticketNumber',
-//render:function(data, type, row, meta){
-//	return "#"+ data +"";
-//} 
-//},{
-//data : 'description',
-//defaultContent:"",
-//// title: "Ticket描述"
-//render:function(data, type, row, meta){
-//	return "<div class='text-left' style='width:265px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data+"</div>"
-//}
-//},{
-//data : 'patch',
-//defaultContent:"",
-//title: "E-patch",
-//},{
-//data : 'isExample',
-//defaultContent:"",
-//// title: "Example",
-//render:function(data, type, row, meta){
-//	if(data>0){
-//		return "<p style='margin: 0;'>有</p>";
-//	}else{
-//		return "<p style='margin: 0;color:red'>无</p>";
-//	}			
-//}
-//},{
-//data : 'version',
-//defaultContent:"",
-//// title: "版本",
-//render:function(data, type, row, meta){
-//	return "<div>"+data+"</div>";
-//}
-//},{
-//data : 'dateTime',
-//defaultContent:""
-//	// title: "时间",
-////render:function(data, type, row, meta){
-////	return new Date(parseInt(Date.parse(data))).toLocaleString().replace(/[\u4e00-\u9fa5]/g, " ").replace(new RegExp('/','g'),"-");
-////}
-//},{
-//data : 'isClose',
-//defaultContent:"",
-//// title: "时间",
-//render:function(data, type, row, meta){
-//	var html= '';
-//	if(data == 1){
-//		html += '<div style="color:green">关闭</div>'
-//	}else{
-//		html += '<div style="color:red">未关闭</div>'
-//	}
-//	return html;
-//}
-//},{
-//data : null,
-//// title: "操作",
-//render:function(data, type, row, meta){
-//	var html ='<a href="javascript:void(0);" title="编辑" class="_edit btn btn-info" > <span class="glyphicon glyphicon-edit"></span></a>'
-////	html +='<a class="btn btn-danger" onclick="del(&quot;'+ row.id +'&quot;)" type="button" href="#" ><span class="glyphicon glyphicon-trash"></span></a>'
-//		html +='<a href="javascript:void(0);" class="_del btn btn-danger"><span class="glyphicon glyphicon-trash"></span></a>'
-//			return html;
-//}
-//}];
+function daysBetween(deadline){
+	var local = new Date();
+	var localMonth = local.getMonth() + 1;
+	var localDay = local.getDate();
+	var localYear = local.getFullYear();  
+	var localTime = localYear+'-'+localMonth+'-'+localDay;
+//	console.log(localTime)
+	var sArr = deadline.split("-");
+	var eArr = localTime.split("-");
+	var sRDate = new Date(sArr[0], sArr[1], sArr[2]);
+	var eRDate = new Date(eArr[0], eArr[1], eArr[2]);
+	var result = (sRDate-eRDate)/(24*60*60*1000);
+return result;
+}
 //var work_find_ajax = function (data, callback, settings) {
 //// 封装请求参数
 //var param = {};
