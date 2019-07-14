@@ -134,6 +134,32 @@
 							<span class="glyphicon glyphicon-download-alt"></span>
 						</button>
 					</div>
+					<div class="row" style="margin:0;">
+						<form class="form-inline">
+							<div class="input-group">
+								<label for="serach_ticket" class="input-group-addon">TICKET:</label>
+								<input id="serach_ticket" class="form-control" type="number">
+							</div>
+							<div class="input-group">
+								<label for="serach_titel" class="input-group-addon">标题:</label>
+								<input id="serach_titel" class="form-control" type="text">
+							</div>
+							<div class="form-group">
+								<label for="serach_patch">发包版本:</label>
+								<select id="serach_patch" class="selectpicker" title="选择版本">
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="serach_sql">脚本:</label>
+								<select id="serach_sql" class="selectpicker" title="选择">
+									<option value="有">有</option>
+									<option value="无">无</option>
+									<option value=""></option>
+								</select>
+							</div>
+						</form>
+						<button id="serach_btn" class="btn btn-danger">查询</button>
+					</div>
 					<div class="panel" style="margin: 0px;">
 						<table id="my_work" cellspacing="0" width="100%"
 							class="table table-hover table-striped display">

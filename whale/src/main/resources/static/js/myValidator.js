@@ -18,7 +18,7 @@ $(function(){
 	fileUpload("#sqlurl","/whale/back/work/sqlUpload",['sql','txt']);//初始化提交
 	fileUpload("#sqlurl_edit","/whale/back/work/sqlUpload",['sql','txt']);//初始化提交
 	//多选插件初始化
-	work_select_ajax('#version,#patch',null);
+	work_select_ajax('#version,#patch,#serach_patch',null);
 //	时间插件初始化
 	laydate.render({
 		elem: '.layerDate' //指定元素
@@ -44,6 +44,23 @@ $(function(){
 	            .search( this.value )
 	            .draw();
 	    } );
+	});
+	
+	$('#serach_btn').on('click', function () {
+		var ticket = $('#serach_ticket').val();
+			titel = $('#serach_titel').val();
+		    patch = $('#serach_patch').val();
+		    sql = $('#serach_sql').val();
+		work_tables
+		 	.column(1)
+		    .search(ticket)
+		    .column(2)
+		    .search(titel)
+		    .column(3)
+		    .search(patch)
+		    .column(7)
+		    .search(sql)
+		    .draw();
 	});
 //	$('#ticket_seareh').on( 'keyup', function () {
 //		work_tables
@@ -249,7 +266,7 @@ var work_columnDefs = [
 		data:"patch",
 		render:function(data,type,full){
 			if(data == null || data == ""){
-				return "<span class='label label-default radius'>未发</span>"
+				return "<span class='label label-default radius'>无</span>"
 			}
 			return "<span class='label label-info radius'>"+data+"</span>"
 		}
