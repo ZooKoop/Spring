@@ -289,7 +289,8 @@ var work_columnDefs = [
 	},
 	{
 		targets: 5,
-		data:"deadlinw",
+		data:"deadline",
+		type:"html-num-fmt",//设置列属性 https://datatables.net/reference/option/columns.type
 		createdCell: function (td, cellData, rowData, row, col) {
 			if(cellData!=null && cellData!=""){
 				var i = daysBetween(cellData);
@@ -305,19 +306,20 @@ var work_columnDefs = [
 		},
 		render:function(data,type,full){
 			if(data!=null && data!=""){
+				var $data = data.replace(new RegExp("-","g"),"");
 				var i = daysBetween(data);
-//				console.log(i)
+//				console.log(typeof(data))
 				if(i<=2 && i>=0){
-					return "<span class='label label-danger radius'>("+i+"天)"+data+"</span>"
+					return "<span class='label label-danger radius' style='margin-right:5px;'>"+i+"</span><span class='label label-danger radius'>"+$data+"</span>"
 				}else if(i>=3&&i<=7){
-					return "<span class='label label-warning radius'>("+i+"天)"+data+"</span>"
+					return "<span class='label label-warning radius' style='margin-right:5px;'>"+i+"</span><span class='label label-warning radius'>"+$data+"</span>"
 				}else if(i>=8){
-					return "<span class='label label-success radius'>("+i+"天)"+data+"</span>"
+					return "<span class='label label-success radius' style='margin-right:5px;'>"+i+"</span><span class='label label-success radius'>"+$data+"</span>"
 				}
 			}else{
 				return "<span class='label label-default radius'>无</span>"
 			}
-			return "<span class='label label-default radius'>"+data+"</span>"
+			return "<span class='label label-default radius'>"+$data+"</span>"
 		}
 	},
 	{
@@ -896,7 +898,7 @@ function daysBetween(deadline){
 	var sRDate = new Date(sArr[0], sArr[1], sArr[2]);
 	var eRDate = new Date(eArr[0], eArr[1], eArr[2]);
 	var result = (sRDate-eRDate)/(24*60*60*1000);
-return result;
+return parseInt(result);
 }
 //var work_find_ajax = function (data, callback, settings) {
 //// 封装请求参数
