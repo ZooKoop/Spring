@@ -9,9 +9,6 @@ $(function(){
 	$('body').one('shown.bs.modal', function (e) { 
 	    $(this).find('div.modal-content select').selectpicker(); 
 	})
-	$("#work_down").click(function(){
-	    $(".buttons-excel").trigger('click');
-	})
 	/*全选、反选选初始化*/
 	select_all('#select_all','.checkbox_select');
 	/*上传初始化 - 修改方法里的初始化也需要同步*/
@@ -19,6 +16,12 @@ $(function(){
 	fileUpload("#sqlurl_edit","/whale/back/work/sqlUpload",['sql','txt']);//初始化提交
 	//多选插件初始化
 	work_select_ajax('#version,#patch,#serach_patch',null);
+	//监听回车按键
+	$(document).keydown(function(event){ 
+		if(event.keyCode==13){ 
+			$("#serach_btn").click(); 
+		} 
+	}); 
 //	时间插件初始化
 	laydate.render({
 		elem: '.layerDate' //指定元素
@@ -45,12 +48,19 @@ $(function(){
 	            .draw();
 	    } );
 	});
-	
+	//初始化完毕才能插入表格的搜索条件
+	//在被选元素的开头插入内容prepend
+	$('.dataTables_length').prepend($work_table_GN);
+	$('.T-Serach').append($work_table_serach);
+	$("#work_down").click(function(){
+	    $(".buttons-excel").trigger('click');
+	})
 	$('#serach_btn').on('click', function () {
 		var ticket = $('#serach_ticket').val();
 			titel = $('#serach_titel').val();
 		    patch = $('#serach_patch').val();
 		    sql = $('#serach_sql').val();
+		    isClose = $('#serach_isClose').val();
 		work_tables
 		 	.column(1)
 		    .search(ticket)
@@ -60,16 +70,12 @@ $(function(){
 		    .search(patch)
 		    .column(7)
 		    .search(sql)
+		    .column(8)
+		    .search(isClose)
 		    .draw();
 	});
-//	$('#ticket_seareh').on( 'keyup', function () {
-//		work_tables
-//	        .columns( 1 )
-//	        .search( this.value )
-//	        .draw();
-//	} );
-	 
 	/* work end */
+	
 	var opction_tables = tables_init('#opction_table',language,opction_columns,hideone_columnDefs,opction_ajax);
 	opction_tables.draw( false ); //页面操作保留在当前页
 	
@@ -151,7 +157,7 @@ $(function(){
 /*tables初始化封装 */
 function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 	return $(tablesid).DataTable({
-		 dom: '<"pull-left"f><"pull-right"l>rt<"hide"B><"pull-left"i><"pull-right"p>',
+		 dom: '<"T-Serach">lrt<"hide"B><"pull-left"i><"pull-right"p>',
 		 buttons: [
 		        {
 		            extend: 'excel',//使用 excel扩展
@@ -432,27 +438,61 @@ var work_select_ajax = function(selectId,work){
 		}
 	})
 }
-/*编辑多选赋值*/
-//var work_updateInfo = function(work){
-//	console.log("----------"+JSON.stringify(work));//打印服务端返回的数据(调试用)，object转键值对字符串
-//    //清空多选（多选为selectpicker插件）
-//	$('#isClose_edit').selectpicker('val',work.isClose);
-//	console.log(work.version)
-//	var version_arry = [];
-//	$('#version_edit').selectpicker('val',work.version.split(','));
-//	$('#patch_edit,#isExample_edit,#version_edit,#isClose_edit,#isSql_edit').selectpicker('refresh');
-	//遍历sqlUrls
-//	if(work.workConcentList != null && work.workConcentList.length>0){
-//		$('.downList').find("a").remove();//先删除在添加
-//		result.workConcentList.forEach(function(e){
-//			if(e!=""&&e!=null){
-//				var file_sqlUrls = e.sqlUrls;
-//				var file_name = getCaption(file_sqlUrls);
-//				$('.downList').append('<a class="btn btn-sm btn-info" style="margin:0 5px 0 0 " href="'+file_sqlUrls+ '" >'+file_name+'  <span class="glyphicon glyphicon-download"></span></a>');
-//			}
-//		});
-//	}
-//}
+
+var $work_table_serach ="<form class='form-inline' role='form' style='margin-left: 5px;'>"+
+							"<div class='form-group'>"+
+							    "<div><label for='serach_ticket'>TICKET</label></div>"+
+							    "<input id='serach_ticket' class='form-control' type='number' oninput='if(value.length>5)value=value.slice(0,5)'>"+
+							"</div>"+
+							"<div class='form-group'>"+
+								"<div><label for='serach_titel'>标题</label></div>"+
+								"<input id='serach_titel' class='form-control' type='text'>"+
+							"</div>"+
+							"<div class='form-group'>"+
+								"<div><label for='serach_patch'>发包版本</label></div>"+
+								"<select id='serach_patch' class='selectpicker' title='发包版本'> </select>"+
+							"</div>"+
+							"<div class='form-group'>"+
+								"<div><label for='serach_sql'>脚本</label></div>"+
+								"<select id='serach_sql' class='selectpicker' title='脚本'>"+
+								  "<option></option>"+
+								  "<option>有</option>"+
+								  "<option>无</option>"+
+								"</select>"+
+							"</div>"+
+							"<div class='form-group'>"+
+								"<div><label for='serach_isClose'>状态</label></div>"+
+								"<select id='serach_isClose' class='selectpicker' title='状态'>"+
+									"<option></option>"+
+									"<option>自提</option>"+
+									"<option>开</option>"+
+									"<option>关</option>"+
+								"</select>"+
+							"</div>"+
+							"<div class='form-group'>"+
+								"<div><label class='invisible'>查询</label></div>"+
+								"<button id='serach_btn' type='button' class='btn btn-info'><span class='glyphicon glyphicon-search'></span></button>"+
+							"</div>"+
+						"</form>";
+
+
+
+
+
+var $work_table_GN ="<div class='btn-group' style='margin: 5px;'>"+
+					"<button class='btn btn-default' data-toggle='modal' data-target='#add'>"+
+						"<span class='glyphicon glyphicon-plus'></span>"+
+					"</button>"+
+					"<button class='btn btn-default' id='work_del_m' title='批量删除' disabled='disabled'>"+
+						"<span class='glyphicon glyphicon-trash'></span>"+
+					"</button>"+
+					"<button class='btn btn-default' id='work_edit_m' title='批量修改' disabled='disabled'>"+
+						"<span class='glyphicon glyphicon-edit'></span>"+
+					"</button>"+
+					"<button class='btn btn-default' id='work_down' title='下载全部数据'>"+
+						"<span class='glyphicon glyphicon-download-alt'></span>"+
+					"</button>"+
+					"</div>";
 
 /*------------------opction_ajax---------------------- */
 var opction_ajax = function (data, callback, settings) {

@@ -106,95 +106,50 @@
 		</div>
 		<!-- /.modal -->
 	</div>
-	<!-- 修改模态框 -->
-	<div class="modal fade" role="dialog" id="work_edit_model">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content"></div>
+	<div class="container-fluid">
+		<div class="row">
+			<div th:replace="common/common_pub :: navbar_"></div>
 		</div>
-	</div>
-	<div th:replace="common/common_pub :: navbar_"></div>
-	<div class="row" style="width: 100%; margin: 0;">
-		<div th:replace="common/common_pub :: left_nav"></div>
-		<div class="col-md-10" style="padding: 0; overflow: hidden;">
-			<div style="margin: 0" class="panel panel-default">
-				<div class="panel-body">
-					<!-- 按钮触发模态框 -->
-					<div class="btn-group" style="margin: 5px;">
-						<button class="btn btn-default" data-toggle="modal"
-							data-target="#add">
-							<span class="glyphicon glyphicon-plus"></span>
-						</button>
-						<button class="btn btn-default" id="work_del_m" title="批量删除" disabled="disabled">
-							<span class="glyphicon glyphicon-trash"></span>
-						</button>
-						<button class="btn btn-default" id="work_edit_m" title="批量修改" disabled="disabled">
-							<span class="glyphicon glyphicon-edit"></span>
-						</button>
-						<button class="btn btn-default" id="work_down" title="下载全部数据">
-							<span class="glyphicon glyphicon-download-alt"></span>
-						</button>
-					</div>
-					<div class="row" style="margin:0;">
-						<form class="form-inline">
-							<div class="input-group">
-								<label for="serach_ticket" class="input-group-addon">TICKET:</label>
-								<input id="serach_ticket" class="form-control" type="number">
-							</div>
-							<div class="input-group">
-								<label for="serach_titel" class="input-group-addon">标题:</label>
-								<input id="serach_titel" class="form-control" type="text">
-							</div>
-							<div class="form-group">
-								<label for="serach_patch">发包版本:</label>
-								<select id="serach_patch" class="selectpicker" title="选择版本">
-								</select>
-							</div>
-							<div class="form-group">
-								<label for="serach_sql">脚本:</label>
-								<select id="serach_sql" class="selectpicker" title="选择">
-									<option value="有">有</option>
-									<option value="无">无</option>
-									<option value=""></option>
-								</select>
-							</div>
-						</form>
-						<button id="serach_btn" class="btn btn-danger">查询</button>
-					</div>
-					<div class="panel" style="margin: 0px;">
-						<table id="my_work" cellspacing="0" width="100%"
-							class="table table-hover table-striped display">
-							<thead>
-								<tr class="my_tables_tr">
-									<th class="text-center"><input name="select_all"
-										id="select_all" type="checkbox"></th>
-									<th class="text-center"  width="10%">Ticket</th>
-									<th class="text-center">标题</th>
-									<th class="text-center">发包版本</th>
-									<th class="text-center">Ticket版本</th>
-									<th class="text-center">Deadline</th>
-									<th class="text-center">用例</th>
-									<th class="text-center">脚本</th>
-									<th class="text-center">状态</th>
-									<th class="text-center">编辑</th>
-								</tr>
-							</thead>
-							<tbody></tbody>
-							<tfoot>
-								<tr class="my_tables_tr">
-									<th class="text-center"></th>
-									<th class="text-center" style="width:50px">Ticket</th>
-									<th class="text-center">标题</th>
-									<th class="text-center">发包版本</th>
-									<th class="text-center">Ticket版本</th>
-									<th class="text-center">Deadline</th>
-									<th class="text-center">用例</th>
-									<th class="text-center">脚本</th>
-									<th class="text-center">状态</th>
-									<th class="text-center"></th>
-								</tr>
-							</tfoot>
-						</table>
-					</div>
+		<div class="row">
+			<div th:replace="common/common_pub :: left_nav"></div>
+			<div class="col-md-10">
+				<div class="row">
+					<h1 style="margin-left: 5px;">TICKET</h1>
+				</div>
+				<div class="row">
+					<table id="my_work" cellspacing="0" width="100%"
+						class="table table-hover table-striped display">
+						<thead>
+							<tr class="my_tables_tr">
+								<th class="text-center"><input name="select_all"
+									id="select_all" type="checkbox"></th>
+								<th class="text-center"  width="10%">Ticket</th>
+								<th class="text-center">标题</th>
+								<th class="text-center">发包版本</th>
+								<th class="text-center">Ticket版本</th>
+								<th class="text-center">Deadline</th>
+								<th class="text-center">用例</th>
+								<th class="text-center">脚本</th>
+								<th class="text-center">状态</th>
+								<th class="text-center">编辑</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+						<tfoot>
+							<tr class="my_tables_tr">
+								<th class="text-center"></th>
+								<th class="text-center" style="width:50px">Ticket</th>
+								<th class="text-center">标题</th>
+								<th class="text-center">发包版本</th>
+								<th class="text-center">Ticket版本</th>
+								<th class="text-center">Deadline</th>
+								<th class="text-center">用例</th>
+								<th class="text-center">脚本</th>
+								<th class="text-center">状态</th>
+								<th class="text-center"></th>
+							</tr>
+						</tfoot>
+					</table>
 				</div>
 			</div>
 		</div>
