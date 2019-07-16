@@ -48,7 +48,7 @@ $(function(){
 	            .draw();
 	    } );
 	});
-	//初始化完毕才能插入表格的搜索条件
+	//初始化完毕后续
 	//在被选元素的开头插入内容prepend
 	$('.dataTables_length').prepend($work_table_GN);
 	$('.T-Serach').append($work_table_serach);
@@ -74,6 +74,7 @@ $(function(){
 		    .search(isClose)
 		    .draw();
 	});
+
 	/* work end */
 	
 	var opction_tables = tables_init('#opction_table',language,opction_columns,hideone_columnDefs,opction_ajax);
@@ -150,46 +151,14 @@ $(function(){
 		
 	});
 
-	
+
 });
 /*初始化 . -. -..--------------------------------------------------------------------*/
 
 /*tables初始化封装 */
 function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
-	return $(tablesid).DataTable({
-		 dom: '<"T-Serach">lrt<"hide"B><"pull-left"i><"pull-right"p>',
-		 buttons: [
-		        {
-		            extend: 'excel',//使用 excel扩展
-		            text: '导出本页',// 显示文字
-		            exportOptions: {
-		                //自定义导出选项
-		                //如：可自定义导出那些列，那些行
-		                //TODO...
-		            }
-		        }
-		    ],
-		 PagingType : "full_numbers",
-		 language : language,
-		 destroy : true, // 销毁表格对象
-		 deferRender:true,// 延迟渲染
-		 Paging : true,// paging属性必须为true才能实现默认初始值得功能
-		 ordering:true,//是否允许Datatables开启排序
-		 order: [[ 8, "desc" ],[ 5, "asc" ]],//表格在初始化的时候的排序
-		 searching : true, // 是否禁用原生搜索(false为禁用,true为使用)
-		 scrollX: true,
-//		 scrollCollapse: true,
-		 Processing : true, // DataTables载入数据时，是否显示‘进度’提示
-//		 bLengthChange: false,   //去掉每页显示多少条数据方法
-		 lengthMenu : [ 10, 20, 50, 70, 100 ],
-		 columns : columns,
-		 columnDefs: columnDefs,
-		 sAjaxSource:ajaxUrl
-//		 bAutoWidth : false// 自动宽度
-//		 stateSave:true,
-//		 serverSide : true, // 是否启动服务器端数据导入
-//		 ajax: ajax
-	 });
+
+
 	//页面上点击此属性，将当前页的列表数据全部选中
     $('#select_all').on('click', function () {
         if (this.checked) {
@@ -202,6 +171,44 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
             });
         }
     });
+
+	return $(tablesid).DataTable({
+		dom: '<"T-Serach">lrt<"hide"B><"pull-left"i><"pull-right"p>',
+		buttons: [
+			{
+				extend: 'excel',//使用 excel扩展
+				text: '导出本页',// 显示文字
+				exportOptions: {
+					//自定义导出选项
+					//如：可自定义导出那些列，那些行
+					//TODO...
+				}
+			}
+		],
+		PagingType : "full_numbers",
+		language : language,
+		destroy : true, // 销毁表格对象
+		deferRender:true,// 延迟渲染
+		Paging : true,// paging属性必须为true才能实现默认初始值得功能
+		ordering:true,//是否允许Datatables开启排序
+		order: [[ 8, "desc" ],[ 5, "asc" ]],//表格在初始化的时候的排序
+		searching : true, // 是否禁用原生搜索(false为禁用,true为使用)
+		scrollX: true,
+//		 scrollCollapse: true,
+		Processing : true, // DataTables载入数据时，是否显示‘进度’提示
+//		 bLengthChange: false,   //去掉每页显示多少条数据方法
+		lengthMenu : [ 10, 20, 50, 70, 100 ],
+		columns : columns,
+		columnDefs: columnDefs,
+		sAjaxSource:ajaxUrl,
+		fnInitComplete: function (oSettings, json) {
+			$("[data-toggle='tooltip']").tooltip();
+		}
+//		 bAutoWidth : false// 自动宽度
+//		 stateSave:true,
+//		 serverSide : true, // 是否启动服务器端数据导入
+//		 ajax: ajax
+	});
  };
  
 /*tables公用语言设置 */
@@ -290,11 +297,11 @@ var work_columnDefs = [
 	{
 		targets: 5,
 		data:"deadline",
-		type:"html-num-fmt",//设置列属性 https://datatables.net/reference/option/columns.type
+		// type:"html",//设置列属性 https://datatables.net/reference/option/columns.type
 		createdCell: function (td, cellData, rowData, row, col) {
 			if(cellData!=null && cellData!=""){
 				var i = daysBetween(cellData);
-//				console.log(i)
+				// console.log(i)
 				if(i<=2 && i>=0){
 					$(td).parent().css({"color":"#d9534f"});
 				}else if(i>=3&&i<=6){
@@ -306,20 +313,19 @@ var work_columnDefs = [
 		},
 		render:function(data,type,full){
 			if(data!=null && data!=""){
-				var $data = data.replace(new RegExp("-","g"),"");
 				var i = daysBetween(data);
 //				console.log(typeof(data))
 				if(i<=2 && i>=0){
-					return "<span class='label label-danger radius' style='margin-right:5px;'>"+i+"</span><span class='label label-danger radius'>"+$data+"</span>"
+					return "<span data-toggle='tooltip' data-placement='right' title='剩"+i+"天'class='label label-danger radius'>"+data+"</span>"
 				}else if(i>=3&&i<=7){
-					return "<span class='label label-warning radius' style='margin-right:5px;'>"+i+"</span><span class='label label-warning radius'>"+$data+"</span>"
+					return "<span data-toggle='tooltip' data-placement='right' title='剩"+i+"天'class='label label-warning radius'>"+data+"</span>"
 				}else if(i>=8){
-					return "<span class='label label-success radius' style='margin-right:5px;'>"+i+"</span><span class='label label-success radius'>"+$data+"</span>"
+					return "<span data-toggle='tooltip' data-placement='right' title='剩"+i+"天'class='label label-success radius'>"+data+"</span>"
 				}
 			}else{
 				return "<span class='label label-default radius'>无</span>"
 			}
-			return "<span class='label label-default radius'>"+$data+"</span>"
+			return "<span class='label label-default radius'>"+data+"</span>"
 		}
 	},
 	{
@@ -898,7 +904,7 @@ function daysBetween(deadline){
 	var sRDate = new Date(sArr[0], sArr[1], sArr[2]);
 	var eRDate = new Date(eArr[0], eArr[1], eArr[2]);
 	var result = (sRDate-eRDate)/(24*60*60*1000);
-return parseInt(result);
+return result;
 }
 //var work_find_ajax = function (data, callback, settings) {
 //// 封装请求参数

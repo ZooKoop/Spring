@@ -47,8 +47,7 @@ $(function(){
 			}
 		});
 	});
-	/* 提示初始化 */
-	$("[data-toggle='tooltip']").tooltip();
+
 	/* ---------------------------userlist页面参数------------------- */
 //	var myTables = tables_init('#table_id_example',language,list_columns,list_columnDefs,list_ajax);
 //	/*del_f('#table_id_example','/back/user/delete','._del',myTables);*/
