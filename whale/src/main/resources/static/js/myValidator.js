@@ -8,7 +8,7 @@ $(function(){
 	/*多选初始化*/
 	$('body').one('shown.bs.modal', function (e) { 
 	    $(this).find('div.modal-content select').selectpicker(); 
-	})
+	});
 	/*全选、反选选初始化*/
 	select_all('#select_all','.checkbox_select');
 	/*上传初始化 - 修改方法里的初始化也需要同步*/
@@ -201,9 +201,37 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 		columns : columns,
 		columnDefs: columnDefs,
 		sAjaxSource:ajaxUrl,
+		fnCreatedRow: function( row, data, dataIndex ) {
+			if ( data.isClose == "0" ) {
+				$(row).css({"color":"#777","background":"rgba(119,119,119,.1)"}).find(".label").attr("class","label radius label-default");
+				trHover("rgba(119,119,119,.3)","rgba(119,119,119,.1)");
+			}
+			if(data.deadline!=null && data.deadline!=""){
+				var i = daysBetween(data.deadline);
+				// console.log(i)
+				if(i<=2 && i>=0){
+					$(row).css({"color":"#d9534f","background":"rgba(217,83,79,.1)"}).find(".label").attr("class","label radius label-danger");
+					trHover("rgba(217,83,79,.3)","rgba(217,83,79,.1)");
+				}else if(i>=3&&i<=6){
+					$(row).css({"color":"#f0ad4e","background":"rgba(240,173,78,.1)"}).find(".label").attr("class","label radius label-warning");
+					trHover("rgba(240,173,78,.3)","rgba(240,173,78,.1)");
+				}else if(i>=7){
+					$(row).css({"color":"#5cb85c","background":"rgba(92,184,92,.1)"}).find(".label").attr("class","label radius label-success");
+					trHover("rgba(92,184,92,.3)","rgba(92,184,92,.1)");
+				}
+			}
+			function trHover(color1,color2) {
+				$(row).hover(function () {
+					$(this).css({"background":color1})
+				},function () {
+					$(this).css({"background":color2})
+				})
+			}
+		},
 		fnInitComplete: function (oSettings, json) {
 			$("[data-toggle='tooltip']").tooltip();
 		}
+
 //		 bAutoWidth : false// 自动宽度
 //		 stateSave:true,
 //		 serverSide : true, // 是否启动服务器端数据导入
@@ -271,7 +299,7 @@ var work_columnDefs = [
 		data:"ticketTitel",
 		orderable:false,//不执行排序
 		render:function(data,type,full){
-			return "<div title='"+data+"' class='text-left' style='width:265px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data+"</div>"
+			return "<div data-toggle='tooltip' data-placement='right' title='"+data+"' class='text-left' style='width:265px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data+"</div>"
 		}
 	},
 	{
@@ -299,6 +327,7 @@ var work_columnDefs = [
 		data:"deadline",
 		// type:"html",//设置列属性 https://datatables.net/reference/option/columns.type
 		createdCell: function (td, cellData, rowData, row, col) {
+			// console.log(rowData.isClose)
 			if(cellData!=null && cellData!=""){
 				var i = daysBetween(cellData);
 				// console.log(i)
@@ -316,11 +345,11 @@ var work_columnDefs = [
 				var i = daysBetween(data);
 //				console.log(typeof(data))
 				if(i<=2 && i>=0){
-					return "<span data-toggle='tooltip' data-placement='right' title='剩"+i+"天'class='label label-danger radius'>"+data+"</span>"
+					return "<span data-toggle='tooltip' data-placement='right' title='剩"+i+"天' class='label label-danger radius'>"+data+"</span>"
 				}else if(i>=3&&i<=7){
-					return "<span data-toggle='tooltip' data-placement='right' title='剩"+i+"天'class='label label-warning radius'>"+data+"</span>"
+					return "<span data-toggle='tooltip' data-placement='right' title='剩"+i+"天' class='label label-warning radius'>"+data+"</span>"
 				}else if(i>=8){
-					return "<span data-toggle='tooltip' data-placement='right' title='剩"+i+"天'class='label label-success radius'>"+data+"</span>"
+					return "<span data-toggle='tooltip' data-placement='right' title='剩"+i+"天' class='label label-success radius'>"+data+"</span>"
 				}
 			}else{
 				return "<span class='label label-default radius'>无</span>"
