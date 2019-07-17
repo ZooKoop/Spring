@@ -157,21 +157,6 @@ $(function(){
 
 /*tables初始化封装 */
 function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
-
-
-	//页面上点击此属性，将当前页的列表数据全部选中
-    $('#select_all').on('click', function () {
-        if (this.checked) {
-            $('.checkbox_select').each(function () {
-                this.checked = true;
-            });
-        } else {
-            $('.checkbox_select').each(function () {
-                this.checked = false;
-            });
-        }
-    });
-
 	return $(tablesid).DataTable({
 		dom: '<"T-Serach">lrt<"hide"B><"pull-left"i><"pull-right"p>',
 		buttons: [
@@ -202,11 +187,12 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 		columnDefs: columnDefs,
 		sAjaxSource:ajaxUrl,
 		fnCreatedRow: function( row, data, dataIndex ) {
+			console.log(data.deadline)
 			if ( data.isClose == "0" ) {
 				$(row).css({"color":"#777","background":"rgba(119,119,119,.1)"}).find(".label").attr("class","label radius label-default");
 				trHover("rgba(119,119,119,.3)","rgba(119,119,119,.1)");
 			}
-			if(data.deadline!=null && data.deadline!=""){
+			if(data.deadline!=null){
 				var i = daysBetween(data.deadline);
 				// console.log(i)
 				if(i<=2 && i>=0){
@@ -219,6 +205,9 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 					$(row).css({"color":"#5cb85c","background":"rgba(92,184,92,.1)"}).find(".label").attr("class","label radius label-success");
 					trHover("rgba(92,184,92,.3)","rgba(92,184,92,.1)");
 				}
+			}else if(data.isClose=="1"){
+				$(row).css({"color":"#5cb85c","background":"rgba(91,192,222,.1)"}).find(".label").attr("class","label radius label-info");
+				trHover("rgba(91,192,222,.3)","rgba(91,192,222,.1)");
 			}
 			function trHover(color1,color2) {
 				$(row).hover(function () {
@@ -229,9 +218,21 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 			}
 		},
 		fnInitComplete: function (oSettings, json) {
+			console.log($(this))
 			$("[data-toggle='tooltip']").tooltip();
+			//页面上点击此属性，将当前页的列表数据全部选中
+			$('#select_all').on('click', function () {
+				if (this.checked) {
+					$('.checkbox_select').each(function () {
+						this.checked = true;
+					});
+				} else {
+					$('.checkbox_select').each(function () {
+						this.checked = false;
+					});
+				}
+			});
 		}
-
 //		 bAutoWidth : false// 自动宽度
 //		 stateSave:true,
 //		 serverSide : true, // 是否启动服务器端数据导入
