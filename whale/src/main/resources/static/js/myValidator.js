@@ -191,24 +191,29 @@ function tables_init(tablesid,language,columns,columnDefs,ajaxUrl){
 			if ( data.isClose == "0" ) {
 				$(row).css({"color":"#777","background":"rgba(119,119,119,.1)"}).find(".label").attr("class","label radius label-default");
 				trHover("rgba(119,119,119,.3)","rgba(119,119,119,.1)");
-			}
-			if(data.deadline!=null){
-				var i = daysBetween(data.deadline);
-				// console.log(i)
-				if(i<=2 && i>=0){
-					$(row).css({"color":"#d9534f","background":"rgba(217,83,79,.1)"}).find(".label").attr("class","label radius label-danger");
-					trHover("rgba(217,83,79,.3)","rgba(217,83,79,.1)");
-				}else if(i>=3&&i<=6){
-					$(row).css({"color":"#f0ad4e","background":"rgba(240,173,78,.1)"}).find(".label").attr("class","label radius label-warning");
-					trHover("rgba(240,173,78,.3)","rgba(240,173,78,.1)");
-				}else if(i>=7){
-					$(row).css({"color":"#5cb85c","background":"rgba(92,184,92,.1)"}).find(".label").attr("class","label radius label-success");
-					trHover("rgba(92,184,92,.3)","rgba(92,184,92,.1)");
-				}
 			}else if(data.isClose=="1"){
-				$(row).css({"color":"#5cb85c","background":"rgba(91,192,222,.1)"}).find(".label").attr("class","label radius label-info");
-				trHover("rgba(91,192,222,.3)","rgba(91,192,222,.1)");
+				if(data.deadline!=null){
+					var i = daysBetween(data.deadline);
+					console.log(i)
+					if(i<0){
+						$(row).css({"color":"#d9534f","background":"rgba(217,83,79,.1)"}).find(".label").attr("class","label radius label-danger").eq(2).css({"text-decoration":"line-through"});
+						trHover("rgba(217,83,79,.3)","rgba(217,83,79,.1)");
+					}else if(i<=2 && i>=0){
+						$(row).css({"color":"#d9534f","background":"rgba(217,83,79,.1)"}).find(".label").attr("class","label radius label-danger");
+						trHover("rgba(217,83,79,.3)","rgba(217,83,79,.1)");
+					}else if(i>=3&&i<=6){
+						$(row).css({"color":"#f0ad4e","background":"rgba(240,173,78,.1)"}).find(".label").attr("class","label radius label-warning");
+						trHover("rgba(240,173,78,.3)","rgba(240,173,78,.1)");
+					}else if(i>=7){
+						$(row).css({"color":"#5cb85c","background":"rgba(92,184,92,.1)"}).find(".label").attr("class","label radius label-success");
+						trHover("rgba(92,184,92,.3)","rgba(92,184,92,.1)");
+					}
+				}else{
+					$(row).css({"color":"#5bc0de","background":"rgba(91,192,222,.1)"}).find(".label").attr("class","label radius label-info");
+					trHover("rgba(91,192,222,.3)","rgba(91,192,222,.1)");
+				}
 			}
+
 			function trHover(color1,color2) {
 				$(row).hover(function () {
 					$(this).css({"background":color1})
