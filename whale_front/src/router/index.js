@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
-// import Header from '@/components/header/Header'
+import BackHome from '@/components/back/BackHome'
 
 Vue.use(Router)
 
@@ -11,6 +11,11 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Home
+    },
+    {
+      path: '/back',
+      name: 'BackHome',
+      component: BackHome
     }
   ]
 })
