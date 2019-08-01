@@ -65,7 +65,17 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
-      }
+      },
+	  // webpack config
+		// {
+		//   test: /\.js$/,
+		//   loader: 'babel-loader',
+		//   exclude: file => {
+		// 	return /node_modules/.test(file) &&
+		// 	  (!/\.vue\.js/.test(file) &&
+		// 		!/vue-data-tables\/src\/mixins\/ShareMixin\.js/.test(file))
+		//   }
+		// }
     ]
   },
   node: {
