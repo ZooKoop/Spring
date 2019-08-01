@@ -9,7 +9,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication(exclude = { RedisAutoConfiguration.class,ErrorMvcAutoConfiguration.class })
-
 //@EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class})//@SpringBootApplication包含3个注解禁用ErrorMvcAutoConfiguration
 public class WhaleApplication extends SpringBootServletInitializer {
 

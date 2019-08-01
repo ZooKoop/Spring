@@ -7,16 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
+
+import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.whale.model.Work;
 import com.whale.model.WorkConcent;
@@ -26,7 +25,9 @@ import com.whale.services.WorkConcentServices;
 import com.whale.services.WorkServices;
 import com.whale.tools.UploadUntils;
 
-@Controller
+//@Controller
+@RestController
+@Api(value = "Ticket")
 @RequestMapping("/back/work")
 public class WorkController {
 	/**
@@ -55,7 +56,6 @@ public class WorkController {
 	}
 
 	@GetMapping("/queryAll")
-	@ResponseBody
 	// public Page<Work> queryAll(@RequestParam(value = "page") Integer page,
 	// @RequestParam(value = "size", defaultValue = "5") Integer size,
 	// Authentication authentication,
@@ -76,7 +76,7 @@ public class WorkController {
 
 	/**
 	 * 模态框跳转用
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping("/toAdd")
@@ -209,7 +209,7 @@ public class WorkController {
 		Map<String, Object> upload = new HashMap<String, Object>();
 		SecurityUser userInfo = userInfo(authentication);
 		if (sqlurl_font!=null && !StringUtils.isBlank(ticketNumber) && !ticketNumber.equals("undefined")) {
-			
+
 			upload = UploadUntils.upload(workSql_D+userInfo.getId()+"/",sqlurl_font);
 			/**
 			 * 先判断是否上传成功，不成功return

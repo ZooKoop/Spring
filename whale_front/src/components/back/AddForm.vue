@@ -1,6 +1,6 @@
 <template>
   <el-form :label-position="labelPosition" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
-    <el-form-item label="TicketNum" prop="name">
+    <el-form-item label="T-NUM" prop="name">
       <el-input v-model="ruleForm.name"></el-input>
     </el-form-item>
 
@@ -73,6 +73,7 @@
 </template>
 <script>
   export default {
+
     data() {
       return {
         labelPosition: "left",

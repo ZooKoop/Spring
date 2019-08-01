@@ -9,6 +9,12 @@ import router from './router'
 import VueDataTables from 'vue-data-tables'
 Vue.use(VueDataTables)
 
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+Vue.use(VueAxios,axios);
+// import  VueResource  from  'vue-resource';
+// Vue.use(VueResource);
+
 Vue.config.productionTip = false
 Vue.use(ElementUI,{size: 'small'});
 /* eslint-disable no-new */

@@ -5,7 +5,7 @@
       <el-button type="primary" icon="el-icon-share"></el-button>
       <el-button type="primary" icon="el-icon-delete"></el-button>
     </el-button-group>
-    <el-drawer title="增加Tickt" :visible.sync="drawer" :before-close="handleClose" size="50%">
+    <el-drawer title="增加Ticket" :visible.sync="drawer" :before-close="handleClose" size="50%">
       <AddForm style="padding: 10px;"></AddForm>
     </el-drawer>
     <data-tables :data="data" :action-col="actionCol">
@@ -21,6 +21,14 @@
 <script>
   import AddForm from '@/components/back/AddForm';
   export default {
+    mounted:function(){
+
+      this.axios.get('http://localhost:8080/whale/back/work/queryAll').then((response)=>{
+                console.log(response.data)
+            }).catch((response)=>{
+                console.log(response)
+            })
+    },
     components:{AddForm},
     data() {
       return {

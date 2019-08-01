@@ -8,6 +8,7 @@
 <script>
   // import img from '../../static/imgs'
   export default {
+
     name: 'Home',
     data() {
       return {

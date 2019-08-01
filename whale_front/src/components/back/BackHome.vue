@@ -17,6 +17,7 @@
   import BodyLeft from '@/components/back/BodyLeft.vue'
   import BodyRight from '@/components/back/BodyRight.vue'
   export default {
+
     components: {
       Header,
       BodyLeft,
