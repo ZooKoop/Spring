@@ -1,6 +1,5 @@
 package com.whale.config;
 
-import com.whale.controller.WorkController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -29,7 +28,7 @@ public class Swagger2Config {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("WHALE--API说明文档")
+                .title("WHALE--API文档")
                 .description("whale")
                 .version("1.0")
                 .build();

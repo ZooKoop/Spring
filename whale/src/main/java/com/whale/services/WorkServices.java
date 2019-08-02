@@ -1,17 +1,17 @@
 package com.whale.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder.In;
-import javax.persistence.criteria.Predicate;
+import com.whale.model.Work;
+import com.whale.repostitory.WorkRepostitory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import com.whale.model.Work;
-import com.whale.repostitory.WorkRepostitory;
+
+import javax.persistence.criteria.CriteriaBuilder.In;
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 @Service
 public class WorkServices {
 	@Autowired
@@ -75,7 +75,7 @@ public class WorkServices {
 	public boolean update(Work work) {
 		return workRepostitory.save(work)!=null ? true:false;
 	}
-	public List<Work> findAll(Work work) {
+	public List<Work> findAll() {
 		return workRepostitory.findAll();
 	}
 	public List<Work> quAll(Work work) {

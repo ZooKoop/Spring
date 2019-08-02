@@ -21,31 +21,47 @@
 <script>
   import AddForm from '@/components/back/AddForm';
   export default {
-    mounted:function(){
-
-      this.axios.get('http://localhost:8080/whale/back/work/queryAll').then((response)=>{
-                console.log(response.data)
-            }).catch((response)=>{
-                console.log(response)
-            })
+    components: {
+      AddForm
     },
-    components:{AddForm},
+    mounted: function() {
+      this.axios.get('http://localhost:8080/whale/back/work/queryAll').then((response) => {
+        this.data = response.data;
+      }).catch((response) => {
+      })
+    },
     data() {
       return {
         drawer: false,
-        data: [{
-          'BH': "1",
-          'NM': "kaka"
+        workData: [],
+        data: [],
+        titles: [{
+          prop: "ticketNumber",
+          label: "T-NUM",
+          type: Number,
+           order: 'descending'
         }, {
-          'BH': "1",
-          'NM': "kaka"
-        }],
-        titles: [{}, {
-          prop: "BH",
-          label: "编号",
+          prop: "ticketTitel",
+          label: "标题",
+          // show-overflow-tooltip="true"
         }, {
-          prop: "NM",
-          label: "名字"
+          prop: "patch",
+          label: "发包版本"
+        }, {
+          prop: "version",
+          label: "TK版本"
+        }, {
+          prop: "deadline",
+          label: "Deadline"
+        }, {
+          prop: "isExample",
+          label: "用例"
+        }, {
+          prop: "sqlurl_font",
+          label: "脚本"
+        }, {
+          prop: "isClose",
+          label: "状态"
         }],
         actionCol: {
           label: '操作',

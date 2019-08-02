@@ -1,22 +1,6 @@
 package com.whale.controller;
 
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-
-import io.swagger.annotations.Api;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import com.whale.model.Work;
 import com.whale.model.WorkConcent;
 import com.whale.security.model.SecurityUser;
@@ -24,6 +8,21 @@ import com.whale.security.repository.SecurityUserRepository;
 import com.whale.services.WorkConcentServices;
 import com.whale.services.WorkServices;
 import com.whale.tools.UploadUntils;
+import io.swagger.annotations.Api;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 //@Controller
 @RestController
@@ -61,17 +60,24 @@ public class WorkController {
 	// Authentication authentication,
 	// Work work
 	// ) {
-	public Map<String, Object> queryAll(Authentication authentication, Work work) {
-		String userName = authentication.getName();
-		SecurityUser byuserName = securityUserRepository.findByuserName(userName);
-		work.setSecurityUser(byuserName);
-		if (null != byuserName) {
-			List<Work> queryAll = workServices.quAll(work);
-			HashMap<String, Object> m = new HashMap<>();
-			m.put("data", queryAll);
-			return m;
-		}
-		return null;
+//	public Map<String, Object> queryAll(Authentication authentication, Work work) {
+//		String userName = authentication.getName();
+//		SecurityUser byuserName = securityUserRepository.findByuserName(userName);
+//		work.setSecurityUser(byuserName);
+//		if (null != byuserName) {
+//			List<Work> queryAll = workServices.quAll(work);
+//			HashMap<String, Object> m = new HashMap<>();
+//			m.put("data", queryAll);
+//			return m;
+//		}
+//		return null;
+//	}
+	public List<Work> queryAll() {
+		List<Work> all = workServices.findAll();
+
+		HashMap<String, Object> m = new HashMap<>();
+			m.put("data", all);
+			return all;
 	}
 
 	/**
@@ -177,11 +183,6 @@ public class WorkController {
 		return "back/work/work_edit";
 	}
 
-	/**
-	 * 获取要编辑的信息回显用
-	 * @param id
-	 * @return
-	 */
 //	@GetMapping("/toUpdateInfo")
 //	@ResponseBody
 //	public Work toUpdateInfo(String id) {
