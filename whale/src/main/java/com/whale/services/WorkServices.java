@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -17,14 +18,14 @@ public class WorkServices {
 	@Autowired
 	private WorkRepostitory workRepostitory;
 	
-	public Page<Work> queryAll(Integer page,Integer size,Work work) {
+	public Page<Work> queryInfo(Integer page,Integer size,Work work) {
 		PageRequest pageable = PageRequest.of(page, size);
 		Page<Work> workList = workRepostitory.findAll((root,query,CriteriaBuilder) -> {
 			ArrayList<Predicate> arrayList = new ArrayList<>();
 			//取其他表需取两次
-			if (!StringUtils.isEmpty(work.getSecurityUser().getUserName())) {
-				arrayList.add(CriteriaBuilder.equal(root.get("securityUser").get("userName").as(String.class), work.getSecurityUser().getUserName()));
-			}
+//			if (!StringUtils.isEmpty(work.getSecurityUser().getUserName())) {
+//				arrayList.add(CriteriaBuilder.equal(root.get("securityUser").get("userName").as(String.class), work.getSecurityUser().getUserName()));
+//			}
 			if (!StringUtils.isEmpty(work.getTicketNumber())) {
 				arrayList.add(CriteriaBuilder.like(root.get("ticketNumber").as(String.class), "%"+ work.getTicketNumber()+"%"));
 			}

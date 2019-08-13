@@ -12,8 +12,8 @@ import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,9 +25,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@Controller
-@RequestMapping("/back/work")
-public class WorkController {
+@RestController
+@Api(value = "Ticket")
+@RequestMapping("/api/work")
+public class WorkControllerApi {
 	/**
 	 * 本地字段,只判断是否创建文件夹不写入库
 	 */
@@ -46,38 +47,31 @@ public class WorkController {
 	@Autowired
 	private WorkConcentServices workConcentServices;
 
-	@GetMapping("/toWork")
-	public String toWork(HttpServletRequest httpServletRequest, Model model) {
-		String queryUrl = httpServletRequest.getRequestURI();
-		model.addAttribute("queryUrl", queryUrl);
-		return "back/work/work";
-	}
-
-	@GetMapping("/queryAll")
-	// public Page<Work> queryAll(@RequestParam(value = "page") Integer page,
-	// @RequestParam(value = "size", defaultValue = "5") Integer size,
-	// Authentication authentication,
-	// Work work
-	// ) {
-//	public Map<String, Object> queryAll(Authentication authentication, Work work) {
+	/**
+	 * 按条件查询
+	 * @param page
+	 * @param pageSize
+	 * @param work
+	 * @return
+	 */
+	@GetMapping("/queryInfo")
+	 public Page<Work> queryInfo(@RequestParam(value = "page") Integer page,
+								@RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+//								Authentication authentication,
+								Work work
+	 ) {
 //		String userName = authentication.getName();
 //		SecurityUser byuserName = securityUserRepository.findByuserName(userName);
 //		work.setSecurityUser(byuserName);
-//		if (null != byuserName) {
-//			List<Work> queryAll = workServices.quAll(work);
-//			HashMap<String, Object> m = new HashMap<>();
-//			m.put("data", queryAll);
-//			return m;
-//		}
-//		return null;
-//	}
-	public List<Work> queryAll() {
-		List<Work> all = workServices.findAll();
-
-		HashMap<String, Object> m = new HashMap<>();
-			m.put("data", all);
-			return all;
+		return workServices.queryInfo(--page, pageSize, work);
 	}
+//	public List<Work> queryAll() {
+//		List<Work> all = workServices.findAll();
+//
+//		HashMap<String, Object> m = new HashMap<>();
+//			m.put("data", all);
+//			return all;
+//	}
 
 	/**
 	 * 模态框跳转用
